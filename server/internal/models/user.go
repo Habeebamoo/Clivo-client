@@ -25,7 +25,6 @@ type UserRequest struct {
 	Name       string     `json:"name"`
 	Email      string     `json:"email"`
 	Picture    string     `json:"picture"`
-	Role       string     `json:"role"`
 }
 
 type UserResponse struct {
