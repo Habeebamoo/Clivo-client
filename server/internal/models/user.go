@@ -22,7 +22,6 @@ type Profile struct {
 }
 
 type UserRequest struct {
-	UserId     string     `json:"userId"`
 	Name       string     `json:"name"`
 	Email      string     `json:"email"`
 	Picture    string     `json:"picture"`
