@@ -28,11 +28,19 @@ func (ahdl *AuthHandler) GoogleCallBack(c *gin.Context) {
 	var user models.UserRequest
 	if err := c.ShouldBindJSON(&user); err != nil {
 		utils.Error(c, 400, "Invalid JSON Format", nil)
+		return
+	}
+
+	//demo validation
+	if user.Name == "" || user.Email == "" || user.Picture == "" {
+		utils.Error(c, 400, "Missing fields", nil)
+		return
 	}
 
 	token, statusCode, err := ahdl.service.SignInUser(user)
 	if err != nil {
 		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+		return
 	}
 
 	// send cookie

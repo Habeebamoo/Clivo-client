@@ -58,11 +58,12 @@ func (as *AuthSvc) SignInUser(userReq models.UserRequest) (string, int, error) {
 	}
 
 	//create profile
-	demoUserBio := fmt.Sprintf("Hey, I am %s", createdUser.Name)
+	demoUserBio := fmt.Sprintf("Hey, I am %s", createdUser.Name);
+	username := fmt.Sprintf("@_%s", userReq.Name)
 
 	userProfile := models.Profile{
 		UserId: createdUser.UserId,
-		Username: "",
+		Username: username,
 		Bio: demoUserBio,
 		Picture: userReq.Picture,
 		ProfileLink: "clivo",
@@ -82,7 +83,7 @@ func (as *AuthSvc) SignInUser(userReq models.UserRequest) (string, int, error) {
 		return "", 401, err
 	}
 
-	return token, 200, nil
+	return token, 201, nil
 
 	//send email notification to admin
 }
