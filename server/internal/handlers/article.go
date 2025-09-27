@@ -16,6 +16,9 @@ func NewArticleHandler(service services.ArticleService) ArticleHandler {
 }
 
 func (ah *ArticleHandler) CreateArticle(c *gin.Context) {
+	//use this in production instead of (userId in article request)
+	//userId, exists := c.Get("userId")
+
 	//bind body
 	var articleReq models.ArticleRequest
 	if err := c.ShouldBindJSON(&articleReq); err != nil {

@@ -32,7 +32,7 @@ type ArticleResponse struct {
 }
 
 type ArticleRequest struct {
-	UserId   string           `json:"userId"`
+	UserId   string           `json:"userId"`  //not required in production
 	Title    string           `json:"title"`
 	Content  string           `json:"content"`
 	Picture  *multipart.File  `json:"picture"`
