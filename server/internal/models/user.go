@@ -21,6 +21,14 @@ type Profile struct {
 	Followers    int     `json:"followers"`
 }
 
+type UserRequest struct {
+	UserId     string     `json:"userId"`
+	Name       string     `json:"name"`
+	Email      string     `json:"email"`
+	Picture    string     `json:"picture"`
+	Role       string     `json:"role"`
+}
+
 type UserResponse struct {
 	UserId       string     `json:"userId"`
 	Name         string     `json:"name"`

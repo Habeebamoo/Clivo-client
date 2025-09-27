@@ -11,6 +11,7 @@ import (
 
 type AuthRepository interface {
 	CreateUser(models.User) (models.User, int, error)
+	CreateUserProfile(models.Profile) (int, error)
 	GetUserByEmail(email string) (models.User, int, error)
 	UserExists(email string) bool
 }
@@ -34,6 +35,19 @@ func (ar *AuthRepo) CreateUser(user models.User) (models.User, int, error) {
 	}
 
 	return user, 201, nil
+}
+
+func (ar *AuthRepo) CreateUserProfile(profile models.Profile) (int, error) {
+	res := ar.db.Create(&profile)
+
+	if res.Error != nil {
+		if strings.Contains(res.Error.Error(), "duplicate key value") {
+			return http.StatusConflict, fmt.Errorf("user profile already exist")
+		}
+		return 500, fmt.Errorf("internal server error")
+	}
+
+	return 201, nil	
 }
 
 func (ar *AuthRepo) GetUserByEmail(email string) (models.User, int, error) {

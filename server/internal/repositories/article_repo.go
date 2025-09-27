@@ -37,7 +37,7 @@ func (ar *ArticleRepo) GetArticleById(articleId string) (models.Article, int, er
 		if res.Error == gorm.ErrRecordNotFound {
 			return article, 404, fmt.Errorf("article does not exists")
 		}
-		return article, 500, fmt.Errorf("internal server error")
+		return article, 500, res.Error //testing
 	}
 
 	return article, 200, nil
@@ -46,8 +46,8 @@ func (ar *ArticleRepo) GetArticleById(articleId string) (models.Article, int, er
 func (ar *ArticleRepo) GetArticleAuthorById(authorId string) (models.UserResponse, int, error) {
 	var user models.UserResponse
 	res := ar.db.Table("users u").
-				Select("u.user_id, u.name, u.email, u.role, u.verified, p.username, p.bio, p.picture, p.profileLink, p.following, p.followers, u.created_at").
-				Joins("join profile p on u.user_id = p.user_id").
+				Select("u.user_id, u.name, u.email, u.role, u.verified, p.username, p.bio, p.picture, p.profile_link, p.following, p.followers, u.created_at").
+				Joins("join profiles p on u.user_id = p.user_id").
 				Where("user_id = ?", authorId).
 				Scan(&user)
 
@@ -55,7 +55,7 @@ func (ar *ArticleRepo) GetArticleAuthorById(authorId string) (models.UserRespons
 		if res.Error == gorm.ErrRecordNotFound {
 			return models.UserResponse{}, 404, fmt.Errorf("author does not exists")
 		}
-		return models.UserResponse{}, 500, fmt.Errorf("internal server error")
+		return models.UserResponse{}, 500, res.Error //testing
 	}
 
 	return user, 200, nil
