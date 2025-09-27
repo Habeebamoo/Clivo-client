@@ -23,13 +23,10 @@ CREATE TABLE profiles (
 
   FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
-
-INSERT INTO users (user_id, name, email, role, verified) VALUES ('hdiuebeufh82338d2', 'Habeeb', 'habeeb@gmail.com', 'user', true);
-INSERT INTO profiles (user_id, username, bio, picture, profile_link, following, followers) VALUES ('hdiuebeufh82338d2', '@habeeb_amoo', 'Software Developer', 'b', '', 0, 0);
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
-DROP TABEL profiles;
+DROP TABLE profiles;
 DROP TABLE users;
 -- +goose StatementEnd
