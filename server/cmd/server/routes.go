@@ -33,6 +33,7 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 	article := api.Group("/article", middlewares.AuthenticateUser())
 	{
 		article.POST("", articleHandler.CreateArticle)
+		article.GET("/:id", articleHandler.GetArticle)
 	}
 
 	return r

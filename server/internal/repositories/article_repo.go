@@ -9,6 +9,8 @@ import (
 
 type ArticleRepository interface {
 	CreateArticle(models.Article) (int, error)
+	GetArticleById(string) (models.Article, int, error)
+	GetArticleAuthorById(string) (models.UserResponse, int, error)
 }
 
 type ArticleRepo struct {
@@ -40,3 +42,22 @@ func (ar *ArticleRepo) GetArticleById(articleId string) (models.Article, int, er
 
 	return article, 200, nil
 }
+
+func (ar *ArticleRepo) GetArticleAuthorById(authorId string) (models.UserResponse, int, error) {
+	var user models.UserResponse
+	res := ar.db.Table("users u").
+				Select("u.user_id, u.name, u.email, u.role, u.verified, p.username, p.bio, p.picture, p.profileLink, p.following, p.followers, u.created_at").
+				Joins("join profile p on u.user_id = p.user_id").
+				Where("user_id = ?", authorId).
+				Scan(&user)
+
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return models.UserResponse{}, 404, fmt.Errorf("author does not exists")
+		}
+		return models.UserResponse{}, 500, fmt.Errorf("internal server error")
+	}
+
+	return user, 200, nil
+}
+

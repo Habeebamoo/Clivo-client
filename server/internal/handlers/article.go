@@ -8,11 +8,11 @@ import (
 )
 
 type ArticleHandler struct {
-	svc services.ArticleService
+	service services.ArticleService
 }
 
-func NewArticleHandler(svc services.ArticleService) ArticleHandler {
-	return ArticleHandler{svc: svc}
+func NewArticleHandler(service services.ArticleService) ArticleHandler {
+	return ArticleHandler{service: service}
 }
 
 func (ah *ArticleHandler) CreateArticle(c *gin.Context) {
@@ -30,11 +30,41 @@ func (ah *ArticleHandler) CreateArticle(c *gin.Context) {
 	}
 
 	//call article service
-	statusCode, err := ah.svc.CreateArticle(articleReq)
+	statusCode, err := ah.service.CreateArticle(articleReq)
 	if err != nil {
 		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
 		return
 	}
 
 	utils.Success(c, statusCode, "Article Created Successfully", nil)
+}
+
+func (ah *ArticleHandler) GetArticle(c *gin.Context) {
+	//validate request
+	articleId := c.Param("id")
+	if articleId == "" {
+		utils.Error(c, 400, "Article Id Missing", nil)
+		return
+	}
+
+	//call service
+	article, statusCode, err := ah.service.GetArticle(articleId)
+	if err != nil {
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	utils.Success(c, statusCode, "", article)
+}
+
+func (ah *ArticleHandler) FetchArticles(c *gin.Context) {
+
+}
+
+func (ah *ArticleHandler) UpdateArticle(c *gin.Context) {
+
+}
+
+func (ah *ArticleHandler) DeleteArticle(c *gin.Context) {
+
 }

@@ -8,11 +8,11 @@ import (
 )
 
 type AuthHandler struct {
-	svc services.AuthService
+	service services.AuthService
 }
 
-func NewAuthHandler(svc services.AuthService) AuthHandler {
-	return AuthHandler{svc}
+func NewAuthHandler(service services.AuthService) AuthHandler {
+	return AuthHandler{service}
 }
 
 func (ahdl *AuthHandler) GoogleLogin(c *gin.Context) {
@@ -25,7 +25,7 @@ func (ahdl *AuthHandler) GoogleCallBack(c *gin.Context) {
 	// sign in user
 	user := models.User{}
 
-	token, statusCode, err := ahdl.svc.SignInUser(user)
+	token, statusCode, err := ahdl.service.SignInUser(user)
 	if err != nil {
 		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
 	}
