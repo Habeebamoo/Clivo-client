@@ -31,8 +31,6 @@ func SetCookies(c *gin.Context, token string) {
 		MaxAge: 3600,
 		Secure: false, //true for production
 		HttpOnly: true,
-		SameSite: http.SameSiteNoneMode,
-		Partitioned: true,
 	})
 }
 

@@ -19,7 +19,7 @@ func SignToken(payload models.TokenPayload) (string, error) {
 	}
 
 	claims := jwt.MapClaims{
-		"user_id": payload.UserId,
+		"userId": payload.UserId,
 		"role": payload.Role,
 		"exp": time.Now().Add(1*time.Hour).Unix(),
 	}
@@ -35,9 +35,9 @@ func ParseToken(token string) (models.TokenPayload ,error) {
 	}
 
 	//parse jwt
-	parsedToken, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
+	parsedToken, err := jwt.Parse(token, func(t *jwt.Token) (any, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-			return "", jwt.ErrSignatureInvalid
+			return nil, jwt.ErrSignatureInvalid
 		}
 
 		return []byte(JWT_KEY), nil
@@ -69,8 +69,15 @@ func ParseToken(token string) (models.TokenPayload ,error) {
 	}
 
 	//extract user details from claims
-	userId := claims["userId"].(string)
-	role := claims["role"].(string)
+	userId, ok := claims["userId"].(string)
+	if !ok {
+		return models.TokenPayload{}, fmt.Errorf("invalid token payload")
+	}
+	
+	role, _ := claims["role"].(string)
+	if !ok {
+		return models.TokenPayload{}, fmt.Errorf("invalid token payload")
+	}
 
 	userDetails := models.TokenPayload{
 		UserId: userId,

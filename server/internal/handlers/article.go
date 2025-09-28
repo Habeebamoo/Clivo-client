@@ -18,7 +18,7 @@ func NewArticleHandler(service services.ArticleService) ArticleHandler {
 //create article
 func (ah *ArticleHandler) CreateArticle(c *gin.Context) {
 	//use this in production instead of (userId in article request)
-	userIdAny, exists := c.Get("email")
+	userIdAny, exists := c.Get("userId")
 	if !exists {
 		utils.Error(c, 401, "UserId is missing", nil)
 		return
