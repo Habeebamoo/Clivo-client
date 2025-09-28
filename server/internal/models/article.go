@@ -21,7 +21,7 @@ type ArticleResponse struct {
 	AuthorId        string     `json:"authorId"`
 	AuthorPicture   string     `json:"authorPicture"`
 	AuthorFullname  string     `json:"authorFullname"`
-	AuthorVerified  bool     `json:"authorVerified"`
+	AuthorVerified  bool       `json:"authorVerified"`
 	Title           string     `json:"title"`
 	Content         string     `json:"content"`
 	Picture         string     `json:"picture"`

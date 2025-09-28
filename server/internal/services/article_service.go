@@ -58,7 +58,7 @@ func (as *ArticleSvc) GetArticle(id string) (models.ArticleResponse, int, error)
 	articleTags := []string{"Tech", "Science"}
 
 	//get user
-	author, code, err := as.repo.GetArticleAuthorById(id)
+	author, code, err := as.repo.GetArticleAuthorById(article.AuthorId)
 	if err != nil {
 		return models.ArticleResponse{}, code, err
 	}

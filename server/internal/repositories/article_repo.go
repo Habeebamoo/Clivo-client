@@ -33,7 +33,7 @@ func (ar *ArticleRepo) CreateArticle(article models.Article) (int, error) {
 func (ar *ArticleRepo) GetArticleById(articleId string) (models.Article, int, error) {
 	var article models.Article
 	res := ar.db.First(&article, "article_id = ?", articleId)
-	if res != nil {
+	if res.Error != nil {
 		if res.Error == gorm.ErrRecordNotFound {
 			return article, 404, fmt.Errorf("article does not exists")
 		}
@@ -47,7 +47,7 @@ func (ar *ArticleRepo) GetArticleAuthorById(authorId string) (models.UserRespons
 	var user models.UserResponse
 	res := ar.db.Table("users u").
 				Select("u.user_id, u.name, u.email, u.role, u.verified, p.username, p.bio, p.picture, p.profile_link, p.following, p.followers, u.created_at").
-				Joins("join profiles p on u.user_id = p.user_id").
+				Joins("JOIN profiles p ON u.user_id = p.user_id").
 				Where("u.user_id = ?", authorId).
 				Scan(&user)
 
