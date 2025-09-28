@@ -1,13 +1,50 @@
 import { useSelector } from "react-redux"
-import { H2 } from "../../components/Typo"
-import { BiLink, BiPencil } from "react-icons/bi"
+import { H1, H2 } from "../../components/Typo"
+import { BiLink, BiPencil, BiPlus } from "react-icons/bi"
 import { MdDateRange, MdVerified } from "react-icons/md"
+import logo from "../../assets/logo2.png"
+import { useQuery } from "@tanstack/react-query"
+import Spinner from "../../components/Spinner"
+import ArticleDisplay from "../../components/ArticleDisplay"
+import type { Article } from "../../redux/reducers/article_reducer"
+import avatar from "../../assets/avatar.jpg"
+
+const getArticles = async () => {
+  //real logic
+
+  //fake logic
+  await new Promise((resolve) => setTimeout(resolve, 2000)
+  );
+
+  const articles: Article[] = [
+  {articleId:"jfif", authorId: "sfrr", authorPicture: logo, authorFullname: "Clivo", authorUsername: "@clivo", authorVerified: true, title:"How to get a verified account", content: "Hello", createdAt: "2 months ago", picture: logo, tags: ["Tech", "Design", "Business"], readTime: "1 mins read time"},
+  {articleId: "weio", authorId: "srrr", authorPicture: "", authorFullname: "Habeeb Amoo", authorUsername: "@habeeb_amoo_534", authorVerified: false, title:"Go or Rust for backend developement", content: "welcome", createdAt: "4 weeks ago", picture: "", tags: ["Tech", "Software"], readTime: "6 mins read time"},
+    {articleId:"jfif", authorId: "sfrr", authorPicture: logo, authorFullname: "Clivo", authorUsername: "@clivo", authorVerified: true, title:"How to get a verified account", content: "Hello", createdAt: "2 months ago", picture: logo, tags: ["Tech", "Design", "Business"], readTime: "1 mins read time"},
+  {articleId: "weio", authorId: "srrr", authorPicture: "", authorFullname: "Habeeb Amoo", authorUsername: "@habeeb_amoo_534", authorVerified: false, title:"Go or Rust for backend developement", content: "welcome", createdAt: "4 weeks ago", picture: "", tags: ["Tech", "Software"], readTime: "6 mins read time"},
+  ];
+
+  return articles;
+}
+
+const MyArticles = ({ data }: { data: Article[] | undefined }) => {
+  return (
+    <>
+      {data?.map((article) => {
+        return <ArticleDisplay article={article} />
+      })}
+    </>
+  )
+}
 
 const MyProfile = () => {
-  const user = useSelector((state: any) => state.user.user)
+  const user = useSelector((state: any) => state.user.user);
+  const { data, isLoading } = useQuery({
+    queryKey: ["my-articles"],
+    queryFn: getArticles
+  })
 
   return (
-    <main className="grid grid-cols-1 md:grid-cols-2 md:w-[800px] mx-auto ">
+    <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:w-[900px] mx-auto items-start">
       <section>
         {/* Profile Picture */}
         <div>
@@ -68,14 +105,37 @@ const MyProfile = () => {
             <p>Joined {user.createdAt}</p>
           </div>
 
-          <button className="text-sm flex-center gap-2 py-2 px-3 border-1 border-accent rounded-full hover:bg-muted active:bg-muted mt-6">
-            <BiPencil />
-            <span>Edit Profile</span>
-          </button>
+          <div className="mt-6 flex-start gap-4">
+            <button className="text-sm flex-center gap-2 py-2 px-3 border-1 border-accent rounded-full hover:bg-muted active:bg-muted">
+              <BiPencil />
+              <span>Edit Profile</span>
+            </button>
+            <button className="text-sm flex-center gap-2 py-2 px-3 btn-primary rounded-full">
+              <BiPlus />
+              <span>New Article</span>
+            </button>
+          </div>
         </div>
 
       </section>
-      <section>
+
+      <hr className="lg:hidden text-mutedLight" />
+      
+      <section className="px-8">
+        {isLoading && 
+          <div className="flex-center my-20">
+            <Spinner size={20} color="accentLight" />
+          </div>
+        }
+
+        {/* Articles */}
+        {data?.length == 0 && 
+          <div className="flex-center flex-col mb-20 lg:mt-10">
+            <img src={avatar} className="h-70" />
+            <H1 font="inter" text="This user hasn't posted anything!" others="mt-6 text-center" />
+          </div>
+        }
+        {data?.length != 0 && <MyArticles data={data} />}
 
       </section>
     </main>
