@@ -9,7 +9,7 @@ import (
 )
 
 type ArticleService interface {
-	CreateArticle(models.ArticleRequest) (int, error)
+	CreateArticle(models.ArticleRequest, string) (int, error)
 	GetArticle(string) (models.ArticleResponse, int, error)
 }
 
@@ -21,17 +21,19 @@ func NewArticleService(repo repositories.ArticleRepository) ArticleService {
 	return &ArticleSvc{repo: repo}
 }
 
-func (as *ArticleSvc) CreateArticle(articleReq models.ArticleRequest) (int, error) {
+func (as *ArticleSvc) CreateArticle(articleReq models.ArticleRequest, userId string) (int, error) {
 	//calculate read time
   readTime := ""
 
 	//upload article image
 	articleImage := ""
 
+	//userId is currently email
+
 	//assign article
 	article := models.Article{
 		ArticleId: utils.GenerateRandomId(),
-		AuthorId: articleReq.UserId,
+		AuthorId: userId,
 		Title: articleReq.Title,
 		Content: articleReq.Content,
 		CreatedAt: time.Now(),

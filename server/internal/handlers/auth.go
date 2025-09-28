@@ -31,12 +31,6 @@ func (ahdl *AuthHandler) GoogleCallBack(c *gin.Context) {
 		return
 	}
 
-	//demo validation
-	if user.Name == "" || user.Email == "" || user.Picture == "" {
-		utils.Error(c, 400, "Missing fields", nil)
-		return
-	}
-
 	token, statusCode, err := ahdl.service.SignInUser(user)
 	if err != nil {
 		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)

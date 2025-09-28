@@ -15,9 +15,16 @@ func NewArticleHandler(service services.ArticleService) ArticleHandler {
 	return ArticleHandler{service: service}
 }
 
+//create article
 func (ah *ArticleHandler) CreateArticle(c *gin.Context) {
 	//use this in production instead of (userId in article request)
-	//userId, exists := c.Get("userId")
+	userIdAny, exists := c.Get("email")
+	if !exists {
+		utils.Error(c, 401, "UserId is missing", nil)
+		return
+	}
+
+	userId := userIdAny.(string)
 
 	//bind body
 	var articleReq models.ArticleRequest
@@ -33,7 +40,7 @@ func (ah *ArticleHandler) CreateArticle(c *gin.Context) {
 	}
 
 	//call article service
-	statusCode, err := ah.service.CreateArticle(articleReq)
+	statusCode, err := ah.service.CreateArticle(articleReq, userId)
 	if err != nil {
 		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
 		return
@@ -42,6 +49,7 @@ func (ah *ArticleHandler) CreateArticle(c *gin.Context) {
 	utils.Success(c, statusCode, "Article Created Successfully", nil)
 }
 
+//Get 1 article
 func (ah *ArticleHandler) GetArticle(c *gin.Context) {
 	//validate request
 	articleId := c.Param("id")
@@ -60,8 +68,10 @@ func (ah *ArticleHandler) GetArticle(c *gin.Context) {
 	utils.Success(c, statusCode, "", article)
 }
 
+//Get all my articles
 func (ah *ArticleHandler) FetchArticles(c *gin.Context) {
-
+	//use this in production instead of (userId in article request)
+	// userId, exists := c.Get("userId")
 }
 
 func (ah *ArticleHandler) UpdateArticle(c *gin.Context) {
