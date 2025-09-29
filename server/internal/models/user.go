@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 type User struct {
 	UserId     string     `json:"userId"`
@@ -43,4 +46,11 @@ type UserResponse struct {
 	Following    int        `json:"following"`
 	Followers    int        `json:"followers"`
 	CreatedAt    time.Time  `json:"createdAt"`
+}
+
+func (u UserRequest) Validate() error {
+	if len(u.Interets) == 0 {
+		return fmt.Errorf("missing field: user interests")
+	}
+	return nil
 }

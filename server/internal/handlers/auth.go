@@ -41,7 +41,9 @@ func (ahdl *AuthHandler) SignIn(c *gin.Context) {
 		return
 	}
 
-	//validate request..........................
+	if err := user.Validate(); err != nil {
+		utils.Error(c, 400, utils.FormatText(err.Error()), nil)
+	}
 
 	token, statusCode, err := ahdl.service.SignInUser(user)
 	if err != nil {
