@@ -88,6 +88,23 @@ func (ah *ArticleHandler) GetMyArticles(c *gin.Context) {
 	utils.Success(c, 200, "", articles)
 }
 
+//fetch all articles
+func (ah *ArticleHandler) FetchArticles(c *gin.Context) {
+	_, exists := c.Get("userId")
+	if !exists {
+		utils.Error(c, 401, "UserId is missing", nil)
+	}
+
+	//call service
+	articles, statusCode, err := ah.service.FetchArticles()
+	if err != nil {
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	utils.Success(c, 200, "", articles)
+}
+
 func (ah *ArticleHandler) UpdateArticle(c *gin.Context) {
 
 }

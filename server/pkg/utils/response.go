@@ -3,9 +3,9 @@ package utils
 import "github.com/gin-gonic/gin"
 
 type Resp struct {
-	Success   bool            `json:"success"`
-	Status    int             `json:"status"`
-	Message   string          `json:"message"`
+	Success   bool         `json:"success"`
+	Status    int          `json:"status"`
+	Message   string       `json:"message,omitempty"`
 	Data      interface{}  `json:"data,omitempty"`
 }
 

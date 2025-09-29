@@ -36,6 +36,7 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 		article.POST("", articleHandler.CreateArticle)
 		article.GET("", articleHandler.GetMyArticles)
 		article.GET("/:id", articleHandler.GetArticle)
+		article.GET("/all", articleHandler.FetchArticles)
 	}
 
 	return r

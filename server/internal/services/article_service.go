@@ -1,6 +1,7 @@
 package services
 
 import (
+	"slices"
 	"time"
 
 	"github.com/Habeebamoo/Clivo/server/internal/models"
@@ -12,6 +13,7 @@ type ArticleService interface {
 	CreateArticle(models.ArticleRequest, string) (int, error)
 	GetArticle(string) (models.ArticleResponse, int, error)
 	GetMyArticles(string) ([]models.ArticleResponse, int, error)
+	FetchArticles() ([]models.ArticleResponse, int, error)
 }
 
 type ArticleSvc struct {
@@ -105,4 +107,29 @@ func (as *ArticleSvc) GetMyArticles(userId string) ([]models.ArticleResponse, in
 	}
 
 	return userArticles, 200, nil
+}
+
+func (as *ArticleSvc) FetchArticles() ([]models.ArticleResponse, int, error) {
+	//get articles
+	articles, code, err := as.repo.FetchArticles()
+	if err != nil {
+		return []models.ArticleResponse{}, code, err
+	}
+
+	//call service to format all articles
+	articlesRes := []models.ArticleResponse{}
+
+	for _, article := range articles {
+		formatedArticle, code, err := as.GetArticle(article.ArticleId)
+		if err != nil {
+			return []models.ArticleResponse{}, code, err
+		}
+
+		articlesRes = append(articlesRes, formatedArticle)
+	}
+
+	//sort by recent
+	slices.Reverse(articlesRes)
+
+	return articlesRes, 200, nil
 }
