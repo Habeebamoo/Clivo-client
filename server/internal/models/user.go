@@ -16,6 +16,7 @@ type Profile struct {
 	Username     string  `json:"username"`
 	Bio          string  `json:"bio"`
 	Picture      string  `json:"picture"`
+	Interests    string  `json:"interests"`
 	ProfileLink  string  `json:"profileLink"`
 	Following    int     `json:"following"`
 	Followers    int     `json:"followers"`
@@ -25,6 +26,7 @@ type UserRequest struct {
 	Name       string     `json:"name"`
 	Email      string     `json:"email"`
 	Picture    string     `json:"picture"`
+	Interets   []string   `json:"interests"`
 }
 
 type UserResponse struct {
@@ -36,6 +38,7 @@ type UserResponse struct {
 	Username     string     `json:"username"`
 	Bio          string     `json:"bio"`
 	Picture      string     `json:"picture"`
+	Interests    string     `json:"interests"`
 	ProfileLink  string     `json:"profileLink"`
 	Following    int        `json:"following"`
 	Followers    int        `json:"followers"`

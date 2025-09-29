@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/Habeebamoo/Clivo/server/internal/models"
@@ -60,12 +61,14 @@ func (as *AuthSvc) SignInUser(userReq models.UserRequest) (string, int, error) {
 	//create profile
 	demoUserBio := fmt.Sprintf("Hey, I am %s", createdUser.Name);
 	username := fmt.Sprintf("@_%s", userReq.Name)
+	userinterests :=	strings.Join(userReq.Interets, ", ")
 
 	userProfile := models.Profile{
 		UserId: createdUser.UserId,
 		Username: username,
 		Bio: demoUserBio,
 		Picture: userReq.Picture,
+		Interests: userinterests,
 		ProfileLink: "clivo",
 		Following: 0,
 		Followers: 0,

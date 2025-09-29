@@ -17,6 +17,7 @@ CREATE TABLE profiles (
   username TEXT NOT NULL,
   bio TEXT,
   picture TEXT,
+  interests TEXT,
   profile_link TEXT,
   following INTEGER,
   followers INTEGER,

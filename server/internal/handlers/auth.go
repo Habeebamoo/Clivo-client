@@ -20,11 +20,21 @@ func (ahdl *AuthHandler) GoogleLogin(c *gin.Context) {
 }
 
 func (ahdl *AuthHandler) GoogleCallBack(c *gin.Context) {
+	//google oauth logic here
 
+	//fake user info from google logic
+	name := c.Query("name")
+	email := c.Query("email")
+	picture := c.Query("picture")
 
-	// sign in user
+	userInfo := map[string]string{"name": name, "email": email, "picture": picture}
 
-	//fake payload
+	//send userinfo back to client
+	utils.Success(c, 200, "", userInfo)
+}
+
+func (ahdl *AuthHandler) SignIn(c *gin.Context) {
+	//client sends this back after google auth
 	var user models.UserRequest
 	if err := c.ShouldBindJSON(&user); err != nil {
 		utils.Error(c, 400, "Invalid JSON Format", nil)

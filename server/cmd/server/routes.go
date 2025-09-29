@@ -27,6 +27,7 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 	{
 		auth.GET("/google", authHandler.GoogleLogin)
 		auth.GET("/google/callback", authHandler.GoogleCallBack)
+		auth.POST("/login", authHandler.SignIn)
 	}
 
 	//posts/articles routes
