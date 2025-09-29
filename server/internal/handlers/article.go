@@ -69,9 +69,23 @@ func (ah *ArticleHandler) GetArticle(c *gin.Context) {
 }
 
 //Get all my articles
-func (ah *ArticleHandler) FetchArticles(c *gin.Context) {
+func (ah *ArticleHandler) GetMyArticles(c *gin.Context) {
 	//use this in production instead of (userId in article request)
-	// userId, exists := c.Get("userId")
+	userIdAny, exists := c.Get("userId")
+	if !exists {
+		utils.Error(c, 401, "UserId is missing", nil)
+	}
+
+	userId := userIdAny.(string)
+
+	//call service
+	articles, statusCode, err := ah.service.GetMyArticles(userId)
+	if err != nil {
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	utils.Success(c, 200, "", articles)
 }
 
 func (ah *ArticleHandler) UpdateArticle(c *gin.Context) {

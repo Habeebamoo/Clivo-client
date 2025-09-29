@@ -11,6 +11,7 @@ import (
 type ArticleService interface {
 	CreateArticle(models.ArticleRequest, string) (int, error)
 	GetArticle(string) (models.ArticleResponse, int, error)
+	GetMyArticles(string) ([]models.ArticleResponse, int, error)
 }
 
 type ArticleSvc struct {
@@ -82,4 +83,26 @@ func (as *ArticleSvc) GetArticle(id string) (models.ArticleResponse, int, error)
 	}
 
 	return articleRespose, 200, nil
+}
+
+func (as *ArticleSvc) GetMyArticles(userId string) ([]models.ArticleResponse, int, error) {
+	//get articles
+	articles, code, err := as.repo.GetArticles(userId)
+	if err != nil {
+		return []models.ArticleResponse{}, code, err
+	}
+
+	//call service to format all articles
+	userArticles := []models.ArticleResponse{}
+
+	for _, article := range articles {
+		formatedArticle, code, err := as.GetArticle(article.ArticleId)
+		if err != nil {
+			return []models.ArticleResponse{}, code, err
+		}
+
+		userArticles = append(userArticles, formatedArticle)
+	}
+
+	return userArticles, 200, nil
 }

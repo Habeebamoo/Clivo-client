@@ -10,6 +10,7 @@ import (
 type ArticleRepository interface {
 	CreateArticle(models.Article) (int, error)
 	GetArticleById(string) (models.Article, int, error)
+	GetArticles(string) ([]models.Article, int, error)
 	GetArticleAuthorById(string) (models.UserResponse, int, error)
 }
 
@@ -41,6 +42,19 @@ func (ar *ArticleRepo) GetArticleById(articleId string) (models.Article, int, er
 	}
 
 	return article, 200, nil
+}
+
+func (ar *ArticleRepo) GetArticles(userId string) ([]models.Article, int, error) {
+	var articles []models.Article
+	res := ar.db.Find(&articles, "author_id = ?", userId)
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return articles, 200, nil
+		}
+		return articles, 500, fmt.Errorf("internal server error")
+	}
+
+	return articles, 200, nil
 }
 
 func (ar *ArticleRepo) GetArticleAuthorById(authorId string) (models.UserResponse, int, error) {
