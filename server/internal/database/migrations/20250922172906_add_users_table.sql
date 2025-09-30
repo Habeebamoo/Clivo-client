@@ -22,7 +22,7 @@ CREATE TABLE profiles (
   following INTEGER,
   followers INTEGER,
 
-  FOREIGN KEY (user_id) REFERENCES users(user_id)
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 -- +goose StatementEnd
 

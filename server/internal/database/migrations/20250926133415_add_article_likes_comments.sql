@@ -17,7 +17,7 @@ CREATE TABLE tags (
   article_id TEXT NOT NULL,
   tags TEXT NOT NULL,
 
-  FOREIGN KEY (article_id) REFERENCES articles(article_id)
+  FOREIGN KEY (article_id) REFERENCES articles(article_id) ON DELETE CASCADE
 );
 
 CREATE TABLE likes (
@@ -25,7 +25,7 @@ CREATE TABLE likes (
   liker_user_id TEXT NOT NULL,
 
   UNIQUE (article_id, liker_user_id),
-  FOREIGN KEY (article_id) REFERENCES articles(article_id)
+  FOREIGN KEY (article_id) REFERENCES articles(article_id) ON DELETE CASCADE
 )
 -- +goose StatementEnd
 
