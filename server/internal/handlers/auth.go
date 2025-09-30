@@ -29,6 +29,8 @@ func (ahdl *AuthHandler) GoogleCallBack(c *gin.Context) {
 
 	userInfo := map[string]string{"name": name, "email": email, "picture": picture}
 
+	//call service to know if user exists and determine statuscode (200 or 201)
+
 	//send userinfo back to client
 	utils.Success(c, 200, "", userInfo)
 }
