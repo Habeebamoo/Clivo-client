@@ -14,6 +14,7 @@ type ArticleService interface {
 	GetArticle(string) (models.ArticleResponse, int, error)
 	GetMyArticles(string) ([]models.ArticleResponse, int, error)
 	FetchArticles() ([]models.ArticleResponse, int, error)
+	DeleteArticle(string) (int, error)
 }
 
 type ArticleSvc struct {
@@ -132,4 +133,8 @@ func (as *ArticleSvc) FetchArticles() ([]models.ArticleResponse, int, error) {
 	slices.Reverse(articlesRes)
 
 	return articlesRes, 200, nil
+}
+
+func (as *ArticleSvc) DeleteArticle(articleId string) (int, error) {
+	return as.repo.DeleteArticle(articleId)
 }

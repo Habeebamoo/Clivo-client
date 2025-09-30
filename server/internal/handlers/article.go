@@ -80,6 +80,7 @@ func (ah *ArticleHandler) GetAllMyArticles(c *gin.Context) {
 	userIdAny, exists := c.Get("userId")
 	if !exists {
 		utils.Error(c, 401, "UserId is missing", nil)
+		return
 	}
 
 	userId := userIdAny.(string)
@@ -99,6 +100,7 @@ func (ah *ArticleHandler) FetchArticles(c *gin.Context) {
 	_, exists := c.Get("userId")
 	if !exists {
 		utils.Error(c, 401, "UserId is missing", nil)
+		return
 	}
 
 	//call service
@@ -111,10 +113,25 @@ func (ah *ArticleHandler) FetchArticles(c *gin.Context) {
 	utils.Success(c, 200, "", articles)
 }
 
-func (ah *ArticleHandler) UpdateArticle(c *gin.Context) {
-
-}
-
 func (ah *ArticleHandler) DeleteArticle(c *gin.Context) {
+	_, exists := c.Get("userId")
+	if !exists {
+		utils.Error(c, 401, "UserId is missing", nil)
+		return
+	}
 
+	articleId := c.Param("id")
+	if articleId == "" {
+		utils.Error(c, 400, "Article ID Missing", nil)
+		return
+	}
+
+	//call service
+	statusCode, err := ah.service.DeleteArticle(articleId)
+	if err != nil {
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	utils.Success(c, statusCode, "Article has been deleted", nil)
 }

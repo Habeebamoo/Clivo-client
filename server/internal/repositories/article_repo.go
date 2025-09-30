@@ -13,6 +13,7 @@ type ArticleRepository interface {
 	GetArticles(string) ([]models.Article, int, error)
 	FetchArticles() ([]models.Article, int, error)
 	GetArticleAuthorById(string) (models.UserResponse, int, error)
+	DeleteArticle(string) (int, error)
 }
 
 type ArticleRepo struct {
@@ -88,4 +89,17 @@ func (ar *ArticleRepo) GetArticleAuthorById(authorId string) (models.UserRespons
 
 	return user, 200, nil
 }
+
+func (ar *ArticleRepo) DeleteArticle(articleId string) (int, error) {
+	res := ar.db.Model(&models.Article{}).Where("article_id = ?", articleId).Delete(models.Article{})
+	if res.Error != nil {
+		if res.RowsAffected == 0 {
+			return 500, fmt.Errorf("failed to delet article")
+		}
+		return 500, fmt.Errorf("internal server error")
+	}
+
+	return 200, nil
+}
+
 
