@@ -1,6 +1,8 @@
 package services
 
 import (
+	"strings"
+
 	"github.com/Habeebamoo/Clivo/server/internal/models"
 	"github.com/Habeebamoo/Clivo/server/internal/repositories"
 )
@@ -33,7 +35,12 @@ func (us *UserSvc) GetArticle(articleId string) (models.SafeArticleResponse, int
 	articleLikes := 0
 
 	//get article tags
-	articleTags := []string{"Tech", "Science"}
+	articleTags, code, err := us.repo.GetArticleTags(article.ArticleId)
+	if err != nil {
+		return models.SafeArticleResponse{}, code, err
+	}
+
+	articleTagsFormated := strings.Split(articleTags.Tag, ", ")
 
 	//get user
 	author, code, err := us.repo.GetArticleAuthorById(article.AuthorId)
@@ -50,7 +57,7 @@ func (us *UserSvc) GetArticle(articleId string) (models.SafeArticleResponse, int
 		Title: article.Title,
 		Content: article.Content,
 		Picture: article.Picture,
-		Tags: articleTags,
+		Tags: articleTagsFormated,
 		Likes: articleLikes,
 		ReadTime: article.ReadTime,
 		CreatedAt: article.CreatedAt,
