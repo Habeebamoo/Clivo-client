@@ -22,7 +22,7 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 		response.Success(c, 200, "All systems are working fine", nil)
 	})
 
-	//free routes
+	//free routes (access anywhere)
 	api.GET("/user/:id", userHandler.GetUser)
 
 	//authentication routes

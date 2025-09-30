@@ -48,6 +48,17 @@ type UserResponse struct {
 	CreatedAt    time.Time  `json:"createdAt"`
 }
 
+type SafeUserResponse struct {
+	Name         string     `json:"name"`
+	Verified     bool       `json:"verified"`
+	Username     string     `json:"username"`
+	Bio          string     `json:"bio"`
+	Picture      string     `json:"picture"`
+	ProfileLink  string     `json:"profileLink"`
+	Following    int        `json:"following"`
+	Followers    int        `json:"followers"`
+}
+
 func (u UserRequest) Validate() error {
 	if len(u.Interets) == 0 {
 		return fmt.Errorf("missing field: user interests")

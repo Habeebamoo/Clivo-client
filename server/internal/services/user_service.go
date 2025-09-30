@@ -6,7 +6,7 @@ import (
 )
 
 type UserService interface {
-	GetUser(string) (models.UserResponse, int, error)
+	GetUser(string) (models.SafeUserResponse, int, error)
 }
 
 type UserSvc struct {
@@ -17,6 +17,6 @@ func NewUserService(repo repositories.UserRepository) UserService {
 	return &UserSvc{repo}
 }
 
-func (us *UserSvc) GetUser(userId string) (models.UserResponse, int, error) {
+func (us *UserSvc) GetUser(userId string) (models.SafeUserResponse, int, error) {
 	return us.repo.GetUser(userId)
 }
