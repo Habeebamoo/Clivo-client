@@ -15,7 +15,7 @@ func NewUserHandler(service services.UserService) UserHandler {
 }
 
 func (uhdl *UserHandler) GetUser(c *gin.Context) {
-	username := c.Param("id")
+	username := c.Param("username")
 	if username == "" {
 		utils.Error(c, 400, "User Not Found", nil)
 		return
