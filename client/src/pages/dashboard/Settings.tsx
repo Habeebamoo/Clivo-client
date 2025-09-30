@@ -41,7 +41,7 @@ const SettingsPage = () => {
 
   return (
     <main className="px-6">
-      <H2 font="inter" text="Your Details" others="mt-20 sm:text-center" />
+      <H2 font="inter" text="Your Details" others="mt-25 sm:text-center" />
 
       <div className="sm:w-[400px] mx-auto">
         {/* profile picture */}
@@ -51,15 +51,28 @@ const SettingsPage = () => {
         </div>
 
         {/* Other Details */}
-        <div className="mt-8 mb-8">
+        <form className="mt-8 mb-10">
           <div>
             <label htmlFor="name" className="font-exo mb-2 block">Full-Name</label>
             <Input type="text" />
           </div>
 
           <div className="mt-4">
-            <label htmlFor="name" className="font-exo mb-2 block">Username</label>
+            <label htmlFor="username" className="font-exo mb-2 block">Username</label>
             <Input type="text" />
+          </div>
+
+          <div className="mt-4">
+            <label htmlFor="bio" className="font-exo mb-2 block">Bio</label>
+            <textarea 
+              name="bio" 
+              rows={4} 
+              className="resize-none border-1 border-accentLight rounded-lg focus:outline-none w-full py-2 px-3 font-inter" required></textarea>
+          </div>
+
+          <div className="mt-4">
+            <label htmlFor="website" className="font-exo mb-2 block">Website</label>
+            <Input type="url" placeholder="https://porfolio.com" />
           </div>
 
           {/* Interest */}
@@ -111,7 +124,7 @@ const SettingsPage = () => {
             <BiSave />
             <span>Save Changes</span>
           </button>
-        </div>
+        </form>
 
       </div>
     </main>
