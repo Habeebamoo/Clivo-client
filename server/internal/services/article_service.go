@@ -14,7 +14,7 @@ type ArticleService interface {
 	CreateArticle(models.ArticleRequest, string) (int, error)
 	GetArticle(string) (models.ArticleResponse, int, error)
 	GetMyArticles(string) ([]models.ArticleResponse, int, error)
-	FetchArticles() ([]models.ArticleResponse, int, error)
+	FetchArticles() ([]models.SafeArticleResponse, int, error)
 	DeleteArticle(string, string) (int, error)
 }
 
@@ -111,23 +111,38 @@ func (as *ArticleSvc) GetMyArticles(userId string) ([]models.ArticleResponse, in
 	return userArticles, 200, nil
 }
 
-func (as *ArticleSvc) FetchArticles() ([]models.ArticleResponse, int, error) {
+func (as *ArticleSvc) FetchArticles() ([]models.SafeArticleResponse, int, error) {
 	//get articles
 	articles, code, err := as.repo.FetchArticles()
 	if err != nil {
-		return []models.ArticleResponse{}, code, err
+		return []models.SafeArticleResponse{}, code, err
 	}
 
 	//call service to format all articles
-	articlesRes := []models.ArticleResponse{}
+	articlesRes := []models.SafeArticleResponse{}
 
 	for _, article := range articles {
 		formatedArticle, code, err := as.GetArticle(article.ArticleId)
 		if err != nil {
-			return []models.ArticleResponse{}, code, err
+			return []models.SafeArticleResponse{}, code, err
 		}
 
-		articlesRes = append(articlesRes, formatedArticle)
+		//send an article (excluding author userId)
+		safeFormatedArticle := models.SafeArticleResponse{
+			ArticleId: formatedArticle.ArticleId,
+			AuthorPicture: formatedArticle.AuthorPicture,
+			AuthorFullname: formatedArticle.AuthorFullname,
+			AuthorVerified: formatedArticle.AuthorVerified,
+			Title: formatedArticle.Title,
+			Content: formatedArticle.Content,
+			Picture: formatedArticle.Picture,
+			Tags: formatedArticle.Tags,
+			Likes: formatedArticle.Likes,
+			ReadTime: formatedArticle.ReadTime,
+			CreatedAt: formatedArticle.CreatedAt,
+		}
+
+		articlesRes = append(articlesRes, safeFormatedArticle)
 	}
 
 	//sort by recent
