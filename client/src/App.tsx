@@ -11,6 +11,7 @@ import Layout from "./layout/layout"
 import Dashboard from "./pages/dashboard/Page"
 import Article from "./pages/dashboard/Article"
 import MyProfile from "./pages/dashboard/MyProfile"
+import SettingsPage from "./pages/dashboard/Settings"
 
 const App = () => {
   const router = createBrowserRouter(
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="" element={<Dashboard />} />
           <Route path="article" element={<Article />} />
           <Route path="profile" element={<MyProfile />} />
+          <Route path="settings" element={<SettingsPage />} />
         </Route>
       </>
     )

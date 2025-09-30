@@ -8,6 +8,7 @@ import Spinner from "../../components/Spinner"
 import ArticleDisplay from "../../components/ArticleDisplay"
 import type { Article } from "../../redux/reducers/article_reducer"
 import avatar from "../../assets/avatar.jpg"
+import { useNavigate } from "react-router"
 
 const getArticles = async () => {
   //real logic
@@ -26,22 +27,17 @@ const getArticles = async () => {
   return articles;
 }
 
-const MyArticles = ({ data }: { data: Article[] | undefined }) => {
-  return (
-    <>
-      {data?.map((article) => {
-        return <ArticleDisplay article={article} />
-      })}
-    </>
-  )
-}
-
 const MyProfile = () => {
   const user = useSelector((state: any) => state.user.user);
   const { data, isLoading } = useQuery({
     queryKey: ["my-articles"],
     queryFn: getArticles
   })
+  const navigate = useNavigate()
+
+  const toSettings = () => {
+    navigate("/dashboard/settings")
+  }
 
   return (
     <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:w-[900px] mx-auto items-start">
@@ -106,7 +102,7 @@ const MyProfile = () => {
           </div>
 
           <div className="mt-6 flex-start gap-4">
-            <button className="text-sm flex-center gap-2 py-2 px-3 border-1 border-accent rounded-full hover:bg-muted active:bg-muted">
+            <button onClick={toSettings} className="text-sm flex-center gap-2 py-2 px-3 border-1 border-accent rounded-full hover:bg-muted active:bg-muted cursor-pointer">
               <BiPencil />
               <span>Edit Profile</span>
             </button>
@@ -139,6 +135,16 @@ const MyProfile = () => {
 
       </section>
     </main>
+  )
+}
+
+const MyArticles = ({ data }: { data: Article[] | undefined }) => {
+  return (
+    <>
+      {data?.map((article) => {
+        return <ArticleDisplay article={article} />
+      })}
+    </>
   )
 }
 
