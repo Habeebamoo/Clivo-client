@@ -50,26 +50,32 @@ func (ah *ArticleHandler) CreateArticle(c *gin.Context) {
 }
 
 //Get 1 article
-func (ah *ArticleHandler) GetArticle(c *gin.Context) {
-	//validate request
-	articleId := c.Param("id")
-	if articleId == "" {
-		utils.Error(c, 400, "Article Id Missing", nil)
-		return
-	}
+// func (ah *ArticleHandler) GetMyArticle(c *gin.Context) {
+// 	_, exists := c.Get("userId")
+// 	if !exists {
+// 		utils.Error(c, 401, "UserId is missing", nil)
+// 		return
+// 	}
 
-	//call service
-	article, statusCode, err := ah.service.GetArticle(articleId)
-	if err != nil {
-		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
-		return
-	}
+// 	//validate request
+// 	articleId := c.Param("id")
+// 	if articleId == "" {
+// 		utils.Error(c, 400, "Article Id Missing", nil)
+// 		return
+// 	}
 
-	utils.Success(c, statusCode, "", article)
-}
+// 	//call service
+// 	article, statusCode, err := ah.service.GetArticle(articleId)
+// 	if err != nil {
+// 		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+// 		return
+// 	}
+
+// 	utils.Success(c, statusCode, "", article)
+// }
 
 //Get all my articles
-func (ah *ArticleHandler) GetMyArticles(c *gin.Context) {
+func (ah *ArticleHandler) GetAllMyArticles(c *gin.Context) {
 	//use this in production instead of (userId in article request)
 	userIdAny, exists := c.Get("userId")
 	if !exists {

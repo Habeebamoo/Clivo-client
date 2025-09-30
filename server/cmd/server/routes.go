@@ -38,8 +38,8 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 	article := api.Group("/article", middlewares.AuthenticateUser())
 	{
 		article.POST("", articleHandler.CreateArticle)
-		article.GET("", articleHandler.GetMyArticles)
-		article.GET("/:id", articleHandler.GetArticle)
+		article.GET("", articleHandler.GetAllMyArticles)
+		//article.GET("/:id", articleHandler.GetArticle)
 		article.GET("/all", articleHandler.FetchArticles)
 	}
 

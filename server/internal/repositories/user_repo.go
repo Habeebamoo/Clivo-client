@@ -22,16 +22,26 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 }
 
 func (ur *UserRepo) GetUser(username string) (models.SafeUserResponse, int, error) {
+	//get userId
+	var userProfile models.Profile
+	res := ur.db.First(&userProfile, "username = ?", username)
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return models.SafeUserResponse{}, 404, fmt.Errorf("user does not exists")
+		}
+		return models.SafeUserResponse{}, 500, fmt.Errorf("internal server error")
+	}
+
 	var user models.SafeUserResponse
-	res := ur.db.Table("users u").
+	res = ur.db.Table("users u").
 				Select("u.name, u.verified, p.username, p.bio, p.picture, p.profile_link, p.following, p.followers").
 				Joins("JOIN profiles p ON u.user_id = p.user_id").
-				Where("p.username = ?", username).
+				Where("u.user_id = ?", userProfile.UserId).
 				Scan(&user)
 
 	if res.Error != nil {
 		if res.Error == gorm.ErrRecordNotFound {
-			return models.SafeUserResponse{}, 404, fmt.Errorf("author does not exists")
+			return models.SafeUserResponse{}, 404, fmt.Errorf("user does not exists")
 		}
 		return models.SafeUserResponse{}, 500, fmt.Errorf("internal server error")
 	}
