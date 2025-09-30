@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"slices"
 	"time"
 
@@ -14,7 +15,7 @@ type ArticleService interface {
 	GetArticle(string) (models.ArticleResponse, int, error)
 	GetMyArticles(string) ([]models.ArticleResponse, int, error)
 	FetchArticles() ([]models.ArticleResponse, int, error)
-	DeleteArticle(string) (int, error)
+	DeleteArticle(string, string) (int, error)
 }
 
 type ArticleSvc struct {
@@ -135,6 +136,18 @@ func (as *ArticleSvc) FetchArticles() ([]models.ArticleResponse, int, error) {
 	return articlesRes, 200, nil
 }
 
-func (as *ArticleSvc) DeleteArticle(articleId string) (int, error) {
+func (as *ArticleSvc) DeleteArticle(articleId string, userId string) (int, error) {
+	//get article
+	article, code, err := as.GetArticle(articleId)
+	if err != nil {
+		return code, err
+	}
+
+	//extra validation to make sure only the author can delete
+	if article.AuthorId != userId {
+		return 401, fmt.Errorf("Unauthorized Access")
+	}
+	//might not be needed :)
+
 	return as.repo.DeleteArticle(articleId)
 }

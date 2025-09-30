@@ -41,6 +41,7 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 		article.GET("", articleHandler.GetAllMyArticles)
 		//article.GET("/:id", articleHandler.GetArticle)
 		article.GET("/all", articleHandler.FetchArticles)
+		article.DELETE("/:id", articleHandler.DeleteArticle)
 	}
 
 	return r

@@ -114,11 +114,13 @@ func (ah *ArticleHandler) FetchArticles(c *gin.Context) {
 }
 
 func (ah *ArticleHandler) DeleteArticle(c *gin.Context) {
-	_, exists := c.Get("userId")
+	userIdAny, exists := c.Get("userId")
 	if !exists {
 		utils.Error(c, 401, "UserId is missing", nil)
 		return
 	}
+
+	userId := userIdAny.(string)
 
 	articleId := c.Param("id")
 	if articleId == "" {
@@ -127,7 +129,7 @@ func (ah *ArticleHandler) DeleteArticle(c *gin.Context) {
 	}
 
 	//call service
-	statusCode, err := ah.service.DeleteArticle(articleId)
+	statusCode, err := ah.service.DeleteArticle(articleId, userId)
 	if err != nil {
 		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
 		return
