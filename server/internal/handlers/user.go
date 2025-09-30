@@ -24,7 +24,7 @@ func (uhdl *UserHandler) GetUser(c *gin.Context) {
 	//call service
 	user, statusCode, err := uhdl.service.GetUser(username)
 	if err != nil {
-		utils.Error(c, statusCode, utils.FormatText(err.Error()), user)
+		utils.Error(c, statusCode, "User Not Found", nil)
 		return
 	}
 
