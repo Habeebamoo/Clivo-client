@@ -60,8 +60,10 @@ func (as *AuthSvc) SignInUser(userReq models.UserRequest) (string, int, error) {
 
 	//create profile
 	demoUserBio := fmt.Sprintf("Hey, I am %s", createdUser.Name);
-	username := fmt.Sprintf("@_%s", userReq.Name)
 	userinterests :=	strings.Join(userReq.Interets, ", ")
+
+	//calculate and get unique username for user
+	username := utils.GenerateUniqueUsername(utils.GetUsernameFromEmail(userReq.Email), as.repo.UsernameExists) 
 
 	userProfile := models.Profile{
 		UserId: createdUser.UserId,
@@ -69,7 +71,7 @@ func (as *AuthSvc) SignInUser(userReq models.UserRequest) (string, int, error) {
 		Bio: demoUserBio,
 		Picture: userReq.Picture,
 		Interests: userinterests,
-		ProfileLink: "clivo",
+		ProfileLink: "",
 		Following: 0,
 		Followers: 0,
 	}

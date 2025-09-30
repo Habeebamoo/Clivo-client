@@ -3,8 +3,10 @@ package utils
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -42,4 +44,21 @@ func GenerateRandomId() string {
 	}
 
 	return hex.EncodeToString(b)
+}
+
+func GetUsernameFromEmail(email string) string {
+	local := strings.SplitN(email, "@", 2)[0]
+	return "@" + local
+}
+
+func GenerateUniqueUsername(base string, exists func(string) bool) string {
+	username := base
+	i := 1
+
+	for exists(username) {
+		username = fmt.Sprintf("%s%d", username, i)
+		i++
+	}
+
+	return username
 }

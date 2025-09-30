@@ -12,8 +12,9 @@ import (
 type AuthRepository interface {
 	CreateUser(models.User) (models.User, int, error)
 	CreateUserProfile(models.Profile) (int, error)
-	GetUserByEmail(email string) (models.User, int, error)
-	UserExists(email string) bool
+	GetUserByEmail(string) (models.User, int, error)
+	UserExists(string) bool
+	UsernameExists(string) (bool)
 }
 
 type AuthRepo struct {
@@ -74,4 +75,17 @@ func (ar *AuthRepo) UserExists(email string) bool {
 	}
 
 	return true
+}
+
+func (ar *AuthRepo) UsernameExists(username string) bool {
+	var existingUser models.Profile
+	res := ar.db.First(&existingUser, "username = ?", username)
+
+	//no user
+	if res.Error == gorm.ErrRecordNotFound {
+		return false
+	}
+
+	return true
+
 }
