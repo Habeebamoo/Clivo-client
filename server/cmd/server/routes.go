@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.ArticleHandler) *gin.Engine {
+func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.ArticleHandler, userHandler handlers.UserHandler) *gin.Engine {
 	r := gin.Default()
 
 	//middlewares chain
@@ -21,6 +21,9 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 	api.GET("/health", func(c *gin.Context) {
 		response.Success(c, 200, "All systems are working fine", nil)
 	})
+
+	//free routes
+	api.GET("/user/:id", userHandler.GetUser)
 
 	//authentication routes
 	auth := api.Group("/auth")

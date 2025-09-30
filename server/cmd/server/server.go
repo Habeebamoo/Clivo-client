@@ -32,17 +32,20 @@ func ConfigureApp(db *gorm.DB) *gin.Engine {
 	//initialized repositories
 	authRepo := repositories.NewAuthRepository(db)
 	articleRepo := repositories.NewArticleRepository(db)
+	userRepo := repositories.NewUserRepository(db)
 
 	//initialized services
 	authService := services.NewAuthService(authRepo)
 	articleService := services.NewArticleService(articleRepo)
+	userService := services.NewUserService(userRepo)
 
 	//initialized handlers
 	authHandler := handlers.NewAuthHandler(authService)
 	articleHandler := handlers.NewArticleHandler(articleService)
+	userHandler := handlers.NewUserHandler(userService)
 
 	//initialized routes
-	return SetupRoutes(authHandler, articleHandler)
+	return SetupRoutes(authHandler, articleHandler, userHandler)
 }
 
 func Run(router *gin.Engine) {
