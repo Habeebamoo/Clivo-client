@@ -18,8 +18,8 @@ func NewUserService(repo repositories.UserRepository) UserService {
 	return &UserSvc{repo}
 }
 
-func (us *UserSvc) GetUser(userId string) (models.SafeUserResponse, int, error) {
-	return us.repo.GetUser(userId)
+func (us *UserSvc) GetUser(username string) (models.SafeUserResponse, int, error) {
+	return us.repo.GetUser(username)
 }
 
 func (us *UserSvc) GetArticle(articleId string) (models.SafeArticleResponse, int, error) {

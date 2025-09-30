@@ -21,12 +21,12 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 	return &UserRepo{db}
 }
 
-func (ur *UserRepo) GetUser(userId string) (models.SafeUserResponse, int, error) {
+func (ur *UserRepo) GetUser(username string) (models.SafeUserResponse, int, error) {
 	var user models.SafeUserResponse
 	res := ur.db.Table("users u").
 				Select("u.name, u.verified, p.username, p.bio, p.picture, p.profile_link, p.following, p.followers").
 				Joins("JOIN profiles p ON u.user_id = p.user_id").
-				Where("u.user_id = ?", userId).
+				Where("p.username = ?", username).
 				Scan(&user)
 
 	if res.Error != nil {
