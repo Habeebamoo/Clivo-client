@@ -41,7 +41,7 @@ func (uhdl *UserHandler) GetUserArticle(c *gin.Context) {
 	//call service
 	article, statusCode, err := uhdl.service.GetArticle(articleId)
 	if err != nil {
-		utils.Error(c, statusCode, utils.FormatText(err.Error()), article)
+		utils.Error(c, statusCode, "Article Not Found", article)
 		return
 	}
 
