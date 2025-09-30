@@ -16,6 +16,11 @@ type Article struct {
 	CreatedAt       time.Time  `json:"createdAt"`
 }
 
+type Tag struct {
+	ArticleId  string  `json:"articleId"`
+	Tag        string  `json:"tag"`
+}
+
 type ArticleResponse struct {
 	ArticleId       string     `json:"articleId"`
 	AuthorId        string     `json:"authorId"`
@@ -57,6 +62,8 @@ func (a ArticleRequest) Validate() error {
 		return fmt.Errorf("missing field: title")
 	} else if a.Content == "" {
 		return fmt.Errorf("missing field: content")
+	} else if len(a.Tags) == 0 {
+		return fmt.Errorf("missing field: tags")
 	}
 	return nil
 }

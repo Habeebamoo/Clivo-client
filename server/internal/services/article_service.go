@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"slices"
+	"strings"
 	"time"
 
 	"github.com/Habeebamoo/Clivo/server/internal/models"
@@ -46,7 +47,25 @@ func (as *ArticleSvc) CreateArticle(articleReq models.ArticleRequest, userId str
 		Picture: articleImage,
 	}
 
-	return as.repo.CreateArticle(article)
+	//create article
+	code, err := as.repo.CreateArticle(article)
+	if err != nil {
+		return code, err
+	}
+
+	fmt.Println("Getting article Id.........................")
+	fmt.Println("Article Id: ", article.ArticleId)
+	fmt.Println("Done.............................")
+
+	//create article tags
+	tags := strings.Join(articleReq.Tags, ", ")
+
+	articleTags := models.Tag{
+		ArticleId: article.ArticleId,
+		Tag: tags,
+	}
+
+	return as.repo.CreateArticleTags(articleTags)
 
 	//notify followers here
 }
@@ -62,7 +81,12 @@ func (as *ArticleSvc) GetArticle(id string) (models.ArticleResponse, int, error)
 	articleLikes := 0
 
 	//get article tags
-	articleTags := []string{"Tech", "Science"}
+	articleTags, code, err := as.repo.GetArticleTags(id)
+	if err != nil {
+		return models.ArticleResponse{}, code, err
+	}
+
+	articleTagsFormated := strings.Split(articleTags.Tag, ", ")
 
 	//get user
 	author, code, err := as.repo.GetArticleAuthorById(article.AuthorId)
@@ -80,7 +104,7 @@ func (as *ArticleSvc) GetArticle(id string) (models.ArticleResponse, int, error)
 		Title: article.Title,
 		Content: article.Content,
 		Picture: article.Picture,
-		Tags: articleTags,
+		Tags: articleTagsFormated,
 		Likes: articleLikes,
 		ReadTime: article.ReadTime,
 		CreatedAt: article.CreatedAt,

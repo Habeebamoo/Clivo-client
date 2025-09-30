@@ -15,14 +15,23 @@ CREATE TABLE articles (
 
 CREATE TABLE tags (
   article_id TEXT NOT NULL,
-  tag TEXT NOT NULL,
+  tags TEXT NOT NULL,
 
   FOREIGN KEY (article_id) REFERENCES articles(article_id)
 );
+
+CREATE TABLE likes (
+  article_id TEXT NOT NULL,
+  liker_user_id TEXT NOT NULL,
+
+  UNIQUE (article_id, liker_user_id),
+  FOREIGN KEY (article_id) REFERENCES articles(article_id)
+)
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
+DROP TABLE likes;
 DROP TABLE tags;
 DROP TABLE articles;
 -- +goose StatementEnd
