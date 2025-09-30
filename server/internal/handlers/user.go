@@ -24,9 +24,26 @@ func (uhdl *UserHandler) GetUser(c *gin.Context) {
 	//call service
 	user, statusCode, err := uhdl.service.GetUser(userId)
 	if err != nil {
-		utils.Error(c, statusCode, "", user)
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), user)
 		return
 	}
 
 	utils.Success(c, statusCode, "", user)
+}
+
+func (uhdl *UserHandler) GetUserArticle(c *gin.Context) {
+	articleId := c.Param("id")
+	if articleId == "" {
+		utils.Error(c, 400, "Article Not Found", nil)
+		return
+	}
+
+	//call service
+	article, statusCode, err := uhdl.service.GetArticle(articleId)
+	if err != nil {
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), article)
+		return
+	}
+
+	utils.Success(c, statusCode, "", article)
 }

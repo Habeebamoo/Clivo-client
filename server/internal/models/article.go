@@ -31,6 +31,20 @@ type ArticleResponse struct {
 	CreatedAt       time.Time  `json:"createdAt"`
 }
 
+type SafeArticleResponse struct {
+	ArticleId       string     `json:"articleId"`
+	AuthorPicture   string     `json:"authorPicture"`
+	AuthorFullname  string     `json:"authorFullname"`
+	AuthorVerified  bool       `json:"authorVerified"`
+	Title           string     `json:"title"`
+	Content         string     `json:"content"`
+	Picture         string     `json:"picture"`
+	Tags            []string   `json:"tags"`
+	Likes           int        `json:"likes"`
+	ReadTime        string     `json:"readTime"`
+	CreatedAt       time.Time  `json:"createdAt"`
+}
+
 type ArticleRequest struct {
 	Title    string           `json:"title"`
 	Content  string           `json:"content"`

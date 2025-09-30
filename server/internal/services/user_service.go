@@ -7,6 +7,7 @@ import (
 
 type UserService interface {
 	GetUser(string) (models.SafeUserResponse, int, error)
+	GetArticle(string) (models.SafeArticleResponse, int, error)
 }
 
 type UserSvc struct {
@@ -19,4 +20,41 @@ func NewUserService(repo repositories.UserRepository) UserService {
 
 func (us *UserSvc) GetUser(userId string) (models.SafeUserResponse, int, error) {
 	return us.repo.GetUser(userId)
+}
+
+func (us *UserSvc) GetArticle(articleId string) (models.SafeArticleResponse, int, error) {
+	//get article
+	article, code, err := us.repo.GetArticleById(articleId)
+	if err != nil {
+		return models.SafeArticleResponse{}, code, err
+	}
+
+	//get article likes
+	articleLikes := 0
+
+	//get article tags
+	articleTags := []string{"Tech", "Science"}
+
+	//get user
+	author, code, err := us.repo.GetArticleAuthorById(article.AuthorId)
+	if err != nil {
+		return models.SafeArticleResponse{}, code, err
+	}
+
+	//build response
+	articleRespose := models.SafeArticleResponse{
+		ArticleId: article.ArticleId,
+		AuthorPicture: author.Picture,
+		AuthorFullname: author.Name,
+		AuthorVerified: author.Verified,
+		Title: article.Title,
+		Content: article.Content,
+		Picture: article.Picture,
+		Tags: articleTags,
+		Likes: articleLikes,
+		ReadTime: article.ReadTime,
+		CreatedAt: article.CreatedAt,
+	}
+
+	return articleRespose, 200, nil
 }

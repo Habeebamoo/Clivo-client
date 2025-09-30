@@ -24,6 +24,7 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 
 	//free routes (access anywhere)
 	api.GET("/user/:id", userHandler.GetUser)
+	api.GET("/posts/:id", userHandler.GetUserArticle)
 
 	//authentication routes
 	auth := api.Group("/auth")
