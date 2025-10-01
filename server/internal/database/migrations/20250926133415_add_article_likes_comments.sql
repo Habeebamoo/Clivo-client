@@ -10,12 +10,12 @@ CREATE TABLE articles (
   created_at TIMESTAMP DEFAULT NOW(),
 
   UNIQUE (article_id),
-  FOREIGN KEY (author_id) REFERENCES users(user_id)
+  FOREIGN KEY (author_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE tags (
   article_id TEXT NOT NULL,
-  tags TEXT NOT NULL,
+  tag TEXT NOT NULL,
 
   FOREIGN KEY (article_id) REFERENCES articles(article_id) ON DELETE CASCADE
 );

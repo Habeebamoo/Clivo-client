@@ -118,7 +118,7 @@ func (ar *ArticleRepo) DeleteArticle(articleId string) (int, error) {
 	res := ar.db.Model(&models.Article{}).Where("article_id = ?", articleId).Delete(models.Article{})
 	if res.Error != nil {
 		if res.RowsAffected == 0 {
-			return 500, fmt.Errorf("failed to delet article")
+			return 500, fmt.Errorf("failed to delete article")
 		}
 		return 500, fmt.Errorf("internal server error")
 	}

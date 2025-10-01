@@ -177,16 +177,16 @@ func (as *ArticleSvc) FetchArticles() ([]models.SafeArticleResponse, int, error)
 
 func (as *ArticleSvc) DeleteArticle(articleId string, userId string) (int, error) {
 	//get article
-	article, code, err := as.GetArticle(articleId)
+	_, code, err := as.GetArticle(articleId)
 	if err != nil {
 		return code, err
 	}
 
-	//extra validation to make sure only the author can delete
-	if article.AuthorId != userId {
-		return 401, fmt.Errorf("Unauthorized Access")
-	}
-	//might not be needed :)
+	// //extra validation to make sure only the author can delete
+	// if article.AuthorId != userId {
+	// 	return 401, fmt.Errorf("Unauthorized Access")
+	// }
+	// //might not be needed :)
 
 	return as.repo.DeleteArticle(articleId)
 }
