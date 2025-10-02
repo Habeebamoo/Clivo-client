@@ -32,7 +32,10 @@ func (us *UserSvc) GetArticle(articleId string) (models.SafeArticleResponse, int
 	}
 
 	//get article likes
-	articleLikes := 0
+	articleLikes, err := us.repo.GetArticleLikes(article.ArticleId)
+	if err != nil {
+		return models.SafeArticleResponse{}, 500, err
+	}
 
 	//get article tags
 	articleTags, code, err := us.repo.GetArticleTags(article.ArticleId)

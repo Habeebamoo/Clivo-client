@@ -13,6 +13,7 @@ type AuthRepository interface {
 	CreateUser(models.User) (models.User, int, error)
 	CreateUserProfile(models.Profile) (int, error)
 	GetUserByEmail(string) (models.User, int, error)
+	GetUserById(userId string) (models.UserResponse, int, error)
 	UserExists(string) bool
 	UsernameExists(string) (bool)
 }
@@ -60,6 +61,24 @@ func (ar *AuthRepo) GetUserByEmail(email string) (models.User, int, error) {
 			return user, 404, fmt.Errorf("user not found")
 		}
 		return user, 500, fmt.Errorf("internal server error")
+	}
+
+	return user, 200, nil
+}
+
+func (ar *AuthRepo) GetUserById(userId string) (models.UserResponse, int, error) {
+	var user models.UserResponse
+	res := ar.db.Table("users u").
+				Select("u.user_id, u.name, u.email, u.role, u.verified, p.username, p.bio, p.picture, p.interests, p.profile_link, p.following, p.followers, u.created_at").
+				Joins("JOIN profiles p ON u.user_id = p.user_id").
+				Where("u.user_id = ?", userId).
+				Scan(&user)
+
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return models.UserResponse{}, 404, fmt.Errorf("user does not exists")
+		}
+		return models.UserResponse{}, 500, fmt.Errorf("internal server error")
 	}
 
 	return user, 200, nil

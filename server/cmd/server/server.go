@@ -36,7 +36,7 @@ func ConfigureApp(db *gorm.DB) *gin.Engine {
 
 	//initialized services
 	authService := services.NewAuthService(authRepo)
-	articleService := services.NewArticleService(articleRepo)
+	articleService := services.NewArticleService(articleRepo, authRepo)
 	userService := services.NewUserService(userRepo)
 
 	//initialized handlers

@@ -137,3 +137,72 @@ func (ah *ArticleHandler) DeleteArticle(c *gin.Context) {
 
 	utils.Success(c, statusCode, "Article has been deleted", nil)
 }
+
+func (ah *ArticleHandler) LikeArticle(c *gin.Context) {
+	var articleLikeRequest models.Like
+	if err := c.ShouldBindJSON(&articleLikeRequest); err != nil {
+		utils.Error(c, 400, "Invalid JSON Format", nil)
+		return
+	}
+
+	//validate request
+	if err := articleLikeRequest.Validate(); err != nil {
+		utils.Error(c, 400, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	//call service
+	statusCode, err := ah.service.LikeArticle(articleLikeRequest)
+	if err != nil {
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	utils.Success(c, statusCode, "", nil)
+}
+
+func (ah *ArticleHandler) CommentArticle(c *gin.Context) {
+	var articleCommentRequest models.Comment
+	if err := c.ShouldBindJSON(&articleCommentRequest); err != nil {
+		utils.Error(c, 400, "Invalid JSON Format", nil)
+		return
+	}
+
+	//validate request
+	if err := articleCommentRequest.Validate(); err != nil {
+		utils.Error(c, 400, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	//call service
+	statusCode, err := ah.service.CommentArticle(articleCommentRequest)
+		if err != nil {
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	utils.Success(c, statusCode, "Comment Sent.", nil)
+}
+
+func (ah *ArticleHandler) GetArticleComments(c *gin.Context) {
+	_, exists := c.Get("userId")
+	if !exists {
+		utils.Error(c, 401, "UserId is missing", nil)
+		return
+	}
+
+	articleId := c.Param("id")
+	if articleId == "" {
+		utils.Error(c, 400, "Article ID Missing", nil)
+		return
+	}
+
+	//call service
+	comments, statusCode, err := ah.service.GetArticleComments(articleId)
+	if err != nil {
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	utils.Success(c, statusCode, "", comments)
+}

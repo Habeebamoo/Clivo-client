@@ -17,14 +17,18 @@ type ArticleService interface {
 	GetMyArticles(string) ([]models.ArticleResponse, int, error)
 	FetchArticles() ([]models.SafeArticleResponse, int, error)
 	DeleteArticle(string, string) (int, error)
+	LikeArticle(models.Like) (int, error)
+	CommentArticle(models.Comment) (int, error)
+	GetArticleComments(string) ([]models.CommentResponse, int, error)
 }
 
 type ArticleSvc struct {
-	repo repositories.ArticleRepository
+	articleRepo repositories.ArticleRepository
+	authRepo repositories.AuthRepository
 }
 
-func NewArticleService(repo repositories.ArticleRepository) ArticleService {
-	return &ArticleSvc{repo: repo}
+func NewArticleService(articleRepo repositories.ArticleRepository, authRepo repositories.AuthRepository) ArticleService {
+	return &ArticleSvc{articleRepo: articleRepo, authRepo: authRepo}
 }
 
 func (as *ArticleSvc) CreateArticle(articleReq models.ArticleRequest, userId string) (int, error) {
@@ -48,7 +52,7 @@ func (as *ArticleSvc) CreateArticle(articleReq models.ArticleRequest, userId str
 	}
 
 	//create article
-	code, err := as.repo.CreateArticle(article)
+	code, err := as.articleRepo.CreateArticle(article)
 	if err != nil {
 		return code, err
 	}
@@ -65,23 +69,26 @@ func (as *ArticleSvc) CreateArticle(articleReq models.ArticleRequest, userId str
 		Tag: tags,
 	}
 
-	return as.repo.CreateArticleTags(articleTags)
+	return as.articleRepo.CreateArticleTags(articleTags)
 
 	//notify followers here
 }
 
 func (as *ArticleSvc) GetArticle(id string) (models.ArticleResponse, int, error) {
 	//get article
-	article, code, err := as.repo.GetArticleById(id)
+	article, code, err := as.articleRepo.GetArticleById(id)
 	if err != nil {
 		return models.ArticleResponse{}, code, err
 	}
 
 	//get article likes
-	articleLikes := 0
+	articleLikes, err := as.articleRepo.GetArticleLikes(article.ArticleId)
+	if err != nil {
+		return models.ArticleResponse{}, 500, err
+	}
 
 	//get article tags
-	articleTags, code, err := as.repo.GetArticleTags(id)
+	articleTags, code, err := as.articleRepo.GetArticleTags(id)
 	if err != nil {
 		return models.ArticleResponse{}, code, err
 	}
@@ -89,7 +96,7 @@ func (as *ArticleSvc) GetArticle(id string) (models.ArticleResponse, int, error)
 	articleTagsFormated := strings.Split(articleTags.Tag, ", ")
 
 	//get user
-	author, code, err := as.repo.GetArticleAuthorById(article.AuthorId)
+	author, code, err := as.articleRepo.GetArticleAuthorById(article.AuthorId)
 	if err != nil {
 		return models.ArticleResponse{}, code, err
 	}
@@ -115,7 +122,7 @@ func (as *ArticleSvc) GetArticle(id string) (models.ArticleResponse, int, error)
 
 func (as *ArticleSvc) GetMyArticles(userId string) ([]models.ArticleResponse, int, error) {
 	//get articles
-	articles, code, err := as.repo.GetArticles(userId)
+	articles, code, err := as.articleRepo.GetArticles(userId)
 	if err != nil {
 		return []models.ArticleResponse{}, code, err
 	}
@@ -137,7 +144,7 @@ func (as *ArticleSvc) GetMyArticles(userId string) ([]models.ArticleResponse, in
 
 func (as *ArticleSvc) FetchArticles() ([]models.SafeArticleResponse, int, error) {
 	//get articles
-	articles, code, err := as.repo.FetchArticles()
+	articles, code, err := as.articleRepo.FetchArticles()
 	if err != nil {
 		return []models.SafeArticleResponse{}, code, err
 	}
@@ -188,5 +195,54 @@ func (as *ArticleSvc) DeleteArticle(articleId string, userId string) (int, error
 	// }
 	// //might not be needed :)
 
-	return as.repo.DeleteArticle(articleId)
+	return as.articleRepo.DeleteArticle(articleId)
+}
+
+func (as *ArticleSvc) LikeArticle(likeReq models.Like) (int, error) {
+	//checkis user ha already liked
+	alreadyLiked := as.articleRepo.IsLikedBy(likeReq)
+
+	if alreadyLiked {
+		return as.articleRepo.RemoveLike(likeReq)
+	}
+
+	return as.articleRepo.CreateLike(likeReq)
+}
+
+func (as *ArticleSvc) CommentArticle(commentReq models.Comment) (int, error) {
+	return as.articleRepo.CreateComment(commentReq)
+}
+
+func (as *ArticleSvc) GetArticleComments(articleId string) ([]models.CommentResponse, int, error) {
+	//get comments
+	comments, code, err := as.articleRepo.GetArticleComments(articleId)
+	if err != nil {
+		return []models.CommentResponse{}, code, err
+	}
+
+	//format comments
+	commentsReponse := []models.CommentResponse{}
+
+	for _, c := range comments {
+		user, code, err := as.authRepo.GetUserById(c.CommenterUserId)
+		if err != nil {
+			return commentsReponse, code, err
+		}
+
+		comment := models.CommentResponse{
+			Content: c.Content,
+			ArticleId: articleId, 
+			Name: user.Name,
+			Username: user.Username,
+			Verified: user.Verified,
+			Picture: user.Picture,
+		}
+
+		commentsReponse =append(commentsReponse, comment)
+	}
+
+	//sort by latest
+	slices.Reverse(commentsReponse)
+
+	return commentsReponse, 200, nil
 }

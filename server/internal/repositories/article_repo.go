@@ -16,6 +16,12 @@ type ArticleRepository interface {
 	FetchArticles() ([]models.Article, int, error)
 	GetArticleAuthorById(string) (models.UserResponse, int, error)
 	DeleteArticle(string) (int, error)
+	IsLikedBy(models.Like) bool
+	CreateLike(models.Like) (int, error)
+	RemoveLike(models.Like) (int, error)
+	CreateComment(models.Comment) (int, error)
+	GetArticleLikes(string) (int, error)
+	GetArticleComments(string) ([]models.Comment, int, error)
 }
 
 type ArticleRepo struct {
@@ -124,6 +130,70 @@ func (ar *ArticleRepo) DeleteArticle(articleId string) (int, error) {
 	}
 
 	return 200, nil
+}
+
+func (ar *ArticleRepo) IsLikedBy(likeReq models.Like) bool {
+	var like models.Like
+	res := ar.db.Where(&likeReq).First(&like)
+	
+	if res.Error == gorm.ErrRecordNotFound {
+		return false
+	}
+
+	return true
+}
+
+func (ar *ArticleRepo) CreateLike(likeReq models.Like) (int, error) {
+	res := ar.db.Create(&likeReq)
+	if res.Error != nil {
+		return 500, fmt.Errorf("failed to like post")
+	}
+
+	return 201, nil
+}
+
+func (ar *ArticleRepo) RemoveLike(likeReq models.Like) (int, error) {
+	res := ar.db.Model(&models.Like{}).Where(&likeReq).Delete(models.Like{})
+	if res.Error != nil {
+		return 500, fmt.Errorf("failed to unlike post")
+	}
+
+	return 200, nil
+}
+
+func (ar *ArticleRepo) CreateComment(commentReq models.Comment) (int, error) {
+	res := ar.db.Create(&commentReq)
+	if res.Error != nil {
+		return 500, fmt.Errorf("failed to comment post")
+	}
+
+	return 201, nil
+}
+
+func (ar *ArticleRepo) GetArticleLikes(articleId string) (int, error) {
+	var likes int64
+	res := ar.db.Model(&models.Like{}).Where("article_id = ?", articleId).Count(&likes)
+	if res.Error != nil {
+		if res.Error ==  gorm.ErrRecordNotFound {
+			return 0, nil
+		}
+		return 0, fmt.Errorf("failed to get likes")
+	}
+
+	return int(likes), nil
+}
+
+func (ar *ArticleRepo) GetArticleComments(articleId string) ([]models.Comment, int, error) {
+	var comments []models.Comment
+	res := ar.db.Find(&comments, "article_id = ?", articleId)
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return []models.Comment{}, 200, nil
+		}
+		return []models.Comment{}, 500, fmt.Errorf("internal server error")
+	}
+
+	return comments, 200, nil
 }
 
 

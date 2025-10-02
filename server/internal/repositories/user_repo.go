@@ -12,6 +12,7 @@ type UserRepository interface {
 	GetArticleById(string) (models.Article, int, error)
 	GetArticleAuthorById(string) (models.SafeUserResponse, int, error)
 	GetArticleTags(string) (models.Tag, int, error)
+	GetArticleLikes(string) (int, error)
 }
 
 type UserRepo struct {
@@ -92,6 +93,19 @@ func (ur *UserRepo) GetArticleTags(articleId string) (models.Tag, int, error) {
 	}
 	
 	return articleTags, 200, nil
+}
+
+func (ur *UserRepo) GetArticleLikes(articleId string) (int, error) {
+	var likes int64
+	res := ur.db.Model(&models.Like{}).Where("article_id = ?", articleId).Count(&likes)
+	if res.Error != nil {
+		if res.Error ==  gorm.ErrRecordNotFound {
+			return 0, nil
+		}
+		return 0, fmt.Errorf("failed to get likes")
+	}
+
+	return int(likes), nil
 }
 
 

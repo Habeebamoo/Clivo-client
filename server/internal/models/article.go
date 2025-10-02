@@ -21,6 +21,17 @@ type Tag struct {
 	Tag        string  `json:"tag"`
 }
 
+type Like struct {
+	ArticleId    string  `json:"articleId"`
+	LikerUserId  string  `json:"likerUserId"`
+}
+
+type Comment struct {
+	ArticleId        string  `json:"articleId"`
+	CommenterUserId  string  `json:"commenterUserId"`
+	Content          string  `json:"content"`
+}
+
 type ArticleResponse struct {
 	ArticleId       string     `json:"articleId"`
 	AuthorId        string     `json:"authorId"`
@@ -34,6 +45,15 @@ type ArticleResponse struct {
 	Likes           int        `json:"likes"`
 	ReadTime        string     `json:"readTime"`
 	CreatedAt       time.Time  `json:"createdAt"`
+}
+
+type CommentResponse struct {
+	ArticleId  string  `json:"articleId"`
+	Content    string  `json:"content"`
+	Name       string  `json:"name"`
+	Username   string  `json:"username"`
+	Verified   bool    `json:"verified"`
+	Picture    string  `json:"picture"`
 }
 
 type SafeArticleResponse struct {
@@ -68,3 +88,22 @@ func (a ArticleRequest) Validate() error {
 	return nil
 }
 
+func (l Like) Validate() error {
+	if l.ArticleId == "" {
+		return fmt.Errorf("missing field: articleId")
+	} else if l.LikerUserId == "" {
+		return fmt.Errorf("missing field: userId")
+	}
+	return nil
+}
+
+func (c Comment) Validate() error {
+	if c.ArticleId == "" {
+		return fmt.Errorf("missing field: articleId")
+	} else if c.CommenterUserId == "" {
+		return fmt.Errorf("missing field: userId")
+	} else if c.Content == "" {
+		return fmt.Errorf("missing field: comment")
+	}
+	return nil
+}

@@ -25,13 +25,24 @@ CREATE TABLE likes (
   liker_user_id TEXT NOT NULL,
 
   UNIQUE (article_id, liker_user_id),
-  FOREIGN KEY (article_id) REFERENCES articles(article_id) ON DELETE CASCADE
-)
+  FOREIGN KEY (article_id) REFERENCES articles(article_id) ON DELETE CASCADE,
+  FOREIGN KEY (liker_user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE comments (
+  article_id TEXT NOT NULL,
+  commenter_user_id TEXT NOT NULL,
+  content TEXT NOT NULL,
+
+  FOREIGN KEY (article_id) REFERENCES articles(article_id) ON DELETE CASCADE,
+  FOREIGN KEY (commenter_user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
 DROP TABLE likes;
+DROP TABLE comments;
 DROP TABLE tags;
 DROP TABLE articles;
 -- +goose StatementEnd
