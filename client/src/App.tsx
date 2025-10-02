@@ -9,7 +9,7 @@ import Home from "./pages/home/Home"
 import LoginPage from "./pages/home/Login"
 import Layout from "./layout/layout"
 import Dashboard from "./pages/dashboard/Page"
-import Article from "./pages/dashboard/Article"
+import Article from "./pages/home/Article"
 import MyProfile from "./pages/dashboard/MyProfile"
 import SettingsPage from "./pages/dashboard/Settings"
 
