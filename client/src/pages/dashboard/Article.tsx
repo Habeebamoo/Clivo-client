@@ -1,16 +1,33 @@
 import { useSelector } from "react-redux"
-import { H2 } from "../../components/Typo"
+import { H2, H3 } from "../../components/Typo"
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 import { articles, type Article } from "../../redux/reducers/article_reducer";
 import { shorten } from "../../utils/utils";
 import { FaUpload } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
+import { GoHeart } from "react-icons/go";
+import { CgShare } from "react-icons/cg";
+import logo from "../../assets/logo.jpg"
+
+interface Comment {
+	articleId: string,
+	content: string,
+	name: string,
+	username: string,
+	verified: boolean,
+	picture: string,
+} 
 
 const ArticlePage = () => {
   const articleId: string = useSelector((state: any) => state.articles.activeArticle);
-  
   const navigate = useNavigate();
+
+  //default comments
+  const comments: Comment[] = [
+    {articleId: "dnfiff", content: "Good", name: "Paul", username: "@paul", verified: true, picture: logo},
+    {articleId: "dnfiff", content: "Yes", name: "Micheal", username: "@paul", verified: false, picture: ""},
+  ]
 
   useEffect(() => {
     if (!articleId) {
@@ -77,7 +94,54 @@ const ArticlePage = () => {
         })}
       </div>
 
+      {/* Info's */}
+      <div className="border-t-1 border-b-1 border-muted p-3 mt-8 flex-between">
+        <div className="flex-start gap-1">
+          <GoHeart color="rgb(165, 163, 161)" size={19} />
+          <p className="text-sm">6</p>
+        </div>
+        <div>
+          <CgShare color="rgb(165, 163, 161)" size={19} />
+        </div>
+      </div>
+
+      {/* Comments */}
+      <div className="mt-10 mb-15">
+        <H3 font="exo" text="Comments" />
+        <div>
+          {comments.length == 0}
+          {comments.length !== 0 && 
+            <div className="mt-8">
+              {comments.map((comment: Comment) => {
+                return <CommentDisplay comment={comment} />
+              })}
+            </div>
+          }
+        </div>
+      </div>
+
     </main>
+  )
+}
+
+const CommentDisplay = ({ comment }: { comment: Comment}) => {
+  return (
+    <div className="border-t-1 border-muted py-4">
+      <div className="flex-start gap-2">
+        {comment.picture ? (
+          <img src={comment.picture} className="h-6 w-6 rounded-full" />
+        ): (
+          <div className="h-5 w-5 rounded-full bg-muted border-1 border-accentLight"></div>
+        )}
+        <div className="flex-start gap-1">
+          <p className="font-inter">{comment.name}</p>
+          {comment.verified && <MdVerified color="rgba(93, 110, 189, 1)" />}
+        </div>
+      </div>
+      <div className="pl-8 text-sm font-inter text-accent mt-1">
+        {comment.content}
+      </div>
+    </div>
   )
 }
 

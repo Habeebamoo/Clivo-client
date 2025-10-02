@@ -4,7 +4,7 @@ import type { Article } from "../redux/reducers/article_reducer"
 import { setActiveArticle } from "../redux/reducers/article_reducer"
 import { useDispatch } from "react-redux"
 import { MdVerified } from "react-icons/md"
-import { GoHeartFill } from "react-icons/go"
+import { GoHeart } from "react-icons/go"
 
 const ArticleDisplay = ({ article }: { article: Article }) => {
   const dispatch = useDispatch()
@@ -57,8 +57,8 @@ const ArticleDisplay = ({ article }: { article: Article }) => {
       {/* others */}
       <div className="mt-3 flex-between">
         <div className="flex-start gap-1">
-          <GoHeartFill color="rgb(165, 163, 161)" />
-          <p className="text-sm">6</p>
+          <GoHeart color="rgb(165, 163, 161)" />
+          <p className="text-[12px]">6</p>
         </div>
         <p className="text-[12px] font-exo text-accentLight">{article.readTime}</p>
       </div>
