@@ -1,6 +1,5 @@
-import { useSelector } from "react-redux"
 import { H2, H3 } from "../../components/Typo"
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useEffect } from "react";
 import { articles, type Article } from "../../redux/reducers/article_reducer";
 import { shorten } from "../../utils/utils";
@@ -9,6 +8,7 @@ import { MdVerified } from "react-icons/md";
 import { GoHeart } from "react-icons/go";
 import { CgShare } from "react-icons/cg";
 import logo from "../../assets/logo.jpg"
+import NotFound from "../../components/NotFound";
 
 interface Comment {
 	articleId: string,
@@ -20,7 +20,7 @@ interface Comment {
 } 
 
 const ArticlePage = () => {
-  const articleId: string = useSelector((state: any) => state.articles.activeArticle);
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   //default comments
@@ -30,12 +30,14 @@ const ArticlePage = () => {
   ]
 
   useEffect(() => {
-    if (!articleId) {
+    if (!id) {
       navigate("/dashboard")
     }
   })
 
-  const article: Article | undefined = articles.find((art) => art?.articleId === articleId)
+  const article: Article | undefined = articles.find((art) => art?.articleId === id)
+
+  if (!article) return <NotFound text="Couldn't Find Article" />
 
   return (
     <main className="w-[90%] sm:w-[400px] md:w-[500px] mx-auto">

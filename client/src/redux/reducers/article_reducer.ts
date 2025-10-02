@@ -22,20 +22,15 @@ export const articles = [
 ];
 
 const initialState = {
-  articles: articles,
-  activeArticle: JSON.parse(localStorage.getItem("clivo_active_article")!) || ""
+  articles: articles
 }
 
 const articleSlice = createSlice({
   name: "articles",
   initialState,
   reducers: {
-    setActiveArticle: (state, action) => {
-      console.log(state)
-      localStorage.setItem("clivo_active_article", JSON.stringify(action.payload))
-    }
+
   }
 })
 
-export const { setActiveArticle } = articleSlice.actions;
 export default articleSlice.reducer

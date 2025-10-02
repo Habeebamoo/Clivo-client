@@ -1,17 +1,12 @@
 import { H3 } from "./Typo"
 import { shorten } from "../utils/utils"
 import type { Article } from "../redux/reducers/article_reducer"
-import { setActiveArticle } from "../redux/reducers/article_reducer"
-import { useDispatch } from "react-redux"
 import { MdVerified } from "react-icons/md"
 import { GoHeart } from "react-icons/go"
 
 const ArticleDisplay = ({ article }: { article: Article }) => {
-  const dispatch = useDispatch()
-
   const toPost = () => {
-    dispatch(setActiveArticle(article.articleId));
-    window.location.href = "/dashboard/article"
+    window.location.href = `/posts/${article.articleId}`
   }
 
   return (
