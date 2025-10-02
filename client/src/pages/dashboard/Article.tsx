@@ -42,7 +42,7 @@ const ArticlePage = () => {
   return (
     <main className="w-[90%] sm:w-[400px] md:w-[500px] mx-auto">
       {/* Heading section */}
-      <div className="p-1 w-full">
+      <div className="p-1 w-full mt-6">
         <div>
           {article!.picture ? (
             <img src={article!.picture} className="h-35 mb-4 mx-auto" />
