@@ -7,6 +7,7 @@ CREATE TABLE articles (
   content TEXT NOT NULL,
   picture TEXT,
   read_time TEXT,
+  slug TEXT,
   created_at TIMESTAMP DEFAULT NOW(),
 
   UNIQUE (article_id),

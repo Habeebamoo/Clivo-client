@@ -9,6 +9,7 @@ import (
 
 type ArticleRepository interface {
 	CreateArticle(models.Article) (int, error)
+	CreateArticleSlug(string, string) (int, error)
 	CreateArticleTags(models.Tag) (int, error)
 	GetArticleById(string) (models.Article, int, error)
 	GetArticleTags(string) (models.Tag, int, error)
@@ -33,11 +34,21 @@ func NewArticleRepository(db *gorm.DB) ArticleRepository {
 }
 
 func (ar *ArticleRepo) CreateArticle(article models.Article) (int, error) {
+	//create article
 	res := ar.db.Create(&article)
 	if res.Error != nil {
 		return 500, fmt.Errorf("internal server error")
 	}
 
+	return 201, nil
+}
+
+func (ar *ArticleRepo) CreateArticleSlug(articleId string, slug string) (int, error) {
+	res := ar.db.Model(&models.Article{}).Where("article_id = ?", articleId).Update("slug", slug)
+	if res.Error != nil {
+		return 500, fmt.Errorf("internal server error")
+	}
+	
 	return 201, nil
 }
 

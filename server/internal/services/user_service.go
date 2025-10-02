@@ -63,6 +63,7 @@ func (us *UserSvc) GetArticle(articleId string) (models.SafeArticleResponse, int
 		Tags: articleTagsFormated,
 		Likes: articleLikes,
 		ReadTime: article.ReadTime,
+		Slug: article.Slug,
 		CreatedAt: article.CreatedAt,
 	}
 

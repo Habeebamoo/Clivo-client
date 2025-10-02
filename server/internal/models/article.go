@@ -13,6 +13,7 @@ type Article struct {
 	Content         string     `json:"content"`
 	Picture         string     `json:"picture"`
 	ReadTime        string     `json:"readTime"`
+	Slug            string     `json:"slug"`
 	CreatedAt       time.Time  `json:"createdAt"`
 }
 
@@ -44,6 +45,7 @@ type ArticleResponse struct {
 	Tags            []string   `json:"tags"`
 	Likes           int        `json:"likes"`
 	ReadTime        string     `json:"readTime"`
+	Slug            string     `json:"slug"`
 	CreatedAt       time.Time  `json:"createdAt"`
 }
 
@@ -67,6 +69,7 @@ type SafeArticleResponse struct {
 	Tags            []string   `json:"tags"`
 	Likes           int        `json:"likes"`
 	ReadTime        string     `json:"readTime"`
+	Slug            string     `json:"slug"`
 	CreatedAt       time.Time  `json:"createdAt"`
 }
 

@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Habeebamoo/Clivo/server/internal/config"
 	"github.com/Habeebamoo/Clivo/server/internal/models"
 	"github.com/Habeebamoo/Clivo/server/internal/repositories"
 	"github.com/Habeebamoo/Clivo/server/pkg/utils"
@@ -48,6 +49,7 @@ func (as *ArticleSvc) CreateArticle(articleReq models.ArticleRequest, userId str
 		Content: articleReq.Content,
 		CreatedAt: time.Now(),
 		ReadTime: readTime,
+		Slug: "",
 		Picture: articleImage,
 	}
 
@@ -57,9 +59,18 @@ func (as *ArticleSvc) CreateArticle(articleReq models.ArticleRequest, userId str
 		return code, err
 	}
 
-	fmt.Println("Getting article Id.........................")
-	fmt.Println("Article Id: ", article.ArticleId)
-	fmt.Println("Done.............................")
+	//updated slug
+	clientOrigin, err := config.Get("CLIENT_URL")
+	if err != nil {
+		return 500, err
+	}
+
+	artcileSlug := fmt.Sprintf("%s/posts/%s", clientOrigin, article.ArticleId)
+
+	code, err = as.articleRepo.CreateArticleSlug(article.ArticleId, artcileSlug)
+	if err != nil {
+		return code, err
+	}
 
 	//create article tags
 	tags := strings.Join(articleReq.Tags, ", ")
@@ -114,6 +125,7 @@ func (as *ArticleSvc) GetArticle(id string) (models.ArticleResponse, int, error)
 		Tags: articleTagsFormated,
 		Likes: articleLikes,
 		ReadTime: article.ReadTime,
+		Slug: article.Slug,
 		CreatedAt: article.CreatedAt,
 	}
 
@@ -170,6 +182,7 @@ func (as *ArticleSvc) FetchArticles() ([]models.SafeArticleResponse, int, error)
 			Tags: formatedArticle.Tags,
 			Likes: formatedArticle.Likes,
 			ReadTime: formatedArticle.ReadTime,
+			Slug: article.Slug,
 			CreatedAt: formatedArticle.CreatedAt,
 		}
 
