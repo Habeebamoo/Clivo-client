@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.ArticleHandler, userHandler handlers.UserHandler) *gin.Engine {
+func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.ArticleHandler, userHandler handlers.UserHandler, adminHandler handlers.AdminHandler) *gin.Engine {
 	r := gin.Default()
 
 	//middlewares chain
@@ -44,6 +44,18 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 		article.POST("/like/:id", articleHandler.LikeArticle)
 		article.POST("/comment/:id", articleHandler.CommentArticle)
 		article.GET("/:id/comments", articleHandler.GetArticleComments)
+	}
+
+	//admin routes
+	admin := api.Group("/admin", middlewares.VerifyAdmin())
+	{
+		admin.GET("/users", adminHandler.GetUsers)
+		admin.GET("/users/:id", adminHandler.GetUser)
+		admin.POST("/verify/:id", adminHandler.VerifyUser)
+		admin.POST("/unverify/:id", adminHandler.UnVerifyUser)
+		admin.POST("/restrict/:id", adminHandler.RestrictUser)
+		admin.POST("/unrestrict:/id", adminHandler.UnRestrictUser)
+		admin.DELETE("/article/:id", adminHandler.DeleteArticle)
 	}
 
 	return r
