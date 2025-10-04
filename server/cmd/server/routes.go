@@ -54,7 +54,7 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 		admin.POST("/verify/:id", adminHandler.VerifyUser)
 		admin.POST("/unverify/:id", adminHandler.UnVerifyUser)
 		admin.POST("/restrict/:id", adminHandler.RestrictUser)
-		admin.POST("/unrestrict:/id", adminHandler.UnRestrictUser)
+		admin.POST("/unrestrict/:id", adminHandler.UnRestrictUser)
 		admin.DELETE("/article/:id", adminHandler.DeleteArticle)
 	}
 
