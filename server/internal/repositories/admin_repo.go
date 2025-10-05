@@ -11,6 +11,7 @@ type AdminRepository interface {
 	GetUsers() ([]models.UserResponse, int, error)
 	GetUser(string) (models.UserResponse, int, error)
 	UpdateUserVerification(string, bool) (int, error)
+	UpdateUserRestriction(string, bool) (int, error)
 }
 
 type AdminRepo struct {
@@ -60,6 +61,21 @@ func (ar *AdminRepo) UpdateUserVerification(userId string, way bool) (int, error
 	res := ar.db.Model(&models.User{}).
 							Where("user_id = ?", userId).
 							Update("verified", way)
+
+	if res.Error != nil {
+		if res.RowsAffected == 0 {
+			return 500, fmt.Errorf("failed to update user")
+		}
+		return 500, fmt.Errorf("internal server error")
+	}
+
+	return 200, nil
+}
+
+func (ar *AdminRepo) UpdateUserRestriction(userId string, way bool) (int, error) {
+	res := ar.db.Model(&models.User{}).
+							Where("user_id = ?", userId).
+							Update("is_banned", way)
 
 	if res.Error != nil {
 		if res.RowsAffected == 0 {

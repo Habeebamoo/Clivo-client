@@ -10,6 +10,8 @@ type AdminService interface {
 	GetUser(string) (models.UserResponse, int, error)
 	VerifyUser(string) (int, error)
 	UnVerifyUser(string) (int, error)
+	BanUser(string) (int, error)
+	UnBanUser(string) (int, error)
 }
 
 type AdminSvc struct {
@@ -53,7 +55,7 @@ func (as *AdminSvc) UnVerifyUser(userId string) (int, error) {
 		return code, err
 	}
 
-	//check is user is already verified
+	//check is user is not verified
 	if !user.Verified {
 		return 200, nil
 	}
@@ -62,4 +64,36 @@ func (as *AdminSvc) UnVerifyUser(userId string) (int, error) {
 	return as.repo.UpdateUserVerification(userId, false)
 
 	//notify user
+}
+
+func (as *AdminSvc) BanUser(userId string) (int, error) {
+	//get user
+	user, code, err := as.repo.GetUser(userId)
+	if err != nil {
+		return code, err
+	}
+
+	//check if user is banned
+	if user.IsBanned {
+		return 200, nil
+	}
+
+	//ban if not
+	return as.repo.UpdateUserRestriction(userId, true)
+}
+
+func (as *AdminSvc) UnBanUser(userId string) (int, error) {
+	//get user
+	user, code, err := as.repo.GetUser(userId)
+	if err != nil {
+		return code, err
+	}
+
+	//check is user is not banned
+	if !user.IsBanned {
+		return 200, nil
+	}
+
+	//un-ban if not
+	return as.repo.UpdateUserRestriction(userId, false)
 }

@@ -77,11 +77,37 @@ func (ahdl *AdminHandler) UnVerifyUser(c *gin.Context) {
 }
 
 func (ahdl *AdminHandler) RestrictUser(c *gin.Context) {
+	userId := c.Param("id")
+	if userId == "" {
+		utils.Error(c, 400, "UserId Missing", nil)
+		return
+	}
 
+	//call service
+	statusCode, err := ahdl.service.BanUser(userId)
+	if err != nil {
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	utils.Success(c, statusCode, "User Restriction Successfull", nil)
 }
 
 func (ahdl *AdminHandler) UnRestrictUser(c *gin.Context) {
+	userId := c.Param("id")
+	if userId == "" {
+		utils.Error(c, 400, "UserId Missing", nil)
+		return
+	}
 
+	//call service
+	statusCode, err := ahdl.service.UnBanUser(userId)
+	if err != nil {
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	utils.Success(c, statusCode, "User Restriction Lifting Successfull", nil)
 }
 
 func (ahdl *AdminHandler) DeleteArticle(c *gin.Context) {
