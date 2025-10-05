@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
   email TEXT NOT NULL,
   role TEXT NOT NULL,
   verified BOOLEAN DEFAULT FALSE,
+  is_banned BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT NOW(),
 
   UNIQUE(user_id),
@@ -18,7 +19,8 @@ CREATE TABLE IF NOT EXISTS profiles (
   bio TEXT,
   picture TEXT,
   interests TEXT,
-  profile_link TEXT,
+  profile_url TEXT,
+  website TEXT,
   following INTEGER,
   followers INTEGER,
 

@@ -38,7 +38,6 @@ CREATE TABLE IF NOT EXISTS comments (
 -- +goose StatementBegin
 DROP TABLE likes;
 DROP TABLE comments;
-DROP TABLE tags;
 DROP TABLE articles;
 -- +goose StatementEnd
 

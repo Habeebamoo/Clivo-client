@@ -69,7 +69,7 @@ func (ar *AuthRepo) GetUserByEmail(email string) (models.User, int, error) {
 func (ar *AuthRepo) GetUserById(userId string) (models.UserResponse, int, error) {
 	var user models.UserResponse
 	res := ar.db.Table("users u").
-				Select("u.user_id, u.name, u.email, u.role, u.verified, p.username, p.bio, p.picture, p.interests, p.profile_link, p.following, p.followers, u.created_at").
+				Select("u.user_id, u.name, u.email, u.role, u.verified, u.is_banned, p.username, p.bio, p.picture, p.interests, p.profile_url, p.website, p.following, p.followers, u.created_at").
 				Joins("JOIN profiles p ON u.user_id = p.user_id").
 				Where("u.user_id = ?", userId).
 				Scan(&user)

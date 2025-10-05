@@ -240,7 +240,7 @@ func (as *ArticleSvc) GetArticleComments(articleId string) ([]models.CommentResp
 			Picture: user.Picture,
 		}
 
-		commentsReponse =append(commentsReponse, comment)
+		commentsReponse = append(commentsReponse, comment)
 	}
 
 	//sort by latest

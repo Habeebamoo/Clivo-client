@@ -50,6 +50,7 @@ func (as *AuthSvc) SignInUser(userReq models.UserRequest) (string, int, error) {
 		Email: userReq.Email,
 		Role: "user",
 		Verified: false,
+		IsBanned: false,
 		CreatedAt: time.Now(),
 	}
 
@@ -65,13 +66,17 @@ func (as *AuthSvc) SignInUser(userReq models.UserRequest) (string, int, error) {
 	//calculate and get unique username for user
 	username := utils.GenerateUniqueUsername(utils.GetUsernameFromEmail(userReq.Email), as.repo.UsernameExists) 
 
+	//get user profile
+	profile := utils.GetUserProfile(username)
+
 	userProfile := models.Profile{
 		UserId: createdUser.UserId,
 		Username: username,
 		Bio: demoUserBio,
 		Picture: userReq.Picture,
 		Interests: userinterests,
-		ProfileLink: "",
+		ProfileUrl: profile,
+		Website: "",
 		Following: 0,
 		Followers: 0,
 	}

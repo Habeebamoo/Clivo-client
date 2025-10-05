@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Habeebamoo/Clivo/server/internal/config"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -44,6 +45,15 @@ func GenerateRandomId() string {
 	}
 
 	return hex.EncodeToString(b)
+}
+
+func GetUserProfile(username string) string {
+	clientOrigin, err := config.Get("CLIENT_URL")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return fmt.Sprintf("%s/%s", clientOrigin, username)
 }
 
 func GetUsernameFromEmail(email string) string {

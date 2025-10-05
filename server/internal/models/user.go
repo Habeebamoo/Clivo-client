@@ -11,6 +11,7 @@ type User struct {
 	Email      string     `json:"email"`
 	Role       string     `json:"role"`
 	Verified   bool       `json:"verified"`
+	IsBanned   bool       `json:"isBanned"`
 	CreatedAt  time.Time  `json:"createdAt"`
 }
 
@@ -20,7 +21,8 @@ type Profile struct {
 	Bio          string  `json:"bio"`
 	Picture      string  `json:"picture"`
 	Interests    string  `json:"interests"`
-	ProfileLink  string  `json:"profileLink"`
+	ProfileUrl   string  `json:"profileUrl"`
+	Website      string  `json:"website"`
 	Following    int     `json:"following"`
 	Followers    int     `json:"followers"`
 }
@@ -38,11 +40,13 @@ type UserResponse struct {
 	Email        string     `json:"email"`
 	Role         string     `json:"role"`
 	Verified     bool       `json:"verified"`
+	IsBanned     bool       `json:"isBanned"`
 	Username     string     `json:"username"`
 	Bio          string     `json:"bio"`
 	Picture      string     `json:"picture"`
 	Interests    string     `json:"interests"`
-	ProfileLink  string     `json:"profileLink"`
+	ProfileUrl   string     `json:"profileUrl"`
+	Website      string     `json:"website"`
 	Following    int        `json:"following"`
 	Followers    int        `json:"followers"`
 	CreatedAt    time.Time  `json:"createdAt"`
@@ -54,7 +58,8 @@ type SafeUserResponse struct {
 	Username     string     `json:"username"`
 	Bio          string     `json:"bio"`
 	Picture      string     `json:"picture"`
-	ProfileLink  string     `json:"profileLink"`
+	ProfileUrl   string     `json:"profileUrl"`
+	Website      string     `json:"website"`
 	Following    int        `json:"following"`
 	Followers    int        `json:"followers"`
 }
