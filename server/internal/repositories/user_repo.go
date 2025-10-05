@@ -11,7 +11,6 @@ type UserRepository interface {
 	GetUser(string) (models.SafeUserResponse, int, error)
 	GetArticleById(string) (models.Article, int, error)
 	GetArticleAuthorById(string) (models.SafeUserResponse, int, error)
-	GetArticleTags(string) (models.Tag, int, error)
 	GetArticleLikes(string) (int, error)
 }
 
@@ -80,19 +79,6 @@ func (ur *UserRepo) GetArticleAuthorById(authorId string) (models.SafeUserRespon
 	}
 
 	return user, 200, nil
-}
-
-func (ur *UserRepo) GetArticleTags(articleId string) (models.Tag, int, error) {
-	var articleTags models.Tag
-	res := ur.db.First(&articleTags, "article_id = ?", articleId)
-	if res.Error != nil {
-		if res.Error == gorm.ErrRecordNotFound {
-			return articleTags, 404, fmt.Errorf("article tags not found")
-		}
-		return articleTags, 500, fmt.Errorf("internal server error")
-	}
-	
-	return articleTags, 200, nil
 }
 
 func (ur *UserRepo) GetArticleLikes(articleId string) (int, error) {

@@ -10,9 +10,7 @@ import (
 type ArticleRepository interface {
 	CreateArticle(models.Article) (int, error)
 	CreateArticleSlug(string, string) (int, error)
-	CreateArticleTags(models.Tag) (int, error)
 	GetArticleById(string) (models.Article, int, error)
-	GetArticleTags(string) (models.Tag, int, error)
 	GetArticles(string) ([]models.Article, int, error)
 	FetchArticles() ([]models.Article, int, error)
 	GetArticleAuthorById(string) (models.UserResponse, int, error)
@@ -52,15 +50,6 @@ func (ar *ArticleRepo) CreateArticleSlug(articleId string, slug string) (int, er
 	return 201, nil
 }
 
-func (ar *ArticleRepo) CreateArticleTags(articleTag models.Tag) (int, error) {
-	res := ar.db.Create(&articleTag)
-	if res.Error != nil {
-		return 500, fmt.Errorf("internal server error")
-	}
-
-	return 201, nil
-}
-
 func (ar *ArticleRepo) GetArticleById(articleId string) (models.Article, int, error) {
 	var article models.Article
 	res := ar.db.First(&article, "article_id = ?", articleId)
@@ -72,19 +61,6 @@ func (ar *ArticleRepo) GetArticleById(articleId string) (models.Article, int, er
 	}
 
 	return article, 200, nil
-}
-
-func (ar *ArticleRepo) GetArticleTags(articleId string) (models.Tag, int, error) {
-	var articleTags models.Tag
-	res := ar.db.First(&articleTags, "article_id = ?", articleId)
-	if res.Error != nil {
-		if res.Error == gorm.ErrRecordNotFound {
-			return articleTags, 404, fmt.Errorf("article tags not found")
-		}
-		return articleTags, 500, fmt.Errorf("internal server error")
-	}
-	
-	return articleTags, 200, nil
 }
 
 func (ar *ArticleRepo) GetArticles(userId string) ([]models.Article, int, error) {

@@ -1,6 +1,6 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   user_id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
   email TEXT NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE users (
   UNIQUE(email)
 );
 
-CREATE TABLE profiles (
+CREATE TABLE IF NOT EXISTS profiles (
   user_id TEXT PRIMARY KEY,
   username TEXT NOT NULL,
   bio TEXT,

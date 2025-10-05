@@ -37,13 +37,8 @@ func (us *UserSvc) GetArticle(articleId string) (models.SafeArticleResponse, int
 		return models.SafeArticleResponse{}, 500, err
 	}
 
-	//get article tags
-	articleTags, code, err := us.repo.GetArticleTags(article.ArticleId)
-	if err != nil {
-		return models.SafeArticleResponse{}, code, err
-	}
-
-	articleTagsFormated := strings.Split(articleTags.Tag, ", ")
+	//format article tags
+	articleTagsFormated := strings.Split(article.Tags, ", ")
 
 	//get user
 	author, code, err := us.repo.GetArticleAuthorById(article.AuthorId)

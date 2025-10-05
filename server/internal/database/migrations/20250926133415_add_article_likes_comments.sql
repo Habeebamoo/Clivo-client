@@ -1,6 +1,6 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TABLE articles (
+CREATE TABLE IF NOT EXISTS articles (
   article_id TEXT NOT NULL,
   author_id TEXT NOT NULL,
   title TEXT NOT NULL,
@@ -8,20 +8,14 @@ CREATE TABLE articles (
   picture TEXT,
   read_time TEXT,
   slug TEXT,
+  tags TEXT,
   created_at TIMESTAMP DEFAULT NOW(),
 
   UNIQUE (article_id),
   FOREIGN KEY (author_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE tags (
-  article_id TEXT NOT NULL,
-  tag TEXT NOT NULL,
-
-  FOREIGN KEY (article_id) REFERENCES articles(article_id) ON DELETE CASCADE
-);
-
-CREATE TABLE likes (
+CREATE TABLE IF NOT EXISTS likes (
   article_id TEXT NOT NULL,
   liker_user_id TEXT NOT NULL,
 
@@ -30,7 +24,7 @@ CREATE TABLE likes (
   FOREIGN KEY (liker_user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE comments (
+CREATE TABLE IF NOT EXISTS comments (
   article_id TEXT NOT NULL,
   commenter_user_id TEXT NOT NULL,
   content TEXT NOT NULL,

@@ -39,7 +39,8 @@ func (as *ArticleSvc) CreateArticle(articleReq models.ArticleRequest, userId str
 	//upload article image
 	articleImage := ""
 
-	//userId is currently email
+	//create article tags
+	tags := strings.Join(articleReq.Tags, ", ")
 
 	//assign article
 	article := models.Article{
@@ -50,6 +51,7 @@ func (as *ArticleSvc) CreateArticle(articleReq models.ArticleRequest, userId str
 		CreatedAt: time.Now(),
 		ReadTime: readTime,
 		Slug: "",
+		Tags: tags,
 		Picture: articleImage,
 	}
 
@@ -72,15 +74,7 @@ func (as *ArticleSvc) CreateArticle(articleReq models.ArticleRequest, userId str
 		return code, err
 	}
 
-	//create article tags
-	tags := strings.Join(articleReq.Tags, ", ")
-
-	articleTags := models.Tag{
-		ArticleId: article.ArticleId,
-		Tag: tags,
-	}
-
-	return as.articleRepo.CreateArticleTags(articleTags)
+	return code, err
 
 	//notify followers here
 }
@@ -98,13 +92,8 @@ func (as *ArticleSvc) GetArticle(id string) (models.ArticleResponse, int, error)
 		return models.ArticleResponse{}, 500, err
 	}
 
-	//get article tags
-	articleTags, code, err := as.articleRepo.GetArticleTags(id)
-	if err != nil {
-		return models.ArticleResponse{}, code, err
-	}
-
-	articleTagsFormated := strings.Split(articleTags.Tag, ", ")
+	//formatting article tags
+	articleTagsFormated := strings.Split(article.Tags, ", ")
 
 	//get user
 	author, code, err := as.articleRepo.GetArticleAuthorById(article.AuthorId)
@@ -197,16 +186,16 @@ func (as *ArticleSvc) FetchArticles() ([]models.SafeArticleResponse, int, error)
 
 func (as *ArticleSvc) DeleteArticle(articleId string, userId string) (int, error) {
 	//get article
-	_, code, err := as.GetArticle(articleId)
+	article, code, err := as.GetArticle(articleId)
 	if err != nil {
 		return code, err
 	}
 
-	// //extra validation to make sure only the author can delete
-	// if article.AuthorId != userId {
-	// 	return 401, fmt.Errorf("Unauthorized Access")
-	// }
-	// //might not be needed :)
+	//extra validation to make sure only the author can delete
+	if article.AuthorId != userId {
+		return 401, fmt.Errorf("Unauthorized Access")
+	}
+	//might not be needed :)
 
 	return as.articleRepo.DeleteArticle(articleId)
 }
