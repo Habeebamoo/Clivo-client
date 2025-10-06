@@ -173,7 +173,7 @@ func (as *ArticleSvc) FetchArticles() ([]models.SafeArticleResponse, int, error)
 			Likes: formatedArticle.Likes,
 			ReadTime: formatedArticle.ReadTime,
 			Slug: article.Slug,
-			CreatedAt: formatedArticle.CreatedAt,
+			CreatedAt: utils.GetTimeAgo(formatedArticle.CreatedAt),
 		}
 
 		articlesRes = append(articlesRes, safeFormatedArticle)

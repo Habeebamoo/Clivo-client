@@ -66,7 +66,7 @@ type SafeArticleResponse struct {
 	Likes           int        `json:"likes"`
 	ReadTime        string     `json:"readTime"`
 	Slug            string     `json:"slug"`
-	CreatedAt       time.Time  `json:"createdAt"`
+	CreatedAt       string     `json:"createdAt"`
 }
 
 type ArticleRequest struct {

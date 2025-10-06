@@ -8,7 +8,8 @@ import (
 )
 
 type UserRepository interface {
-	GetUser(string) (models.SafeUserResponse, int, error)
+	GetUserByUsername(string) (models.SafeUserResponse, int, error)
+	GetArticlesByUsername(string) ([]models.Article, int, error)
 	GetArticleById(string) (models.Article, int, error)
 	GetArticleAuthorById(string) (models.SafeUserResponse, int, error)
 	GetArticleLikes(string) (int, error)
@@ -22,7 +23,7 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 	return &UserRepo{db}
 }
 
-func (ur *UserRepo) GetUser(username string) (models.SafeUserResponse, int, error) {
+func (ur *UserRepo) GetUserByUsername(username string) (models.SafeUserResponse, int, error) {
 	//get userId
 	var userProfile models.Profile
 	res := ur.db.First(&userProfile, "username = ?", username)
@@ -48,6 +49,36 @@ func (ur *UserRepo) GetUser(username string) (models.SafeUserResponse, int, erro
 	}
 
 	return user, 200, nil
+}
+
+func (ur *UserRepo) GetArticlesByUsername(username string) ([]models.Article, int, error) {
+	//get user
+	var user models.UserResponse
+	res := ur.db.Table("users u").
+				Select("u.user_id, u.name, u.email, u.role, u.verified, u.is_banned, p.username, p.bio, p.picture, p.interests, p.profile_url, p.website, p.following, p.followers, u.created_at").
+				Joins("JOIN profiles p ON u.user_id = p.user_id").
+				Where("p.username = ?", username).
+				Scan(&user)
+
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return []models.Article{}, 404, fmt.Errorf("user not found")
+		}
+		return []models.Article{}, 500, fmt.Errorf("internal server error")
+	}
+
+	//get articles
+	var articles []models.Article
+	res = ur.db.Find(&articles, "author_id = ?", user.UserId)
+
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return articles, 200, nil
+		}
+		return articles, 500, fmt.Errorf("internal server error")
+	}
+
+	return articles, 200, nil
 }
 
 func (ur *UserRepo) GetArticleById(articleId string) (models.Article, int, error) {
