@@ -110,6 +110,36 @@ func (ahdl *AdminHandler) UnRestrictUser(c *gin.Context) {
 	utils.Success(c, statusCode, "User Restriction Lifting Successfull", nil)
 }
 
-func (ahdl *AdminHandler) DeleteArticle(c *gin.Context) {
+func (ahdl *AdminHandler) GetArticlesByUsername(c *gin.Context) {
+	username := c.Param("username")
+	if username == "" {
+		utils.Error(c, 400, "Username Missing", nil)
+		return
+	}
 
+	//call service
+	articles, statusCode, err := ahdl.service.GetArticlesByUsername(username)
+	if err != nil {
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	utils.Success(c, statusCode, "", articles)
+}
+
+func (ahdl *AdminHandler) DeleteArticle(c *gin.Context) {
+	articleId := c.Param("id")
+	if articleId == "" {
+		utils.Error(c, 400, "Article Id Missing", nil)
+		return
+	}
+
+	//call service
+	statusCode, err := ahdl.service.DeleteUserArticle(articleId) 
+	if err != nil {
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	utils.Success(c, statusCode, "Article Deleted Successfully", nil)
 }

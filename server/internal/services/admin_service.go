@@ -12,6 +12,8 @@ type AdminService interface {
 	UnVerifyUser(string) (int, error)
 	BanUser(string) (int, error)
 	UnBanUser(string) (int, error)
+	GetArticlesByUsername(string) ([]models.Article, int, error)
+	DeleteUserArticle(string) (int, error)
 }
 
 type AdminSvc struct {
@@ -96,4 +98,24 @@ func (as *AdminSvc) UnBanUser(userId string) (int, error) {
 
 	//un-ban if not
 	return as.repo.UpdateUserRestriction(userId, false)
+}
+
+func (as *AdminSvc) GetArticlesByUsername(username string) ([]models.Article, int, error) {
+	//get userId
+	userId, code, err := as.repo.GetUserIdByUsername(username)
+	if err != nil {
+		return []models.Article{}, code, err
+	}
+
+	//get articles
+	articles, code, err := as.repo.GetUserArticles(userId)
+	if err != nil {
+		return []models.Article{}, code, err
+	}
+
+	return articles, 200, nil
+}
+
+func (as *AdminSvc) DeleteUserArticle(articleId string) (int, error) {
+	return as.repo.DeleteArticle(articleId)
 }

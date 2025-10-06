@@ -12,6 +12,9 @@ type AdminRepository interface {
 	GetUser(string) (models.UserResponse, int, error)
 	UpdateUserVerification(string, bool) (int, error)
 	UpdateUserRestriction(string, bool) (int, error)
+	GetUserIdByUsername(string) (string, int, error)
+	GetUserArticles(string) ([]models.Article, int, error)
+	DeleteArticle(string) (int, error)
 }
 
 type AdminRepo struct {
@@ -86,4 +89,49 @@ func (ar *AdminRepo) UpdateUserRestriction(userId string, way bool) (int, error)
 
 	return 200, nil
 }
+
+func (ar *AdminRepo) GetUserIdByUsername(username string) (string, int, error) {
+	//get user profile
+	var userProfile models.Profile
+	res := ar.db.First(&userProfile, "username = ?", username)
+
+	//error check
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return "", 404, fmt.Errorf("user not found")
+		}
+		return "", 500, fmt.Errorf("internal server error")
+	}
+
+	return userProfile.UserId, 200, nil
+}
+
+func (ar *AdminRepo) GetUserArticles(userId string) ([]models.Article, int, error) {
+	var articles []models.Article
+	res := ar.db.Find(&articles, "author_id = ?", userId)
+
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return articles, 404, fmt.Errorf("articles not found")
+		}
+		return articles, 500, fmt.Errorf("internal server error")
+	}
+
+	return articles, 200, nil
+}
+
+func (ar *AdminRepo) DeleteArticle(articleId string) (int, error) {
+	res := ar.db.Model(&models.Article{}).
+							Where("article_id = ?", articleId).
+							Delete(models.Article{})
+	
+	if res.Error != nil {
+		if res.RowsAffected == 0 {
+			return 500, fmt.Errorf("failed to delete article")
+		}
+		return 500, fmt.Errorf("internal server error")
+	}
+
+	return 200, nil
+} 
 
