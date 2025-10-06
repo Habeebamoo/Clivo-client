@@ -74,6 +74,10 @@ func (us *UserSvc) GetArticles(username string) ([]models.SafeArticleResponse, i
 		return []models.SafeArticleResponse{}, code, err
 	}
 
+	if len(articles) == 0 {
+		return []models.SafeArticleResponse{}, 200, nil
+	}
+
 	//get user
 	user, code, err := us.repo.GetUserByUsername(username)
 	if err != nil {
