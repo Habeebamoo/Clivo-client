@@ -34,6 +34,12 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 		auth.POST("/login", authHandler.SignIn)
 	}
 
+	//user routes
+	user := api.Group("/user", middlewares.AuthenticateUser())
+	{
+		user.GET("/me", authHandler.GetProfile)
+	}
+
 	//posts/articles routes
 	article := api.Group("/article", middlewares.AuthenticateUser())
 	{

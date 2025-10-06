@@ -82,3 +82,22 @@ func GetArticleReadTime(content string) int {
 
 	return int(math.Ceil(minutes))
 }
+
+func GetTimeAgo(t time.Time) string {
+	duration := time.Since(t)
+
+	switch {
+	case duration < time.Minute:
+		return "just now"
+	case duration < time.Hour:
+		return fmt.Sprintf("%d mins ago", int(duration.Minutes()))
+	case duration < 24*time.Hour:
+		return fmt.Sprintf("%d hours ago", int(duration.Hours()))
+	case duration < 30*24*time.Hour:
+		return fmt.Sprintf("%d days ago", int(duration.Hours()/24))
+	case duration < 12*30*24*time.Hour:
+		return fmt.Sprintf("%d months ago", int(duration.Hours()/(24*30)))
+	default:
+		return fmt.Sprintf("%d years ago", int(duration.Hours()/(24*365)))
+	}
+}
