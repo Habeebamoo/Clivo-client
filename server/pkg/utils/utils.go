@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"log"
+	"math"
 	"net/http"
 	"strings"
 	"time"
@@ -71,4 +72,13 @@ func GenerateUniqueUsername(base string, exists func(string) bool) string {
 	}
 
 	return username
+}
+
+func GetArticleReadTime(content string) int {
+	words := strings.Fields(content)
+	wordCount := len(words)
+
+	minutes := float64(wordCount) / 200.00
+
+	return int(math.Ceil(minutes))
 }
