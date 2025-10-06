@@ -37,7 +37,7 @@ const ArticlePage = () => {
 
   const article: Post | undefined = posts.find((art) => art?.articleId === id)
 
-  if (!article) return <NotFound text="Couldn't Find Article" />
+  if (!article) return <NotFound text="Couldn't Find Article" subText="This article has either been deleted or moved to a new URL" />
 
   return (
     <main className="w-[90%] sm:w-[400px] md:w-[500px] mx-auto">

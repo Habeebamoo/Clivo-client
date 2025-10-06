@@ -29,7 +29,7 @@ const getArticles = async () => {
 const MyProfile = () => {
   const user: User = useSelector((state: any) => state.user.user);
   const { data, isLoading } = useQuery({
-    queryKey: ["my-articles"],
+    queryKey: ["my-profile"],
     queryFn: getArticles
   })
   const navigate = useNavigate()
@@ -137,7 +137,7 @@ const MyProfile = () => {
   )
 }
 
-const MyArticles = ({ data }: { data: Post[] | undefined }) => {
+export const MyArticles = ({ data }: { data: Post[] | undefined }) => {
   return (
     <>
       {data?.map((article) => {
