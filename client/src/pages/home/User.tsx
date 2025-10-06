@@ -1,47 +1,57 @@
 import { useQuery } from "@tanstack/react-query"
 import { H1, H2 } from "../../components/Typo"
-import { MdDateRange, MdVerified } from "react-icons/md"
+import { MdVerified } from "react-icons/md"
 import { BiLink } from "react-icons/bi"
 import avatar from "../../assets/avatar.jpg"
-import { MyArticles } from "../dashboard/MyProfile"
 import type { User } from "../../redux/reducers/user_reducer"
 import { useParams } from "react-router"
 import type { Post } from "../../redux/reducers/article_reducer"
-import logo from "../../assets/logo.jpg"
 import Loading from "../../components/Loading"
 import NotFound from "../../components/NotFound"
+import ArticleDisplay from "../../components/ArticleDisplay"
 
 const getUser = async (username: string) => {
-  //real logic
+  try {
+    console.log(import.meta.env.SERVER_URL)
+    //get user
+    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/${username}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-KEY": import.meta.env.VITE_API_KEY 
+      }
+    })
+    const response = await res.json()
 
-  //fake logic
-  await new Promise((resolve) => setTimeout(resolve, 5000)
-  );
+    if (!response.success) {
+      throw new Error(response.message)
+    }
 
-  const user = {
-    userId: "",
-    name: "Habeeb Amoo",
-    email: "habeebamoo08@gmail.com",
-    role: "user",
-    verified: true,
-    isBanned: false,
-    username: username,
-    bio: "Clivo CEO",
-    picture: "",
-    interests: ["Tech", "Science"],
-    profileUrl: "",
-    website: "habeebamoo.netlify.app",
-    following: 15,
-    followers: 400,
-    createdAt: "3 months ago"
+    const user: User = response.data;
+    console.log("1")
+
+    //get user articles
+    const res2 = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/${username}/articles`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-KEY": import.meta.env.VITE_API_KEY 
+      }
+    })
+    const response2 = await res2.json()
+
+    if (!response2.success) {
+      throw new Error(response.message)
+    }
+
+    const userArticles: Post[] = response2.data;
+
+    console.log("en")
+    return { user, userArticles };
+    
+  } catch (error) {
+    throw new Error("")
   }
-
-  const userArticles: Post[] = [
-    {articleId:"jfif", authorPicture: logo, authorFullname: "Clivo", authorVerified: true, title:"How to get a verified account", content: "Hello", createdAt: "2 months ago", picture: logo, tags: ["Tech", "Design", "Business"], likes: 5, readTime: "1 mins read time", slug: ""},
-    {articleId: "weio", authorPicture: "", authorFullname: "Habeeb Amoo", authorVerified: false, title:"Go or Rust for backend developement", content: "welcome", createdAt: "4 weeks ago", picture: "", tags: ["Tech", "Software"], likes: 16, readTime: "6 mins read time", slug: ""},
-  ];
-
-  return { user, userArticles };
 }
 
 const UserPage = () => {
@@ -52,6 +62,9 @@ const UserPage = () => {
   })
 
   const user: User | undefined = data?.user;
+  const articles: Post[] | undefined = data?.userArticles;
+
+  console.log(data)
 
   if (isLoading) return <Loading />;
   
@@ -86,13 +99,7 @@ const UserPage = () => {
             {/* Name */}
             <div className="flex-start gap-2">
               <H2 font="exo" text={user!.name} />
-              {user!.verified ? 
-                <MdVerified size={18} color="rgba(93, 110, 189, 1)" /> : 
-                <p className="text-[12px] underline cursor-pointer">
-                  Get Verified
-                </p>
-              }
-
+              {user!.verified && <MdVerified size={18} color="rgba(93, 110, 189, 1)" />}
             </div>
 
             {/* username */}
@@ -114,11 +121,7 @@ const UserPage = () => {
               <p>{user!.followers} Followers</p>
             </div>
 
-            {/* others */}
-            <div className="mt-3 flex-start gap-2 text-[12px] font-exo text-accent">
-              <MdDateRange size={16} />
-              <p>Joined {user!.createdAt}</p>
-            </div>
+            <button className="btn-primary px-4 mt-4 text-sm rounded-full">Follow</button>
           </div>
 
         </section>
@@ -127,13 +130,19 @@ const UserPage = () => {
         
         <section className="px-8">
           {/* Articles */}
-          {data?.userArticles.length == 0 && 
+          {articles!.length == 0 && 
             <div className="flex-center flex-col mb-20 lg:mt-10">
               <img src={avatar} className="h-70" />
               <H1 font="inter" text="This user hasn't posted anything!" others="mt-6 text-center" />
             </div>
           }
-          {data?.userArticles.length != 0 && <MyArticles data={data?.userArticles} />}
+          {articles!.length != 0 && 
+            <div>
+              {articles!.map((article: Post) => {
+                return <ArticleDisplay article={article} />
+              })}
+            </div>
+          }
 
         </section>
       </main>

@@ -140,7 +140,7 @@ const MyProfile = () => {
 export const MyArticles = ({ data }: { data: Post[] | undefined }) => {
   return (
     <>
-      {data?.map((article) => {
+      {data!.map((article) => {
         return <ArticleDisplay article={article} />
       })}
     </>

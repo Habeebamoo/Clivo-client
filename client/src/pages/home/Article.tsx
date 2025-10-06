@@ -1,7 +1,7 @@
 import { H2, H3 } from "../../components/Typo"
 import { useNavigate, useParams } from "react-router";
 import { useEffect } from "react";
-import { posts, type Post } from "../../redux/reducers/article_reducer";
+import { type Post } from "../../redux/reducers/article_reducer";
 import { shorten } from "../../utils/utils";
 import { FaUpload } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
@@ -9,6 +9,8 @@ import { GoHeart } from "react-icons/go";
 import { CgShare } from "react-icons/cg";
 import logo from "../../assets/logo.jpg"
 import NotFound from "../../components/NotFound";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../components/Loading";
 
 interface Comment {
 	articleId: string,
@@ -19,8 +21,33 @@ interface Comment {
 	picture: string,
 } 
 
+const getArticle = async (id: string) => {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/posts/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-KEY": import.meta.env.VITE_API_KEY
+      }
+    })
+    const response = await res.json()
+
+    if (!response.success) {
+      throw new Error(response.message)
+    }
+
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error)
+  }
+}
+
 const ArticlePage = () => {
   const { id } = useParams<{ id: string }>();
+  const { data, isLoading, isError }= useQuery({
+    queryKey: ["article"],
+    queryFn: () => getArticle(id!)
+  })
   const navigate = useNavigate();
 
   //default comments
@@ -35,9 +62,11 @@ const ArticlePage = () => {
     }
   })
 
-  const article: Post | undefined = posts.find((art) => art?.articleId === id)
+  const article: Post | undefined | void = data;
 
-  if (!article) return <NotFound text="Couldn't Find Article" subText="This article has either been deleted or moved to a new URL" />
+  if (isLoading) return <Loading />
+
+  if (isError) return <NotFound text="Couldn't Find Article" subText="This article has either been deleted or moved to a new URL" />
 
   return (
     <main className="w-[90%] sm:w-[400px] md:w-[500px] mx-auto">
