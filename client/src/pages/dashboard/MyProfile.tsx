@@ -6,9 +6,10 @@ import logo from "../../assets/logo2.png"
 import { useQuery } from "@tanstack/react-query"
 import Spinner from "../../components/Spinner"
 import ArticleDisplay from "../../components/ArticleDisplay"
-import type { Article } from "../../redux/reducers/article_reducer"
+import type { Post } from "../../redux/reducers/article_reducer"
 import avatar from "../../assets/avatar.jpg"
 import { useNavigate } from "react-router"
+import type { User } from "../../redux/reducers/user_reducer"
 
 const getArticles = async () => {
   //real logic
@@ -17,18 +18,16 @@ const getArticles = async () => {
   await new Promise((resolve) => setTimeout(resolve, 2000)
   );
 
-  const articles: Article[] = [
-  {articleId:"jfif", authorId: "sfrr", authorPicture: logo, authorFullname: "Clivo", authorUsername: "@clivo", authorVerified: true, title:"How to get a verified account", content: "Hello", createdAt: "2 months ago", picture: logo, tags: ["Tech", "Design", "Business"], readTime: "1 mins read time"},
-  {articleId: "weio", authorId: "srrr", authorPicture: "", authorFullname: "Habeeb Amoo", authorUsername: "@habeeb_amoo_534", authorVerified: false, title:"Go or Rust for backend developement", content: "welcome", createdAt: "4 weeks ago", picture: "", tags: ["Tech", "Software"], readTime: "6 mins read time"},
-    {articleId:"jfif", authorId: "sfrr", authorPicture: logo, authorFullname: "Clivo", authorUsername: "@clivo", authorVerified: true, title:"How to get a verified account", content: "Hello", createdAt: "2 months ago", picture: logo, tags: ["Tech", "Design", "Business"], readTime: "1 mins read time"},
-  {articleId: "weio", authorId: "srrr", authorPicture: "", authorFullname: "Habeeb Amoo", authorUsername: "@habeeb_amoo_534", authorVerified: false, title:"Go or Rust for backend developement", content: "welcome", createdAt: "4 weeks ago", picture: "", tags: ["Tech", "Software"], readTime: "6 mins read time"},
+  const articles: Post[] = [
+    {articleId:"jfif", authorPicture: logo, authorFullname: "Clivo", authorVerified: true, title:"How to get a verified account", content: "Hello", createdAt: "2 months ago", picture: logo, tags: ["Tech", "Design", "Business"], likes: 5, readTime: "1 mins read time", slug: ""},
+    {articleId: "weio", authorPicture: "", authorFullname: "Habeeb Amoo", authorVerified: false, title:"Go or Rust for backend developement", content: "welcome", createdAt: "4 weeks ago", picture: "", tags: ["Tech", "Software"], likes: 16, readTime: "6 mins read time", slug: ""},
   ];
 
   return articles;
 }
 
 const MyProfile = () => {
-  const user = useSelector((state: any) => state.user.user);
+  const user: User = useSelector((state: any) => state.user.user);
   const { data, isLoading } = useQuery({
     queryKey: ["my-articles"],
     queryFn: getArticles
@@ -81,10 +80,10 @@ const MyProfile = () => {
 
           {/* Bio */}
           <p className="font-exo text-sm text-accent mt-4">{user.bio}</p>
-          {user.profileLink && 
+          {user.website && 
             <div className="flex-start gap-1 mt-2">
               <BiLink />
-              <p className="text-blue-500 text-[12px] underline cursor-pointer">{user.profileLink}</p>
+              <p className="text-blue-500 text-[12px] underline cursor-pointer">{user.website}</p>
             </div>
           }
           
@@ -138,7 +137,7 @@ const MyProfile = () => {
   )
 }
 
-const MyArticles = ({ data }: { data: Article[] | undefined }) => {
+const MyArticles = ({ data }: { data: Post[] | undefined }) => {
   return (
     <>
       {data?.map((article) => {

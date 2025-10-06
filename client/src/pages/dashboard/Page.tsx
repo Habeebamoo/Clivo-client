@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux"
 import ArticleDisplay from "../../components/ArticleDisplay"
-import type { Article } from "../../redux/reducers/article_reducer"
+import type { Post } from "../../redux/reducers/article_reducer"
 
 const Dashboard = () => {
-  const articles: Article[] = useSelector((state: any) => state.articles.articles)
+  const articles: Post[] = useSelector((state: any) => state.articles.posts)
 
   return (
     <main>

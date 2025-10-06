@@ -1,10 +1,10 @@
 import { H3 } from "./Typo"
 import { shorten } from "../utils/utils"
-import type { Article } from "../redux/reducers/article_reducer"
+import type { Post } from "../redux/reducers/article_reducer"
 import { MdVerified } from "react-icons/md"
 import { GoHeart } from "react-icons/go"
 
-const ArticleDisplay = ({ article }: { article: Article }) => {
+const ArticleDisplay = ({ article }: { article: Post }) => {
   const toPost = () => {
     window.location.href = `/posts/${article.articleId}`
   }
@@ -53,7 +53,7 @@ const ArticleDisplay = ({ article }: { article: Article }) => {
       <div className="mt-3 flex-between">
         <div className="flex-start gap-1">
           <GoHeart color="rgb(165, 163, 161)" />
-          <p className="text-[12px]">6</p>
+          <p className="text-[12px]">{article.likes}</p>
         </div>
         <p className="text-[12px] font-exo text-accentLight">{article.readTime}</p>
       </div>

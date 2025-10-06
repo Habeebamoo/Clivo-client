@@ -1,7 +1,7 @@
 import { H2, H3 } from "../../components/Typo"
 import { useNavigate, useParams } from "react-router";
 import { useEffect } from "react";
-import { articles, type Article } from "../../redux/reducers/article_reducer";
+import { posts, type Post } from "../../redux/reducers/article_reducer";
 import { shorten } from "../../utils/utils";
 import { FaUpload } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
@@ -35,7 +35,7 @@ const ArticlePage = () => {
     }
   })
 
-  const article: Article | undefined = articles.find((art) => art?.articleId === id)
+  const article: Post | undefined = posts.find((art) => art?.articleId === id)
 
   if (!article) return <NotFound text="Couldn't Find Article" />
 
@@ -100,7 +100,7 @@ const ArticlePage = () => {
       <div className="border-t-1 border-b-1 border-muted p-3 mt-8 flex-between">
         <div className="flex-start gap-1">
           <GoHeart color="rgb(165, 163, 161)" size={19} />
-          <p className="text-sm">6</p>
+          <p className="text-sm">{article!.likes}</p>
         </div>
         <div>
           <CgShare color="rgb(165, 163, 161)" size={19} />

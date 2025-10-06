@@ -1,16 +1,39 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export type User = {
+  userId: string,
+  name: string,
+  email: string,
+  role: string,
+  verified: boolean,
+  isBanned: boolean,
+  username: string,
+  bio: string,
+  picture: string,
+  interests: string[],
+  profileUrl: string,
+  website: string,
+  following: number,
+  followers: number,
+  createdAt: string
+}
+
 const initialState = {
   user: {
+    userId: "",
     name: "Habeeb Amoo",
-    email: "",
-    picture: "",
-    bio: "Clivo CEO",
-    username: "@habeeb_amoo_414",
-    following: 16,
-    followers: 400,
+    email: "habeebamoo08@gmail.com",
+    role: "user",
     verified: true,
-    profileLink: "habeebamoo.netlify.app",
+    isBanned: false,
+    username: "@habeebamoo08",
+    bio: "Clivo CEO",
+    picture: "",
+    interests: ["Tech", "Science"],
+    profileUrl: "",
+    website: "habeebamoo.netlify.app",
+    following: 15,
+    followers: 400,
     createdAt: "3 months ago"
   }
 }
