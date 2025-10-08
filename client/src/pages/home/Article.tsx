@@ -1,6 +1,6 @@
 import { H2, H3 } from "../../components/Typo"
 import { useNavigate, useParams } from "react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { type Post } from "../../redux/reducers/article_reducer";
 import { shorten } from "../../utils/utils";
 import { FaUpload } from "react-icons/fa";
@@ -48,7 +48,22 @@ const ArticlePage = () => {
     queryKey: ["article"],
     queryFn: () => getArticle(id!)
   })
+  const [commentAction, setCommentAction] = useState<"add" | "send">("add");
+  const [commentBarActive, setCommentBarActive] = useState<boolean>(false)
+  const [commentValue, setCommentValue] = useState<string>("");
+
   const navigate = useNavigate();
+  if (!id) {
+    navigate("/")
+  }
+
+  useEffect(() => {
+    if (commentValue) {
+      setCommentAction("send")
+    }
+  }, [commentValue])
+
+  console.log(commentAction)
 
   //default comments
   const comments: Comment[] = [
@@ -56,13 +71,15 @@ const ArticlePage = () => {
     {articleId: "dnfiff", content: "Yes", name: "Micheal", username: "@paul", verified: false, picture: ""},
   ]
 
-  useEffect(() => {
-    if (!id) {
-      navigate("/dashboard")
-    }
-  })
-
   const article: Post | undefined | void = data;
+
+  const handleCommentAction = () => {
+    if (commentAction === "add") {
+      setCommentBarActive(true)
+    } else {
+      //send comments
+    }
+  }
 
   if (isLoading) return <Loading />
 
@@ -138,7 +155,25 @@ const ArticlePage = () => {
 
       {/* Comments */}
       <div className="mt-10 mb-15">
-        <H3 font="exo" text="Comments" />
+        <div className="flex-between">
+          <H3 font="exo" text="Comments" />
+          <button onClick={handleCommentAction} className="btn-primary text-sm">
+            {commentAction == "add" ? "Add Comment" : "Send"}
+          </button>
+        </div>
+
+        {commentBarActive &&
+          <div className="mt-4">
+            <textarea 
+              name="bio" 
+              rows={4} 
+              className="resize-none border-1 border-accentLight rounded-lg focus:outline-none w-full py-2 px-3 font-inter"
+              value={commentValue}
+              onChange={(e) => setCommentValue(e.target.value)}>
+            </textarea>
+          </div>
+        }
+
         <div>
           {comments.length == 0}
           {comments.length !== 0 && 

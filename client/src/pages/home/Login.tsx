@@ -7,7 +7,7 @@ import { useState } from "react"
 import InterestsSection from "./Interests"
 
 const LoginPage = () => {
-  const [interestSectionActive, setInterestSectionActive] = useState<boolean>(false)
+  const [interestSectionActive] = useState<boolean>(false)
   const [interest, setInterests] = useState<string[]>([])
   const navigate = useNavigate()
 

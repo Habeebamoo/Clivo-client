@@ -68,7 +68,7 @@ const UserPage = () => {
 
   if (isLoading) return <Loading />;
   
-  if (isError) return <NotFound text="User Not Found" subText="We couldn't find a user with this username. Please visit a valid profile url" />;
+  if (isError) return <NotFound text="User Not Found" subText="We couldn't find this user. Please visit a valid profile url" />;
 
   return (
     <>

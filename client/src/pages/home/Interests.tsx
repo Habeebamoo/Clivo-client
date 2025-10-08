@@ -71,7 +71,16 @@ const InterestsSection = ({ interests, setInterests }: Props) => {
       {/* interests */}
       <div className="flex-center gap-4 w-[70%] sm:w-[400px] mx-auto mt-10 flex-wrap">
         {interestsArray.map((obj: Interest) => {
-          return <InterestBadge icon={obj.icon} text={obj.text} selected={selected(obj.text)} interests={interests} addInterest={addInterest} removeInterest={removeInterest}  />
+          return (
+            <InterestBadge 
+              icon={obj.icon} 
+              text={obj.text} 
+              selected={selected(obj.text)} 
+              interests={interests} 
+              addInterest={addInterest} 
+              removeInterest={removeInterest} 
+            />
+          )
         })}
       </div>
 
