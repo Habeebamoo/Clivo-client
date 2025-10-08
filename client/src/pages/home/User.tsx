@@ -14,7 +14,7 @@ const getUser = async (username: string) => {
   try {
     console.log(import.meta.env.SERVER_URL)
     //get user
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/${username}`, {
+    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/@${username}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
