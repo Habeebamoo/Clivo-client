@@ -1,48 +1,60 @@
-import { BiMusic, BiPaint } from "react-icons/bi"
 import { H1 } from "../../components/Typo"
 import { MdScience } from "react-icons/md"
-import { FaBuilding, FaGamepad, FaLaptop, FaRobot, FaRust, FaSpider, FaStar, FaStethoscope, FaSuitcase, FaUsers } from "react-icons/fa"
+import { FaBookOpen, FaBriefcase, FaCamera, FaChartLine, FaChurch, FaCode, FaFilm, FaGamepad, FaHeart, FaHome, FaLandmark, FaLaptopCode, FaMagic, FaMoneyBillWave, FaMusic, FaPaintBrush, FaPaw, FaPlane, FaRobot, FaShoppingCart, FaSquareRootAlt, FaTheaterMasks, FaTshirt, FaUserFriends, FaWallet } from "react-icons/fa"
 import { TbChefHat } from "react-icons/tb"
-import { GiDress } from "react-icons/gi"
-import { PiTelevisionFill } from "react-icons/pi"
-import { RiGovernmentFill } from "react-icons/ri"
-import { FaBookAtlas, FaGears, FaMoneyBill } from "react-icons/fa6"
-import { SiCinema4D } from "react-icons/si"
+import { GiEarthAfricaEurope, GiMicrochip, GiWeightLiftingUp } from "react-icons/gi"
+import { FaBasketball } from "react-icons/fa6"
+import { SiGooglecloud } from "react-icons/si"
+import { useState } from "react"
 
 interface Interest {
   icon: any,
   text: string
 }
 
-interface Props {
-  interests: string[],
-  setInterests: React.Dispatch<React.SetStateAction<string[]>>
-}
+const InterestsPage = () => {
+  const [interests, setInterests] = useState<string[]>([])
 
-const InterestsSection = ({ interests, setInterests }: Props) => {
   // list of interests
   const interestsArray: Interest[] = [
-    {icon: <BiMusic color="blue" />, text: "Music"}, 
-    {icon: <FaLaptop />, text: "Tech"}, 
-    {icon: <FaSpider color="red" />, text: "Anime"},
-    {icon: <MdScience color="blue" />, text: "Science"},
-    {icon: <GiDress color="red" />, text: "Fashion"},
-    {icon: <BiPaint color="brown" />, text: "Art"},
-    {icon: <FaRust color="rgba(240, 36, 29, 1)" />, text: "Programming"},
-    {icon: <FaStethoscope color="blue" />, text: "Medicine"},
-    {icon: <PiTelevisionFill color="brown" />, text: "Entertainment"},
-    {icon: <RiGovernmentFill color="brown" />, text: "Government"},
-    {icon: <FaGears />, text: "Engineering"},
-    {icon: <FaMoneyBill color="rgba(172, 164, 164, 1)" />, text: "Economy"},
-    {icon: <FaRobot color="brown" />, text: "Artificial Intelligence"},
-    {icon: <FaUsers color="orange" />, text: "Lifestyle"},
-    {icon: <FaBookAtlas color="purple" />, text: "Education"},
-    {icon: <FaSuitcase color="brown" />, text: "Business"},
-    {icon: <FaStar color="rgba(28, 165, 131, 1)" />, text: "Astrology"},
-    {icon: <TbChefHat  />, text: "Food"},
-    {icon: <FaBuilding color="brown" />, text: "Construction"},
-    {icon: <SiCinema4D />, text: "Movies"},
-    {icon: <FaGamepad color="blue" />, text: "Gaming"}
+    {text: "Programming", icon: <FaCode color="#0078D7" />},
+    {text: "Software Developement", icon: <FaLaptopCode color="#2b89a3ff" />},
+    {text: "Cybersecurity", icon: <GiMicrochip color="#c41e3a" />},
+    {text: "Artificial Intelligence", icon: <FaRobot color="#FF9800" />},
+    {text: "Cloud Computing", icon: <SiGooglecloud color="#4285f4" />},
+    {text: "Gaming", icon: <FaGamepad color="#9c27b0" />},
+
+    {text: "Graphics Design", icon: <FaPaintBrush color="#e91e63" />},
+    {text: "Photography", icon: <FaCamera color="#9c27b0" />},
+    {text: "Music", icon: <FaMusic color="#f44336" />},
+    {text: "Animation", icon: <FaMagic color="#9c27bo" />},
+    {text: "Fashion", icon: <FaTshirt color="#ff4081" />},
+
+    {text: "Science", icon: <MdScience color="#4caf50" />},
+    {text: "History", icon: <FaBookOpen color="#795548" />},
+    {text: "Psychology", icon: <FaUserFriends color="#03a9f4" />},
+    {text: "Maths", icon: <FaSquareRootAlt color="#009688" />},
+    {text: "Career", icon: <FaBriefcase color="#607d8b" />},
+
+    {text: "Entrepreneurship", icon: <FaChartLine color="#009688" />},
+    {text: "Investment", icon: <FaMoneyBillWave color="#4caf50" />},
+    {text: "Finance", icon: <FaWallet color="#8bc34a" />},
+    {text: "E-commerce", icon: <FaShoppingCart color="#2196f3" />},
+    {text: "Real Estate", icon: <FaHome color="#9e9e9e" />},
+
+    {text: "Travel", icon: <FaPlane color="#03a9f4" />},
+    {text: "Food & Cooking", icon: <TbChefHat color="#ff7053" />},
+    {text: "Fitness", icon: <GiWeightLiftingUp color="#4caf50" />},
+    {text: "Relationships", icon: <FaHeart color="#f44336" />},
+    {text: "Culture", icon: <GiEarthAfricaEurope color="#00bcd4" />},
+
+    {text: "Wildlife", icon: <FaPaw color="#795548" />},
+    {text: "Politics", icon: <FaLandmark color="#607d8b" />},
+    {text: "Religion", icon: <FaChurch color="#9c27b0" />},
+    {text: "Sports", icon: <FaBasketball color="#ff9800" />},
+    {text: "Movies", icon: <FaFilm color="#2196f3" />},
+    {text: "Anime", icon: <FaTheaterMasks color="#e91e63" />}
+
   ];
 
   const selected = (interest: string): boolean => {
@@ -51,7 +63,7 @@ const InterestsSection = ({ interests, setInterests }: Props) => {
   }
 
   const addInterest = (text: string) => {
-    if (interests.length < 3) {
+    if (interests.length < 5) {
       setInterests(prev => ([...prev, text]))
     }
   }
@@ -64,7 +76,7 @@ const InterestsSection = ({ interests, setInterests }: Props) => {
   }
 
   return (
-    <section className="fixed top-0 left-0 right-0 bottom-0 bg-white">
+    <section className="bg-white">
       <div className="mt-15"></div>
       <H1 font="inter" text="Choose Your Interests" others="text-center" />
 
@@ -90,7 +102,6 @@ const InterestsSection = ({ interests, setInterests }: Props) => {
 }
 
 // Interest Badge component 
-
 type BadgeProps = {
   icon: any, 
   text: string, 
@@ -113,4 +124,4 @@ const InterestBadge = ({ icon, text, selected, interests, addInterest, removeInt
   )
 }
 
-export default InterestsSection
+export default InterestsPage

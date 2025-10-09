@@ -6,7 +6,7 @@ import { FaSearch } from "react-icons/fa"
 import { BiSave } from "react-icons/bi"
 
 const interestsArray: string[] = [
-  "Music", "Tech", "Anime", "Science", "Fashion", "Art", "Programming", "Medicine", "Entertainment", "Government", "Engineering", "Economy", "Artificial Intelligence", "Lifestyle", "Education", "Business", "Astrology", "Food", "Construction", "Movies", "Gaming"
+  "Programming", "Software Developement", "Cybersecurity", "Artificial Intelligence", "Gaming", "Cloud Computing", "Graphics Design", "Photography", "Music", "Animation", "Fashion", "Science", "History", "Psychology", "Maths", "Career", "Entrepreneurship", "Investment", "Finance", "E-commerce", "Real Estate", "Travel", "Food & Cooking", "Relationships", "Fitness", "Culture", "Wildlife", "Politics", "Religion", "Sports", "Movies", "Anime"
 ];
 
 const SettingsPage = () => {
