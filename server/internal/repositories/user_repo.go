@@ -8,6 +8,10 @@ import (
 )
 
 type UserRepository interface {
+	CreateFollow(models.Follow) (int, error)
+	RemoveFollow(models.Follow) (int, error)
+	IncrementFollows(string, string) error
+	DecrementFollows(string, string) error
 	GetUserByUsername(string) (models.SafeUserResponse, int, error)
 	GetArticlesByUsername(string) ([]models.Article, int, error)
 	GetArticleById(string) (models.Article, int, error)
@@ -21,6 +25,57 @@ type UserRepo struct {
 
 func NewUserRepository(db *gorm.DB) UserRepository {
 	return &UserRepo{db}
+}
+
+func (ur *UserRepo) CreateFollow(followReq models.Follow) (int, error) {
+	res := ur.db.Create(&followReq)
+	if res.Error != nil {
+		return 500, fmt.Errorf("internal server error")
+	}
+
+	return 201, nil
+}
+
+func (ur *UserRepo) RemoveFollow(followReq models.Follow) (int, error) {
+	res := ur.db.Model(&models.Follow{}).Where(&followReq).Delete(models.Follow{})
+	if res.Error != nil {
+		if res.RowsAffected == 0 {
+			return 500, fmt.Errorf("failed to unfollow user")
+		}
+		return 500, fmt.Errorf("internal server error")
+	}
+
+	return 200, nil
+}
+
+func (ur *UserRepo) IncrementFollows(userId string, column string) error {
+	res := ur.db.Model(&models.Profile{}).
+							Where("user_id = ?", userId).
+							Update(column, gorm.Expr(fmt.Sprintf("%s + ?", column), 1))
+
+	if res.Error != nil {
+		if res.RowsAffected == 0 {
+			return fmt.Errorf("failed to updated profile")
+		}
+		return fmt.Errorf("internal server error")
+	}
+
+	return nil
+}
+
+func (ur *UserRepo) DecrementFollows(userId string, column string) error {
+	res := ur.db.Model(&models.Profile{}).
+							Where("user_id = ?", userId).
+							Update(column, gorm.Expr(fmt.Sprintf("%s - ?", column), 1))
+
+	if res.Error != nil {
+		if res.RowsAffected == 0 {
+			return fmt.Errorf("failed to updated profile")
+		}
+		return fmt.Errorf("internal server error")
+	}
+	
+	return nil
 }
 
 func (ur *UserRepo) GetUserByUsername(username string) (models.SafeUserResponse, int, error) {

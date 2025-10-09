@@ -9,6 +9,8 @@ import (
 )
 
 type UserService interface {
+	FollowUser(string, string) (int, error)
+	UnFollowUser(string, string) (int, error)
 	GetUser(string) (models.SafeUserResponse, int, error)
 	GetArticle(string) (models.SafeArticleResponse, int, error)
 	GetArticles(string) ([]models.SafeArticleResponse, int, error)
@@ -20,6 +22,63 @@ type UserSvc struct {
 
 func NewUserService(repo repositories.UserRepository) UserService {
 	return &UserSvc{repo}
+}
+
+func (us *UserSvc) FollowUser(followerId string, followingId string) (int, error) {
+	follow := models.Follow{
+		FollowerId: followerId,
+		FollowingId: followingId,
+	}
+
+	//create follow
+	code, err := us.repo.CreateFollow(follow)
+	if err != nil {
+		return code, err
+	}
+
+	//use transactions
+	//update follower (user that followed) profile
+	err = us.repo.IncrementFollows(follow.FollowerId, "following")
+	if err != nil {
+		return code, err
+	}
+
+	//update following (user that is been followed)
+	err = us.repo.IncrementFollows(follow.FollowingId, "followers")
+	if err != nil {
+		return code, err
+	}
+
+	return 201, nil
+	//notify user following
+}
+
+func (us *UserSvc) UnFollowUser(followerId string, followingId string) (int, error) {
+	follow := models.Follow{
+		FollowerId: followerId,
+		FollowingId: followingId,
+	}
+
+	code, err := us.repo.RemoveFollow(follow)
+	if err != nil {
+		return code, err
+	}
+
+	//use transactions
+	//update follower (user that followed) profile
+	err = us.repo.DecrementFollows(follow.FollowerId, "following")
+	if err != nil {
+		return code, err
+	}
+
+	//update following (user that is been followed)
+	err = us.repo.DecrementFollows(follow.FollowingId, "followers")
+	if err != nil {
+		return code, err
+	}
+
+	return 200, nil
+	//notify user following
 }
 
 func (us *UserSvc) GetUser(username string) (models.SafeUserResponse, int, error) {

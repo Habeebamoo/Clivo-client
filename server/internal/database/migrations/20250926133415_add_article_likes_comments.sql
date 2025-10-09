@@ -32,10 +32,20 @@ CREATE TABLE IF NOT EXISTS comments (
   FOREIGN KEY (article_id) REFERENCES articles(article_id) ON DELETE CASCADE,
   FOREIGN KEY (commenter_user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS follows (
+  follower_id TEXT NOT NULL,
+  following_id TEXT NOT NULL,
+
+  UNIQUE (follower_id, following_id),
+  FOREIGN KEY (follower_id) REFERENCES users(user_id) ON DELETE CASCADE,
+  FOREIGN KEY (following_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
+DROP TABLE follows;
 DROP TABLE likes;
 DROP TABLE comments;
 DROP TABLE articles;

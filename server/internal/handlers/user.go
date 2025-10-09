@@ -14,6 +14,56 @@ func NewUserHandler(service services.UserService) UserHandler {
 	return UserHandler{service}
 }
 
+func (uhdl *UserHandler) FollowUser(c *gin.Context) {
+	userIdAny, exists := c.Get("userId")
+	if !exists {
+		utils.Error(c, 401, "Unauthorized Access", nil)
+		return
+	}
+
+	userId := userIdAny.(string)
+
+	userFollowing := c.Param("id")
+	if userFollowing == "" {
+		utils.Error(c, 400, "UserId Missing", nil)
+		return
+	}
+
+	//call service
+	statusCode, err := uhdl.service.FollowUser(userId, userFollowing)
+	if err != nil {
+		utils.Error(c, statusCode, "", nil)
+		return
+	}
+
+	utils.Success(c, statusCode, "", nil)
+}
+
+func (uhdl *UserHandler) UnFollowUser(c *gin.Context) {
+	userIdAny, exists := c.Get("userId")
+	if !exists {
+		utils.Error(c, 401, "Unauthorized Access", nil)
+		return
+	}
+
+	userId := userIdAny.(string)
+
+	userFollowing := c.Param("id")
+	if userFollowing == "" {
+		utils.Error(c, 400, "UserId Missing", nil)
+		return
+	}
+
+	//call service
+	statusCode, err := uhdl.service.UnFollowUser(userId, userFollowing)
+	if err != nil {
+		utils.Error(c, statusCode, "", nil)
+		return
+	}
+
+	utils.Success(c, statusCode, "", nil)
+}
+
 func (uhdl *UserHandler) GetUser(c *gin.Context) {
 	username := c.Param("username")
 	if username == "" {
