@@ -40,11 +40,14 @@ const articleSlice = createSlice({
   name: "articles",
   initialState,
   reducers: {
+    setPosts: (state, action) => {
+      state.posts = action.payload;
+    },
     setArticles: (state, action) => {
-      state.posts = action.payload
+      state.articles = action.payload;
     }
   }
 })
 
-export const { setArticles } = articleSlice.actions;
+export const { setPosts, setArticles } = articleSlice.actions;
 export default articleSlice.reducer;

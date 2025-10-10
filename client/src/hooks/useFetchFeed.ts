@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { setArticles, type Post } from "../redux/reducers/article_reducer";
+import { setPosts, type Post } from "../redux/reducers/article_reducer";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
@@ -23,7 +23,7 @@ export const useFetchFeed = () => {
 
   useEffect(() => {
     if (isSuccess && data) {
-      dispatch(setArticles(data))
+      dispatch(setPosts(data))
     }
   }, [isSuccess, data, dispatch])
 

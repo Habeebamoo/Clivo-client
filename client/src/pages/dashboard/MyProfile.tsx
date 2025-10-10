@@ -1,37 +1,12 @@
 import { useSelector } from "react-redux"
-import { H1, H2 } from "../../components/Typo"
+import { H2 } from "../../components/Typo"
 import { BiLink, BiPencil, BiPlus } from "react-icons/bi"
 import { MdDateRange, MdVerified } from "react-icons/md"
-import logo from "../../assets/logo2.png"
-import { useQuery } from "@tanstack/react-query"
-import Spinner from "../../components/Spinner"
-import ArticleDisplay from "../../components/ArticleDisplay"
-import type { Post } from "../../redux/reducers/article_reducer"
-import avatar from "../../assets/avatar.jpg"
 import { useNavigate } from "react-router"
 import type { User } from "../../redux/reducers/user_reducer"
-
-const getArticles = async () => {
-  //real logic
-
-  //fake logic
-  await new Promise((resolve) => setTimeout(resolve, 2000)
-  );
-
-  const articles: Post[] = [
-    {articleId:"jfif", authorPicture: logo, authorFullname: "Clivo", authorVerified: true, title:"How to get a verified account", content: "Hello", createdAt: "2 months ago", picture: logo, tags: ["Tech", "Design", "Business"], likes: 5, readTime: "1 mins read time", slug: ""},
-    {articleId: "weio", authorPicture: "", authorFullname: "Habeeb Amoo", authorVerified: false, title:"Go or Rust for backend developement", content: "welcome", createdAt: "4 weeks ago", picture: "", tags: ["Tech", "Software"], likes: 16, readTime: "6 mins read time", slug: ""},
-  ];
-
-  return articles;
-}
-
+import MyArticles from "../../components/MyArticles"
 const MyProfile = () => {
   const user: User = useSelector((state: any) => state.user.user);
-  const { data, isLoading } = useQuery({
-    queryKey: ["my-profile"],
-    queryFn: getArticles
-  })
   const navigate = useNavigate()
 
   const toSettings = () => {
@@ -117,33 +92,10 @@ const MyProfile = () => {
       <hr className="lg:hidden text-mutedLight" />
       
       <section className="px-8">
-        {isLoading && 
-          <div className="flex-center my-20">
-            <Spinner size={20} color="accentLight" />
-          </div>
-        }
-
         {/* Articles */}
-        {data?.length == 0 && 
-          <div className="flex-center flex-col mb-20 lg:mt-10">
-            <img src={avatar} className="h-70" />
-            <H1 font="inter" text="This user hasn't posted anything!" others="mt-6 text-center" />
-          </div>
-        }
-        {data?.length != 0 && <MyArticles data={data} />}
-
+        <MyArticles />
       </section>
     </main>
-  )
-}
-
-export const MyArticles = ({ data }: { data: Post[] | undefined }) => {
-  return (
-    <>
-      {data!.map((article) => {
-        return <ArticleDisplay article={article} />
-      })}
-    </>
   )
 }
 
