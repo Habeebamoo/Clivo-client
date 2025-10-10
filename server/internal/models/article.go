@@ -30,19 +30,20 @@ type Comment struct {
 }
 
 type ArticleResponse struct {
-	ArticleId       string     `json:"articleId"`
-	AuthorId        string     `json:"authorId"`
-	AuthorPicture   string     `json:"authorPicture"`
-	AuthorFullname  string     `json:"authorFullname"`
-	AuthorVerified  bool       `json:"authorVerified"`
-	Title           string     `json:"title"`
-	Content         string     `json:"content"`
-	Picture         string     `json:"picture"`
-	Tags            []string   `json:"tags"`
-	Likes           int        `json:"likes"`
-	ReadTime        string     `json:"readTime"`
-	Slug            string     `json:"slug"`
-	CreatedAt       time.Time  `json:"createdAt"`
+	ArticleId        string      `json:"articleId"`
+	AuthorId          string     `json:"authorId"`
+	AuthorPicture     string     `json:"authorPicture"`
+	AuthorFullname    string     `json:"authorFullname"`
+	AuthorProfileUrl  string     `json:"authorProfileUrl"`
+	AuthorVerified    bool       `json:"authorVerified"`
+	Title             string     `json:"title"`
+	Content           string     `json:"content"`
+	Picture           string     `json:"picture"`
+	Tags              []string   `json:"tags"`
+	Likes             int        `json:"likes"`
+	ReadTime          string     `json:"readTime"`
+	Slug              string     `json:"slug"`
+	CreatedAt         time.Time  `json:"createdAt"`
 }
 
 type CommentResponse struct {
@@ -55,18 +56,19 @@ type CommentResponse struct {
 }
 
 type SafeArticleResponse struct {
-	ArticleId       string     `json:"articleId"`
-	AuthorPicture   string     `json:"authorPicture"`
-	AuthorFullname  string     `json:"authorFullname"`
-	AuthorVerified  bool       `json:"authorVerified"`
-	Title           string     `json:"title"`
-	Content         string     `json:"content"`
-	Picture         string     `json:"picture"`
-	Tags            []string   `json:"tags"`
-	Likes           int        `json:"likes"`
-	ReadTime        string     `json:"readTime"`
-	Slug            string     `json:"slug"`
-	CreatedAt       string     `json:"createdAt"`
+	ArticleId         string     `json:"articleId"`
+	AuthorPicture     string     `json:"authorPicture"`
+	AuthorFullname    string     `json:"authorFullname"`
+	AuthorProfileUrl  string     `json:"authorProfileUrl"`
+	AuthorVerified    bool       `json:"authorVerified"`
+	Title             string     `json:"title"`
+	Content           string     `json:"content"`
+	Picture           string     `json:"picture"`
+	Tags              []string   `json:"tags"`
+	Likes             int        `json:"likes"`
+	ReadTime          string     `json:"readTime"`
+	Slug              string     `json:"slug"`
+	CreatedAt         string     `json:"createdAt"`
 }
 
 type ArticleRequest struct {
