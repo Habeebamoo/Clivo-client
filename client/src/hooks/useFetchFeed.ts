@@ -7,7 +7,7 @@ const getfeed = async () => {
   await new Promise((resolve) => setTimeout(resolve, 2000)
   );
   const articles: Post[] = [
-    {articleId: "weio", authorPicture: "", authorFullname: "Habeeb Amoo", authorVerified: false, title:"Go or Rust for backend developement", content: "welcome", createdAt: "4 weeks ago", picture: "", tags: ["Tech", "Software"], likes: 16, readTime: "6 mins read time", slug: ""},
+    {articleId: "weio", authorPicture: "", authorFullname: "Habeeb Amoo", authorProfileUrl: "", authorVerified: false, title:"Go or Rust for backend developement", content: "welcome", createdAt: "4 weeks ago", picture: "", tags: ["Tech", "Software"], likes: 16, readTime: "6 mins read time", slug: ""},
   ]
   
   return articles

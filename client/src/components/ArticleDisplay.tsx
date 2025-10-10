@@ -5,14 +5,18 @@ import { MdVerified } from "react-icons/md"
 import { GoHeart } from "react-icons/go"
 
 const ArticleDisplay = ({ article }: { article: Post }) => {
+  const toUser = () => {
+    window.location.href = article.authorProfileUrl;
+  }
+
   const toPost = () => {
-    window.location.href = `/posts/${article.articleId}`
+    window.location.href = article.slug;
   }
 
   return (
     <div className="py-4 border-b-1 border-b-muted">
       {/* profile */}
-      <div className="hover:bg-mutedLight active:bg-mutedLight cursor-pointer p-1">
+      <div onClick={toUser} className="hover:bg-mutedLight active:bg-mutedLight cursor-pointer p-1">
         <div className="flex-start gap-2">
           {article.authorPicture ?
             <div className="h-6 w-6 rounded-full overflow-hidden">
