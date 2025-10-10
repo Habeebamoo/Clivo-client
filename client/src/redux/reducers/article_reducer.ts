@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import logo from "../../assets/logo.jpg"
 
 export interface Post {
   articleId: string,
@@ -32,23 +31,20 @@ export interface Article {
   createdAt: string
 }
 
-export const posts: Post[] = [
-  {articleId:"jfif", authorPicture: logo, authorFullname: "Clivo", authorVerified: true, title:"How to get a verified account", content: "Hello", createdAt: "2 months ago", picture: logo, tags: ["Tech", "Design", "Business"], likes: 5, readTime: "1 mins read time", slug: ""},
-  {articleId: "weio", authorPicture: "", authorFullname: "Habeeb Amoo", authorVerified: false, title:"Go or Rust for backend developement", content: "welcome", createdAt: "4 weeks ago", picture: "", tags: ["Tech", "Software"], likes: 16, readTime: "6 mins read time", slug: ""},
-];
-
 const initialState = {
-  posts: posts,
+  posts: [],
   articles: []
-  
 }
 
 const articleSlice = createSlice({
   name: "articles",
   initialState,
   reducers: {
-
+    setArticles: (state, action) => {
+      state.posts = action.payload
+    }
   }
 })
 
-export default articleSlice.reducer
+export const { setArticles } = articleSlice.actions;
+export default articleSlice.reducer;

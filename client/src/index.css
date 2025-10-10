@@ -36,7 +36,15 @@
 
 @utility nav-text {
   @apply hover:bg-primary hover:text-white hover:border-b-white active:bg-primary active:text-white px-3 py-3;
-}
+};
+
+@utility home-tab {
+  @apply border-accentLight text-accentLight flex-center border-b-1 p-2 cursor-pointer;
+};
+
+@utility home-tab-active {
+  @apply border-accent flex-center border-b-2 p-2 cursor-pointer;
+};
 
 .test {
   color: rgb(116, 114, 113);
