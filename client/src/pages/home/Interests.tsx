@@ -81,7 +81,7 @@ const InterestsPage = () => {
       <H1 font="inter" text="Choose Your Interests" others="text-center" />
 
       {/* interests */}
-      <div className="flex-center gap-4 w-[70%] sm:w-[400px] mx-auto mt-10 flex-wrap">
+      <div className="flex-center gap-4 w-[90%] sm:w-[400px] mx-auto mt-15 flex-wrap">
         {interestsArray.map((obj: Interest) => {
           return (
             <InterestBadge 
@@ -96,6 +96,7 @@ const InterestsPage = () => {
         })}
       </div>
 
+      <button className="btn-primary block font-exo mx-auto mt-20">Submit</button>
       <div className="mb-15"></div>
     </section>
   )
@@ -117,7 +118,7 @@ const InterestBadge = ({ icon, text, selected, interests, addInterest, removeInt
   return (
     <div
       onClick={interestExists ? () => removeInterest(text) : () => addInterest(text)} 
-      className={`${selected ? "bg-black text-white" : "bg-muted"} py-2 px-4 rounded-full flex-center gap-2 hover:bg-accentLight active:bg-black active:text-white cursor-pointer text-sm`}>
+      className={`${selected && "bg-black text-white"} py-2 px-4 rounded-full flex-center gap-2 hover:bg-accentLight active:bg-black active:text-white cursor-pointer text-sm`}>
       {icon}
       <span>{text}</span>
     </div>
