@@ -95,23 +95,33 @@ func (ah *ArticleHandler) GetAllMyArticles(c *gin.Context) {
 	utils.Success(c, 200, "", articles)
 }
 
-//fetch all articles
-func (ah *ArticleHandler) FetchArticles(c *gin.Context) {
-	_, exists := c.Get("userId")
-	if !exists {
-		utils.Error(c, 401, "UserId is missing", nil)
-		return
-	}
+func (ah *ArticleHandler) GetUserFeed(c *gin.Context) {
+	userIdAny, _ := c.Get("userId")
+	userId := userIdAny.(string)
 
 	//call service
-	articles, statusCode, err := ah.service.FetchArticles()
+	articles, statusCode, err := ah.service.GetUserFeed(userId)
 	if err != nil {
 		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
 		return
 	}
 
-	utils.Success(c, 200, "", articles)
+	utils.Success(c, statusCode, "", articles)
 }
+
+// func (ah *ArticleHandler) GetUserFyp(c *gin.Context) {
+// 	userIdAny, _ := c.Get("userId")
+// 	userId := userIdAny.(string)
+
+// 	//call service
+// 	articles, statusCode, err := ah.service.GetUserFyp(userId)
+// 	if err != nil {
+// 		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+// 		return
+// 	}
+
+// 	utils.Success(c, statusCode, "", articles)
+// } 
 
 func (ah *ArticleHandler) DeleteArticle(c *gin.Context) {
 	userIdAny, exists := c.Get("userId")

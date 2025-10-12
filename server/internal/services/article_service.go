@@ -16,7 +16,7 @@ type ArticleService interface {
 	CreateArticle(models.ArticleRequest, string) (int, error)
 	GetArticle(string) (models.ArticleResponse, int, error)
 	GetMyArticles(string) ([]models.ArticleResponse, int, error)
-	FetchArticles() ([]models.SafeArticleResponse, int, error)
+	GetUserFeed(string) ([]models.SafeArticleResponse, int, error)
 	DeleteArticle(string, string) (int, error)
 	LikeArticle(models.Like) (int, error)
 	CommentArticle(models.Comment) (int, error)
@@ -145,46 +145,60 @@ func (as *ArticleSvc) GetMyArticles(userId string) ([]models.ArticleResponse, in
 	return userArticles, 200, nil
 }
 
-func (as *ArticleSvc) FetchArticles() ([]models.SafeArticleResponse, int, error) {
-	//get articles
-	articles, code, err := as.articleRepo.FetchArticles()
-	if err != nil {
+func (as *ArticleSvc) GetUserFeed(userId string) ([]models.SafeArticleResponse, int, error) {
+	//get user feed
+	userFeeds, code, err := as.articleRepo.GetUserFeed(userId)
+
+	//fail early
+	if code == 500 {
 		return []models.SafeArticleResponse{}, code, err
 	}
 
-	//call service to format all articles
-	articlesRes := []models.SafeArticleResponse{}
+	//get latest articles from popular accounts
+	popularArticles, code, err := as.articleRepo.GetPopularArticles()
 
-	for _, article := range articles {
-		formatedArticle, code, err := as.GetArticle(article.ArticleId)
-		if err != nil {
-			return []models.SafeArticleResponse{}, code, err
-		}
-
-		//send an article (excluding author userId)
-		safeFormatedArticle := models.SafeArticleResponse{
-			ArticleId: formatedArticle.ArticleId,
-			AuthorPicture: formatedArticle.AuthorPicture,
-			AuthorFullname: formatedArticle.AuthorFullname,
-			AuthorProfileUrl: formatedArticle.AuthorProfileUrl,
-			AuthorVerified: formatedArticle.AuthorVerified,
-			Title: formatedArticle.Title,
-			Content: formatedArticle.Content,
-			Picture: formatedArticle.Picture,
-			Tags: formatedArticle.Tags,
-			Likes: formatedArticle.Likes,
-			ReadTime: formatedArticle.ReadTime,
-			Slug: article.Slug,
-			CreatedAt: utils.GetTimeAgo(formatedArticle.CreatedAt),
-		}
-
-		articlesRes = append(articlesRes, safeFormatedArticle)
+	if code == 404 {
+		return []models.SafeArticleResponse{}, code, err
 	}
 
-	//sort by recent
-	slices.Reverse(articlesRes)
+	//fail early
+	if code == 500 {
+		return []models.SafeArticleResponse{}, code, err
+	}
 
-	return articlesRes, 200, nil
+	//combine articles
+	userFeeds = append(userFeeds, popularArticles...)
+
+	//build response
+	articleFeed := []models.SafeArticleResponse{}
+
+	for _, article := range userFeeds {
+		formattedArticle, code, err := as.GetArticle(article.ArticleId)
+		if err != nil {
+			return articleFeed, code, err
+		}
+
+		//build response
+		safeFormatedArticle := models.SafeArticleResponse{
+			ArticleId: formattedArticle.ArticleId,
+			AuthorPicture: formattedArticle.AuthorPicture,
+			AuthorFullname: formattedArticle.AuthorFullname,
+			AuthorProfileUrl: formattedArticle.AuthorProfileUrl,
+			AuthorVerified: formattedArticle.AuthorVerified,
+			Title: formattedArticle.Title,
+			Content: formattedArticle.Content,
+			Picture: formattedArticle.Picture,
+			Tags: formattedArticle.Tags,
+			Likes: formattedArticle.Likes,
+			ReadTime: formattedArticle.ReadTime,
+			Slug: formattedArticle.Slug,
+			CreatedAt: utils.GetTimeAgo(formattedArticle.CreatedAt),
+		}
+
+		articleFeed = append(articleFeed, safeFormatedArticle)
+	}
+
+	return articleFeed, 200, nil
 }
 
 func (as *ArticleSvc) DeleteArticle(articleId string, userId string) (int, error) {

@@ -1,2 +1,1 @@
-users table should have a profileUrl column
-remove tags table
+popular articles repo not working

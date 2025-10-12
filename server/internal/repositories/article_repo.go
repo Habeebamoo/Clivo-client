@@ -12,7 +12,8 @@ type ArticleRepository interface {
 	CreateArticleSlug(string, string) (int, error)
 	GetArticleById(string) (models.Article, int, error)
 	GetArticles(string) ([]models.Article, int, error)
-	FetchArticles() ([]models.Article, int, error)
+	GetUserFeed(string) ([]models.Article, int, error)
+	GetPopularArticles() ([]models.Article, int, error)
 	GetArticleAuthorById(string) (models.UserResponse, int, error)
 	DeleteArticle(string) (int, error)
 	IsLikedBy(models.Like) bool
@@ -76,15 +77,51 @@ func (ar *ArticleRepo) GetArticles(userId string) ([]models.Article, int, error)
 	return articles, 200, nil
 }
 
-func (ar *ArticleRepo) FetchArticles() ([]models.Article, int, error) {
+func (ar *ArticleRepo) GetUserFeed(userId string) ([]models.Article, int, error) {
 	var articles []models.Article
-	res := ar.db.Find(&articles)
+	res := ar.db.Raw(`
+		SELECT a.*
+		FROM articles a
+		WHERE a.author_id IN (
+			SELECT following_id FROM follows WHERE follower_id = ?
+			UNION
+			SELECT follower_id FROM follows WHERE following_id = ?
+		)
+		ORDER BY a.created_at DESC
+		LIMIT ?
+		`, userId, userId, 20).
+		Scan(&articles)
+
 	if res.Error != nil {
 		if res.Error == gorm.ErrRecordNotFound {
-			return articles, 200, nil
+			return articles, 404, fmt.Errorf("no articles found")
 		}
 		return articles, 500, fmt.Errorf("internal server error")
 	}
+
+	return articles, 200, nil
+}
+
+func (ar *ArticleRepo) GetPopularArticles() ([]models.Article, int, error) {
+	var articles []models.Article
+	res := ar.db.Raw(`
+		SELECT a.*
+		FROM articles a
+		WHERE a.author_id IN (
+			SELECT user_id FROM users WHERE verified = ?
+		)
+		ORDER BY a.created_at DESC
+		LIMIT ?
+	`, true, 5)
+
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return articles, 404, fmt.Errorf("no articles found")
+		}
+		return articles, 500, fmt.Errorf("internal server error")
+	}
+
+	fmt.Println(articles)
 
 	return articles, 200, nil
 }
