@@ -1,5 +1,4 @@
-import { H1 } from "../../components/Typo"
-import logo from "../../assets/logo.jpg"
+import { H2 } from "../../components/Typo"
 import googleImg from "../../assets/google.png"
 import Button from "../../components/Button"
 import { useNavigate } from "react-router"
@@ -13,8 +12,8 @@ const LoginPage = () => {
 
   return (
     <main className="flex-center flex-col h-[100vh]">
-      <img src={logo} className="h-10 rounded-md mb-8" />
-      <H1 font="inter" text="Sign In With Google" others="mb-6" />
+      <H2 font="inter" text="Sign In With Google" />
+      <p className="text-accent text-sm font-inter mb-4 mt-2">Sign in with your google account to continue with Clivo.</p>
       <Button action={login} text="Continue With Google" img={googleImg} imgClass="h-5" />
     </main>
   )
