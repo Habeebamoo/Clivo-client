@@ -38,7 +38,7 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 	//user routes
 	user := api.Group("/user", middlewares.AuthenticateUser())
 	{
-		user.GET("/me", authHandler.GetProfile)
+		user.GET("/me", userHandler.GetProfile)
 		user.POST("/follow/:id", userHandler.FollowUser)
 		user.POST("/unfollow/:id", userHandler.UnFollowUser)
 		user.GET("/followers", userHandler.GetUserFollowers)

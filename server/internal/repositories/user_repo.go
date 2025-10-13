@@ -8,6 +8,7 @@ import (
 )
 
 type UserRepository interface {
+	GetUserById(userId string) (models.UserResponse, int, error)
 	CreateFollow(models.Follow) (int, error)
 	RemoveFollow(models.Follow) (int, error)
 	IncrementFollows(string, string) error
@@ -27,6 +28,24 @@ type UserRepo struct {
 
 func NewUserRepository(db *gorm.DB) UserRepository {
 	return &UserRepo{db}
+}
+
+func (ar *UserRepo) GetUserById(userId string) (models.UserResponse, int, error) {
+	var user models.UserResponse
+	res := ar.db.Table("users u").
+				Select("u.user_id, u.name, u.email, u.role, u.verified, u.is_banned, p.username, p.bio, p.picture, p.interests, p.profile_url, p.website, p.following, p.followers, u.created_at").
+				Joins("JOIN profiles p ON u.user_id = p.user_id").
+				Where("u.user_id = ?", userId).
+				Scan(&user)
+
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return models.UserResponse{}, 404, fmt.Errorf("user does not exists")
+		}
+		return models.UserResponse{}, 500, fmt.Errorf("internal server error")
+	}
+
+	return user, 200, nil
 }
 
 func (ur *UserRepo) CreateFollow(followReq models.Follow) (int, error) {

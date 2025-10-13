@@ -10,6 +10,7 @@ import (
 )
 
 type UserService interface {
+	GetUserProfile(string) (models.UserProfileResponse, int, error)
 	FollowUser(string, string) (int, error)
 	UnFollowUser(string, string) (int, error)
 	GetUser(string) (models.SafeUserResponse, int, error)
@@ -20,12 +21,44 @@ type UserService interface {
 }
 
 type UserSvc struct {
-	userRepo repositories.UserRepository
-	articleRepo repositories.ArticleRepository
+	repo repositories.UserRepository
 }
 
-func NewUserService(userRepo repositories.UserRepository, articleRepo repositories.ArticleRepository) UserService {
-	return &UserSvc{userRepo, articleRepo}
+func NewUserService(repo repositories.UserRepository) UserService {
+	return &UserSvc{repo}
+}
+
+func (as *UserSvc) GetUserProfile(userId string) (models.UserProfileResponse, int, error) {
+	//get user
+	user, code, err := as.repo.GetUserById(userId)
+	if err != nil {
+		return models.UserProfileResponse{}, code, err
+	}
+
+	//build response
+	userInterests := strings.Split(user.Interests, ", ")
+
+	//calculate time
+	createdAt := utils.GetTimeAgo(user.CreatedAt)
+
+	userProfile := models.UserProfileResponse{
+		UserId: user.UserId,
+		Name: user.Name,
+		Email: user.Email,
+		Role: user.Role,
+		Verified: user.Verified,
+		IsBanned: user.IsBanned,
+		Bio: user.Bio,
+		Picture: user.Picture,
+		Interests: userInterests,
+		ProfileUrl: user.ProfileUrl,
+		Website: user.Website,
+		Following: user.Following,
+		Followers: user.Following,
+		CreatedAt: createdAt,
+	}
+
+	return userProfile, 200, nil
 }
 
 func (us *UserSvc) FollowUser(followerId string, followingId string) (int, error) {
@@ -35,20 +68,20 @@ func (us *UserSvc) FollowUser(followerId string, followingId string) (int, error
 	}
 
 	//create follow
-	code, err := us.userRepo.CreateFollow(follow)
+	code, err := us.repo.CreateFollow(follow)
 	if err != nil {
 		return code, err
 	}
 
 	//use transactions
 	//update follower (user that followed) profile
-	err = us.userRepo.IncrementFollows(follow.FollowerId, "following")
+	err = us.repo.IncrementFollows(follow.FollowerId, "following")
 	if err != nil {
 		return code, err
 	}
 
 	//update following (user that is been followed)
-	err = us.userRepo.IncrementFollows(follow.FollowingId, "followers")
+	err = us.repo.IncrementFollows(follow.FollowingId, "followers")
 	if err != nil {
 		return code, err
 	}
@@ -63,20 +96,20 @@ func (us *UserSvc) UnFollowUser(followerId string, followingId string) (int, err
 		FollowingId: followingId,
 	}
 
-	code, err := us.userRepo.RemoveFollow(follow)
+	code, err := us.repo.RemoveFollow(follow)
 	if err != nil {
 		return code, err
 	}
 
 	//use transactions
 	//update follower (user that followed) profile
-	err = us.userRepo.DecrementFollows(follow.FollowerId, "following")
+	err = us.repo.DecrementFollows(follow.FollowerId, "following")
 	if err != nil {
 		return code, err
 	}
 
 	//update following (user that is been followed)
-	err = us.userRepo.DecrementFollows(follow.FollowingId, "followers")
+	err = us.repo.DecrementFollows(follow.FollowingId, "followers")
 	if err != nil {
 		return code, err
 	}
@@ -86,18 +119,18 @@ func (us *UserSvc) UnFollowUser(followerId string, followingId string) (int, err
 }
 
 func (us *UserSvc) GetUser(username string) (models.SafeUserResponse, int, error) {
-	return us.userRepo.GetUserByUsername(username)
+	return us.repo.GetUserByUsername(username)
 }
 
 func (us *UserSvc) GetArticle(articleId string) (models.SafeArticleResponse, int, error) {
 	//get article
-	article, code, err := us.userRepo.GetArticleById(articleId)
+	article, code, err := us.repo.GetArticleById(articleId)
 	if err != nil {
 		return models.SafeArticleResponse{}, code, err
 	}
 
 	//get article likes
-	articleLikes, err := us.userRepo.GetArticleLikes(article.ArticleId)
+	articleLikes, err := us.repo.GetArticleLikes(article.ArticleId)
 	if err != nil {
 		return models.SafeArticleResponse{}, 500, err
 	}
@@ -106,7 +139,7 @@ func (us *UserSvc) GetArticle(articleId string) (models.SafeArticleResponse, int
 	articleTagsFormated := strings.Split(article.Tags, ", ")
 
 	//get user
-	author, code, err := us.userRepo.GetArticleAuthorById(article.AuthorId)
+	author, code, err := us.repo.GetArticleAuthorById(article.AuthorId)
 	if err != nil {
 		return models.SafeArticleResponse{}, code, err
 	}
@@ -133,7 +166,7 @@ func (us *UserSvc) GetArticle(articleId string) (models.SafeArticleResponse, int
 
 func (us *UserSvc) GetArticles(username string) ([]models.SafeArticleResponse, int, error) {
 	//get articles
-	articles, code, err := us.userRepo.GetArticlesByUsername(username)
+	articles, code, err := us.repo.GetArticlesByUsername(username)
 	if err != nil {
 		return []models.SafeArticleResponse{}, code, err
 	}
@@ -143,7 +176,7 @@ func (us *UserSvc) GetArticles(username string) ([]models.SafeArticleResponse, i
 	}
 
 	//get user
-	user, code, err := us.userRepo.GetUserByUsername(username)
+	user, code, err := us.repo.GetUserByUsername(username)
 	if err != nil {
 		return []models.SafeArticleResponse{}, code, err
 	}
@@ -153,7 +186,7 @@ func (us *UserSvc) GetArticles(username string) ([]models.SafeArticleResponse, i
 
 	for _, article := range articles {
 		//get likes
-		likes, err := us.userRepo.GetArticleLikes(article.ArticleId)
+		likes, err := us.repo.GetArticleLikes(article.ArticleId)
 		if err != nil {
 			return []models.SafeArticleResponse{}, 500, err
 		}
@@ -185,7 +218,7 @@ func (us *UserSvc) GetArticles(username string) ([]models.SafeArticleResponse, i
 }
 
 func (us *UserSvc) GetFollowers(userId string) ([]models.SafeUserResponse, int, error) {
-	followersId, code, err := us.userRepo.GetUserFollowersId(userId)
+	followersId, code, err := us.repo.GetUserFollowersId(userId)
 	if err != nil {
 		return []models.SafeUserResponse{}, code, err
 	}
@@ -193,7 +226,7 @@ func (us *UserSvc) GetFollowers(userId string) ([]models.SafeUserResponse, int, 
 	var followers []models.SafeUserResponse
 
 	for _, followerId := range followersId {
-		follower, code, err := us.articleRepo.GetArticleAuthorById(followerId)
+		follower, code, err := us.repo.GetUserById(followerId)
 		//error check
 		if err != nil {
 			return followers, code, err
@@ -222,7 +255,7 @@ func (us *UserSvc) GetFollowers(userId string) ([]models.SafeUserResponse, int, 
 }
 
 func (us *UserSvc) GetFollowing(userId string) ([]models.SafeUserResponse, int, error) {
-	usersFollowingId, code, err := us.userRepo.GetUsersFollowingId(userId)
+	usersFollowingId, code, err := us.repo.GetUsersFollowingId(userId)
 	if err != nil {
 		return []models.SafeUserResponse{}, code, err
 	}
@@ -230,7 +263,7 @@ func (us *UserSvc) GetFollowing(userId string) ([]models.SafeUserResponse, int, 
 	var usersFollowing []models.SafeUserResponse
 
 	for _, userfollowingId := range usersFollowingId {
-		userFollowing, code, err := us.articleRepo.GetArticleAuthorById(userfollowingId)
+		userFollowing, code, err := us.repo.GetUserById(userfollowingId)
 		//error check
 		if err != nil {
 			return usersFollowing, code, err

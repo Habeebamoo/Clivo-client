@@ -12,7 +12,6 @@ import (
 
 type AuthService interface {
 	SignInUser(models.UserRequest) (string, int, error)
-	GetUserProfile(string) (models.UserProfileResponse, int, error)
 }
 
 type AuthSvc struct {
@@ -97,37 +96,4 @@ func (as *AuthSvc) SignInUser(userReq models.UserRequest) (string, int, error) {
 	return token, 201, nil
 
 	//send email notification to admin
-}
-
-func (as *AuthSvc) GetUserProfile(userId string) (models.UserProfileResponse, int, error) {
-	//get user
-	user, code, err := as.repo.GetUserById(userId)
-	if err != nil {
-		return models.UserProfileResponse{}, code, err
-	}
-
-	//build response
-	userInterests := strings.Split(user.Interests, ", ")
-
-	//calculate time
-	createdAt := utils.GetTimeAgo(user.CreatedAt)
-
-	userProfile := models.UserProfileResponse{
-		UserId: user.UserId,
-		Name: user.Name,
-		Email: user.Email,
-		Role: user.Role,
-		Verified: user.Verified,
-		IsBanned: user.IsBanned,
-		Bio: user.Bio,
-		Picture: user.Picture,
-		Interests: userInterests,
-		ProfileUrl: user.ProfileUrl,
-		Website: user.Website,
-		Following: user.Following,
-		Followers: user.Following,
-		CreatedAt: createdAt,
-	}
-
-	return userProfile, 200, nil
 }

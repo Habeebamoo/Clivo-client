@@ -14,6 +14,25 @@ func NewUserHandler(service services.UserService) UserHandler {
 	return UserHandler{service}
 }
 
+func (uhdl *UserHandler) GetProfile(c *gin.Context) {
+	userIdAny, exists := c.Get("userId")
+	if !exists {
+		utils.Error(c, 401, "UserId Missing", nil)
+		return
+	}
+
+	userId := userIdAny.(string)
+
+	//call service
+	user, statusCode, err := uhdl.service.GetUserProfile(userId)
+	if err != nil {
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	utils.Success(c, statusCode, "", user)
+}
+
 func (uhdl *UserHandler) FollowUser(c *gin.Context) {
 	userIdAny, exists := c.Get("userId")
 	if !exists {

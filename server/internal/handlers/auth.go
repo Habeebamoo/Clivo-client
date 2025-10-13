@@ -59,22 +59,3 @@ func (ahdl *AuthHandler) SignIn(c *gin.Context) {
 
 	utils.Success(c, statusCode, "Signed In Successfully", nil)
 }
-
-func (ahdl *AuthHandler) GetProfile(c *gin.Context) {
-	userIdAny, exists := c.Get("userId")
-	if !exists {
-		utils.Error(c, 401, "UserId Missing", nil)
-		return
-	}
-
-	userId := userIdAny.(string)
-
-	//call service
-	user, statusCode, err := ahdl.service.GetUserProfile(userId)
-	if err != nil {
-		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
-		return
-	}
-
-	utils.Success(c, statusCode, "", user)
-}
