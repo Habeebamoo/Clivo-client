@@ -114,3 +114,22 @@ func (uhdl *UserHandler) GetUserArticle(c *gin.Context) {
 
 	utils.Success(c, statusCode, "", article)
 }
+
+func (uhdl *UserHandler) GetUserFollowers(c *gin.Context) {
+	userIdAny, exists := c.Get("userId")
+	if !exists {
+		utils.Error(c, 401, "Unauthorized Access", nil)
+		return
+	}
+
+	userId := userIdAny.(string)
+
+	//call service
+	followers, statusCode, err := uhdl.service.GetFollowers(userId)
+	if err != nil {
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+		return
+	}
+	
+	utils.Success(c, statusCode, "", followers)
+}
