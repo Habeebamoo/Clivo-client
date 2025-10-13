@@ -112,7 +112,8 @@ func (ar *ArticleRepo) GetPopularArticles() ([]models.Article, int, error) {
 		)
 		ORDER BY a.created_at DESC
 		LIMIT ?
-	`, true, 5)
+	`, true, 5).
+	Scan(&articles)
 
 	if res.Error != nil {
 		if res.Error == gorm.ErrRecordNotFound {
