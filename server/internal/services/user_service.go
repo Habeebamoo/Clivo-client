@@ -16,6 +16,7 @@ type UserService interface {
 	GetArticle(string) (models.SafeArticleResponse, int, error)
 	GetArticles(string) ([]models.SafeArticleResponse, int, error)
 	GetFollowers(string) ([]models.SafeUserResponse, int, error)
+	GetFollowing(string) ([]models.SafeUserResponse, int, error)
 }
 
 type UserSvc struct {
@@ -184,7 +185,7 @@ func (us *UserSvc) GetArticles(username string) ([]models.SafeArticleResponse, i
 }
 
 func (us *UserSvc) GetFollowers(userId string) ([]models.SafeUserResponse, int, error) {
-	followersId, code, err := us.userRepo.GetFollowersId(userId)
+	followersId, code, err := us.userRepo.GetUserFollowersId(userId)
 	if err != nil {
 		return []models.SafeUserResponse{}, code, err
 	}
@@ -218,4 +219,41 @@ func (us *UserSvc) GetFollowers(userId string) ([]models.SafeUserResponse, int, 
 	slices.Reverse(followers)
 
 	return followers, 200, nil
+}
+
+func (us *UserSvc) GetFollowing(userId string) ([]models.SafeUserResponse, int, error) {
+	usersFollowingId, code, err := us.userRepo.GetUsersFollowingId(userId)
+	if err != nil {
+		return []models.SafeUserResponse{}, code, err
+	}
+
+	var usersFollowing []models.SafeUserResponse
+
+	for _, userfollowingId := range usersFollowingId {
+		userFollowing, code, err := us.articleRepo.GetArticleAuthorById(userfollowingId)
+		//error check
+		if err != nil {
+			return usersFollowing, code, err
+		}
+
+		//build response
+		user := models.SafeUserResponse{
+			Name: userFollowing.Name,
+			Verified: userFollowing.Verified,
+			Username: userFollowing.Username,
+			Bio: userFollowing.Bio,
+			Picture: userFollowing.Picture,
+			ProfileUrl: userFollowing.ProfileUrl,
+			Website: userFollowing.Website,
+			Following: userFollowing.Following,
+			Followers: userFollowing.Followers,
+		}
+
+		usersFollowing = append(usersFollowing, user)
+	}
+
+	//sort by recent
+	slices.Reverse(usersFollowing)
+
+	return usersFollowing, 200, nil
 }

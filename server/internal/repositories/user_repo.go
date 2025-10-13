@@ -12,7 +12,8 @@ type UserRepository interface {
 	RemoveFollow(models.Follow) (int, error)
 	IncrementFollows(string, string) error
 	DecrementFollows(string, string) error
-	GetFollowersId(string) ([]string, int, error)
+	GetUserFollowersId(string) ([]string, int, error)
+	GetUsersFollowingId(string) ([]string, int, error)
 	GetUserByUsername(string) (models.SafeUserResponse, int, error)
 	GetArticlesByUsername(string) ([]models.Article, int, error)
 	GetArticleById(string) (models.Article, int, error)
@@ -79,7 +80,7 @@ func (ur *UserRepo) DecrementFollows(userId string, column string) error {
 	return nil
 }
 
-func (ur *UserRepo) GetFollowersId(userId string) ([]string, int, error) {
+func (ur *UserRepo) GetUserFollowersId(userId string) ([]string, int, error) {
 	var followersId []string
 	res := ur.db.Raw(`SELECT follower_id FROM follows WHERE following_id = ?`, userId).Scan(&followersId)
 
@@ -91,6 +92,20 @@ func (ur *UserRepo) GetFollowersId(userId string) ([]string, int, error) {
 	}
 
 	return followersId, 200, nil
+}
+
+func (ur *UserRepo) GetUsersFollowingId(userId string) ([]string, int, error) {
+	var followingId []string
+	res := ur.db.Raw(`SELECT following_id FROM follows WHERE follower_id = ?`, userId).Scan(&followingId)
+
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return followingId, 404, nil
+		}
+		return followingId, 500, fmt.Errorf("internal server error")
+	}
+
+	return followingId, 200, nil
 }
 
 func (ur *UserRepo) GetUserByUsername(username string) (models.SafeUserResponse, int, error) {
