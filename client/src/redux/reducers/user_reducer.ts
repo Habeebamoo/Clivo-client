@@ -19,11 +19,11 @@ export type User = {
 }
 
 interface UserReducerState {
-  profile: User | null
+  profile: User | {}
 }
 
 const initialState: UserReducerState = {
-  profile: null
+  profile: {}
 }
 
 const userSlice = createSlice({

@@ -9,8 +9,9 @@ import { useFetchProfile } from "../../hooks/useFetchProfile"
 import Loading from "../../components/Loading"
 
 const MyProfile = () => {
-  const { isLoading } = useFetchProfile()
+  const { isLoading, } = useFetchProfile()
   const user: User = useSelector((state: any) => state.user.profile);
+  console.log(user)
   const navigate = useNavigate()
 
   const toSettings = () => {
