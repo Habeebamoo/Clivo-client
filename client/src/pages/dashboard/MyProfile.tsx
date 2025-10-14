@@ -5,13 +5,19 @@ import { MdDateRange, MdVerified } from "react-icons/md"
 import { useNavigate } from "react-router"
 import type { User } from "../../redux/reducers/user_reducer"
 import MyArticles from "../../components/MyArticles"
+import { useFetchProfile } from "../../hooks/useFetchProfile"
+import Loading from "../../components/Loading"
+
 const MyProfile = () => {
-  const user: User = useSelector((state: any) => state.user.user);
+  const { isLoading } = useFetchProfile()
+  const user: User = useSelector((state: any) => state.user.profile);
   const navigate = useNavigate()
 
   const toSettings = () => {
     navigate("/dashboard/settings")
   }
+
+  if (isLoading) return <Loading />
 
   return (
     <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:w-[900px] mx-auto items-start">

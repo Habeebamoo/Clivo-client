@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 export type User = {
   userId: string,
@@ -18,36 +18,23 @@ export type User = {
   createdAt: string
 }
 
-const initialState = {
-  user: {
-    userId: "",
-    name: "Habeeb Amoo",
-    email: "habeebamoo08@gmail.com",
-    role: "user",
-    verified: true,
-    isBanned: false,
-    username: "@habeebamoo08",
-    bio: "Clivo CEO",
-    picture: "",
-    interests: ["Tech", "Science"],
-    profileUrl: "",
-    website: "habeebamoo.netlify.app",
-    following: 15,
-    followers: 400,
-    createdAt: "3 months ago"
-  }
+interface UserReducerState {
+  profile: User | null
+}
+
+const initialState: UserReducerState = {
+  profile: null
 }
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state: any, action: any) => {
-      console.log(state)
-      console.log(action.payload)
+    setProfile: (state, action: PayloadAction<User>) => {
+      state.profile = action.payload;
     }
   }
 })
 
-export const { setUser } = userSlice.actions;
+export const { setProfile } = userSlice.actions;
 export default userSlice.reducer;
