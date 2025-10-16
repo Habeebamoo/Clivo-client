@@ -1,9 +1,9 @@
-import nature from "../assets/nature.jpg"
-import commercial from "../assets/commercial.jpg"
-import literature from "../assets/literature.jpg"
-import tech from "../assets/tech.jpg"
-import telephone from "../assets/telephone.jpg"
-import chefs from "../assets/chefs.jpg"
+import nature from "../assets/nature.jpeg"
+import commercial from "../assets/commercial.jpeg"
+import literature from "../assets/literature.jpeg"
+import tech from "../assets/tech.jpeg"
+import telephone from "../assets/telephone.jpeg"
+import chefs from "../assets/chefs.jpeg"
 import { memo } from "react"
 
 const PhotoGrid = () => {
@@ -12,18 +12,18 @@ const PhotoGrid = () => {
       <div className="grid grid-cols-3 gap-2">
 
         <div className="flex flex-col gap-2 justify-center">
-          <img src={commercial} className="aspect-square object-cover w-full" />
-          <img src={nature} className="aspect-square object-cover w-full" />
+          <img src={commercial} className="aspect-square object-cover w-full" loading="lazy" />
+          <img src={nature} className="aspect-square object-cover w-full" loading="lazy" />
         </div>
 
         <div className="flex flex-col gap-2">
-          <img src={chefs} className="aspect-square object-cover w-full" />
-          <img src={tech} className="object-cover w-full" style={{ aspectRatio: "1 / 2"}} />
+          <img src={chefs} className="aspect-square object-cover w-full" loading="lazy" />
+          <img src={tech} className="object-cover w-full" style={{ aspectRatio: "1 / 2"}} loading="lazy" />
         </div>
 
         <div className="flex flex-col gap-2 justify-center">
-          <img src={telephone} className="aspect-square object-cover w-full" />
-          <img src={literature} className="aspect-square object-cover w-full" />
+          <img src={telephone} className="aspect-square object-cover w-full" loading="lazy" />
+          <img src={literature} className="aspect-square object-cover w-full" loading="lazy" />
         </div>
 
       </div>
