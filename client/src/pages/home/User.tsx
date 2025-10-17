@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { H1, H2 } from "../../components/Typo"
+import { H2 } from "../../components/Typo"
 import { MdVerified } from "react-icons/md"
 import { BiLink } from "react-icons/bi"
 import avatar from "../../assets/avatar.jpg"
@@ -31,7 +31,7 @@ const getUser = async (username: string) => {
     console.log("1")
 
     //get user articles
-    const res2 = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/${username}/articles`, {
+    const res2 = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/@${username}/articles`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -133,7 +133,7 @@ const UserPage = () => {
           {articles!.length == 0 && 
             <div className="flex-center flex-col mb-20 lg:mt-10">
               <img src={avatar} className="h-70" />
-              <H1 font="inter" text="This user hasn't posted anything!" others="mt-6 text-center" />
+              <H2 font="inter" text="This user hasn't posted anything!" others="mt-6 text-center" />
             </div>
           }
           {articles!.length != 0 && 
