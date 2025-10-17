@@ -14,6 +14,7 @@ import MyProfile from "./pages/dashboard/MyProfile"
 import SettingsPage from "./pages/dashboard/Settings"
 import UserPage from "./pages/home/User"
 import InterestsPage from "./pages/home/Interests"
+import NotFoundPage from "./pages/home/NotFoundPage"
 
 const App = () => {
   const router = createBrowserRouter(
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="settings" element={<SettingsPage />} />
         </Route>
         <Route path="/posts/:id" element={<Article />} />
+        <Route path="*" element={<NotFoundPage />} />
       </>
     )
   )
