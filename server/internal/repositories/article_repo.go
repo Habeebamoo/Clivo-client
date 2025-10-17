@@ -21,7 +21,6 @@ type ArticleRepository interface {
 	RemoveLike(models.Like) (int, error)
 	CreateComment(models.Comment) (int, error)
 	GetArticleLikes(string) (int, error)
-	GetArticleComments(string) ([]models.Comment, int, error)
 }
 
 type ArticleRepo struct {
@@ -206,19 +205,6 @@ func (ar *ArticleRepo) GetArticleLikes(articleId string) (int, error) {
 	}
 
 	return int(likes), nil
-}
-
-func (ar *ArticleRepo) GetArticleComments(articleId string) ([]models.Comment, int, error) {
-	var comments []models.Comment
-	res := ar.db.Find(&comments, "article_id = ?", articleId)
-	if res.Error != nil {
-		if res.Error == gorm.ErrRecordNotFound {
-			return []models.Comment{}, 200, nil
-		}
-		return []models.Comment{}, 500, fmt.Errorf("internal server error")
-	}
-
-	return comments, 200, nil
 }
 
 

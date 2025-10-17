@@ -193,26 +193,3 @@ func (ah *ArticleHandler) CommentArticle(c *gin.Context) {
 
 	utils.Success(c, statusCode, "Comment Sent.", nil)
 }
-
-func (ah *ArticleHandler) GetArticleComments(c *gin.Context) {
-	_, exists := c.Get("userId")
-	if !exists {
-		utils.Error(c, 401, "UserId is missing", nil)
-		return
-	}
-
-	articleId := c.Param("id")
-	if articleId == "" {
-		utils.Error(c, 400, "Article ID Missing", nil)
-		return
-	}
-
-	//call service
-	comments, statusCode, err := ah.service.GetArticleComments(articleId)
-	if err != nil {
-		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
-		return
-	}
-
-	utils.Success(c, statusCode, "", comments)
-}

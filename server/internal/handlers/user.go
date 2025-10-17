@@ -134,6 +134,23 @@ func (uhdl *UserHandler) GetUserArticle(c *gin.Context) {
 	utils.Success(c, statusCode, "", article)
 }
 
+func (uhdl *UserHandler) GetArticleComments(c *gin.Context) {
+	articleId := c.Param("id")
+	if articleId == "" {
+		utils.Error(c, 400, "Article ID Missing", nil)
+		return
+	}
+
+	//call service
+	comments, statusCode, err := uhdl.service.GetArticleComments(articleId)
+	if err != nil {
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	utils.Success(c, statusCode, "", comments)
+}
+
 func (uhdl *UserHandler) GetUserFollowers(c *gin.Context) {
 	userIdAny, exists := c.Get("userId")
 	if !exists {

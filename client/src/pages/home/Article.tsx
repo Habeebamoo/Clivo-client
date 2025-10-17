@@ -7,10 +7,9 @@ import { FaUpload } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
 import { GoHeart } from "react-icons/go";
 import { CgShare } from "react-icons/cg";
-import logo from "../../assets/logo.jpg"
 import NotFound from "../../components/NotFound";
-import { useQuery } from "@tanstack/react-query";
 import Loading from "../../components/Loading";
+import { useFetchUserArticle } from "../../hooks/useFetchUserArticle";
 
 interface Comment {
 	articleId: string,
@@ -21,33 +20,9 @@ interface Comment {
 	picture: string,
 } 
 
-const getArticle = async (id: string) => {
-  try {
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/posts/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "X-API-KEY": import.meta.env.VITE_API_KEY
-      }
-    })
-    const response = await res.json()
-
-    if (!response.success) {
-      throw new Error(response.message)
-    }
-
-    return response.data;
-  } catch (error: any) {
-    throw new Error(error)
-  }
-}
-
 const ArticlePage = () => {
   const { id } = useParams<{ id: string }>();
-  const { data, isLoading, isError }= useQuery({
-    queryKey: ["article"],
-    queryFn: () => getArticle(id!)
-  })
+  const { data, isLoading, isError } = useFetchUserArticle(id!)
   const [commentAction, setCommentAction] = useState<"add" | "send">("add");
   const [commentBarActive, setCommentBarActive] = useState<boolean>(false)
   const [commentValue, setCommentValue] = useState<string>("");
@@ -63,15 +38,8 @@ const ArticlePage = () => {
     }
   }, [commentValue])
 
-  console.log(commentAction)
-
-  //default comments
-  const comments: Comment[] = [
-    {articleId: "dnfiff", content: "Good", name: "Paul", username: "@paul", verified: true, picture: logo},
-    {articleId: "dnfiff", content: "Yes", name: "Micheal", username: "@paul", verified: false, picture: ""},
-  ]
-
-  const article: Post | undefined | void = data;
+  const article: Post | undefined | void = data?.article;
+  const comments: Comment[] = data?.comments;
 
   const handleCommentAction = () => {
     if (commentAction === "add") {
@@ -175,7 +143,7 @@ const ArticlePage = () => {
         }
 
         <div>
-          {comments.length == 0}
+          {comments.length == 0 && <NotFound text="No Comments Yet" subText="Be the first to comment on this post." />}
           {comments.length !== 0 && 
             <div className="mt-8">
               {comments.map((comment: Comment) => {

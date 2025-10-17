@@ -16,6 +16,7 @@ type UserService interface {
 	GetUser(string) (models.SafeUserResponse, int, error)
 	GetArticle(string) (models.SafeArticleResponse, int, error)
 	GetArticles(string) ([]models.SafeArticleResponse, int, error)
+	GetArticleComments(string) ([]models.CommentResponse, int, error)
 	GetFollowers(string) ([]models.SafeUserResponse, int, error)
 	GetFollowing(string) ([]models.SafeUserResponse, int, error)
 }
@@ -215,6 +216,40 @@ func (us *UserSvc) GetArticles(username string) ([]models.SafeArticleResponse, i
 	}
 
 	return userArticles, 200, nil
+}
+
+func (as *UserSvc) GetArticleComments(articleId string) ([]models.CommentResponse, int, error) {
+	//get comments
+	comments, code, err := as.repo.GetArticleComments(articleId)
+	if err != nil {
+		return []models.CommentResponse{}, code, err
+	}
+
+	//format comments
+	commentsReponse := []models.CommentResponse{}
+
+	for _, c := range comments {
+		user, code, err := as.repo.GetUserById(c.CommenterUserId)
+		if err != nil {
+			return commentsReponse, code, err
+		}
+
+		comment := models.CommentResponse{
+			Content: c.Content,
+			ArticleId: articleId, 
+			Name: user.Name,
+			Username: user.Username,
+			Verified: user.Verified,
+			Picture: user.Picture,
+		}
+
+		commentsReponse = append(commentsReponse, comment)
+	}
+
+	//sort by latest
+	slices.Reverse(commentsReponse)
+
+	return commentsReponse, 200, nil
 }
 
 func (us *UserSvc) GetFollowers(userId string) ([]models.SafeUserResponse, int, error) {

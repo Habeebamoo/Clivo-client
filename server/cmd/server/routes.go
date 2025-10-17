@@ -26,6 +26,7 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 	api.GET("/user/:username", userHandler.GetUser)
 	api.GET("/user/:username/articles", userHandler.GetUserArticles)
 	api.GET("/posts/:id", userHandler.GetUserArticle)
+	api.GET("/posts/:id/comments", userHandler.GetArticleComments)
 
 	//authentication routes
 	auth := api.Group("/auth")
@@ -54,7 +55,6 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 		article.DELETE("/:id", articleHandler.DeleteArticle)
 		article.POST("/like/:id", articleHandler.LikeArticle)
 		article.POST("/comment/:id", articleHandler.CommentArticle)
-		article.GET("/:id/comments", articleHandler.GetArticleComments)
 	}
 
 	//admin routes

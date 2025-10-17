@@ -2,7 +2,6 @@ package services
 
 import (
 	"fmt"
-	"slices"
 	"strings"
 	"time"
 
@@ -20,7 +19,6 @@ type ArticleService interface {
 	DeleteArticle(string, string) (int, error)
 	LikeArticle(models.Like) (int, error)
 	CommentArticle(models.Comment) (int, error)
-	GetArticleComments(string) ([]models.CommentResponse, int, error)
 }
 
 type ArticleSvc struct {
@@ -230,38 +228,4 @@ func (as *ArticleSvc) LikeArticle(likeReq models.Like) (int, error) {
 
 func (as *ArticleSvc) CommentArticle(commentReq models.Comment) (int, error) {
 	return as.articleRepo.CreateComment(commentReq)
-}
-
-func (as *ArticleSvc) GetArticleComments(articleId string) ([]models.CommentResponse, int, error) {
-	//get comments
-	comments, code, err := as.articleRepo.GetArticleComments(articleId)
-	if err != nil {
-		return []models.CommentResponse{}, code, err
-	}
-
-	//format comments
-	commentsReponse := []models.CommentResponse{}
-
-	for _, c := range comments {
-		user, code, err := as.authRepo.GetUserById(c.CommenterUserId)
-		if err != nil {
-			return commentsReponse, code, err
-		}
-
-		comment := models.CommentResponse{
-			Content: c.Content,
-			ArticleId: articleId, 
-			Name: user.Name,
-			Username: user.Username,
-			Verified: user.Verified,
-			Picture: user.Picture,
-		}
-
-		commentsReponse = append(commentsReponse, comment)
-	}
-
-	//sort by latest
-	slices.Reverse(commentsReponse)
-
-	return commentsReponse, 200, nil
 }

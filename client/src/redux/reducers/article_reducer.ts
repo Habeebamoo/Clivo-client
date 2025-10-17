@@ -34,8 +34,10 @@ export interface Article {
 }
 
 const initialState = {
-  posts: [],
-  articles: []
+  posts: [],           //feeds & fyp
+  articles: [],        //user's article(s)
+  userArticle: [],     //user's or someone's article
+  articleComments: []  //any article comments
 }
 
 const articleSlice = createSlice({
@@ -47,9 +49,15 @@ const articleSlice = createSlice({
     },
     setArticles: (state, action) => {
       state.articles = action.payload;
+    },
+    setUserArticle: (state, action) => {
+      state.userArticle = action.payload
+    },
+    setArticleComments: (state, action) => {
+      state.articleComments = action.payload
     }
   }
 })
 
-export const { setPosts, setArticles } = articleSlice.actions;
+export const { setPosts, setArticles, setUserArticle, setArticleComments } = articleSlice.actions;
 export default articleSlice.reducer;
