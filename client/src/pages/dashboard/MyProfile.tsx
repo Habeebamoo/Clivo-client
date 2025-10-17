@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux"
-import { H2 } from "../../components/Typo"
+import { H1, H2 } from "../../components/Typo"
 import { BiLink, BiPencil, BiPlus } from "react-icons/bi"
 import { MdDateRange, MdVerified } from "react-icons/md"
 import { useNavigate } from "react-router"
@@ -26,8 +26,8 @@ const MyProfile = () => {
         {/* Profile Picture */}
         <div>
           <div className="h-40 bg-mutedLight relative flex-center flex-col">
-            <H2 font="exo" text="Clivo" color="accent" />
-            <p className="text-[12px] text-accentLight mt-1">Where Simple Stories Find Thier Voices</p>
+            <H1 font="exo" text="Clivo" color="accent" />
+            <p className="text-[12px] text-accentLight mt-1 font-exo">Where Simple Stories Find Thier Voices</p>
 
             {/* profile pic */}
             <div className="bg-white p-1 h-26 w-26 rounded-full flex-center absolute left-7 bottom-[-70px]">
@@ -65,7 +65,7 @@ const MyProfile = () => {
           {user.website && 
             <div className="flex-start gap-1 mt-2">
               <BiLink />
-              <p className="text-blue-500 text-[12px] underline cursor-pointer">{user.website}</p>
+              <a href={user.website} className="text-blue-500 text-[12px] underline cursor-pointer">My Website</a>
             </div>
           }
           

@@ -81,7 +81,7 @@ const InterestsPage = () => {
       <H1 font="inter" text="Choose Your Interests" others="text-center" />
 
       {/* interests */}
-      <div className="flex-center gap-4 w-[90%] sm:w-[400px] mx-auto mt-15 flex-wrap">
+      <div className="flex-center gap-4 w-[95%] sm:w-[400px] mx-auto mt-15 flex-wrap">
         {interestsArray.map((obj: Interest) => {
           return (
             <InterestBadge 

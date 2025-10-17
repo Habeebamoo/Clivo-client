@@ -34,10 +34,10 @@ const ArticleDisplay = ({ article }: { article: Post }) => {
 
       {/* title & picture */}
       <div onClick={toPost} className="py-3 my-2 grid grid-cols-6 gap-3 px-1 hover:bg-mutedLight active:bg-mutedLight cursor-pointer">
-        <div className="col-span-5 break-words">
+        <div className="col-span-4 break-words">
           <H3 font="inter" text={shorten(article.title, 50)} />
         </div>
-        <div className="h-full w-full">
+        <div className="h-[80px] w-full col-span-2">
           {article.picture ? (
             <img src={article.picture} className="h-full w-full object-cover" />
           ): (
