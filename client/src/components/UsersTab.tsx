@@ -3,14 +3,26 @@ import { FaSearch } from "react-icons/fa"
 import type { User } from "../redux/reducers/user_reducer";
 import { MdVerified } from "react-icons/md";
 import { SlArrowRight } from "react-icons/sl";
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/reducers/admin_reducer";
 
-const UsersTab = () => {
+interface PropsType {
+  setModalActive: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const UsersTab = ({ setModalActive }: PropsType) => {
+  const dispatch = useDispatch()
   const [query, setQuery] = useState<string>("");
 
   const users: User[] = [
     {userId: "jdd", name: "Sarah", email: "sarah@gmail.com", role: "user", verified: true, isBanned: false, username: "@sarah", bio: "Accountant", picture: "", interests: ["Tech"], profileUrl: "", website: "", followers: 2, following: 3, createdAt: "3 months ago"},
     {userId: "jdd", name: "Micheal", email: "micheal09@gmail.com", role: "user", verified: false, isBanned: true, username: "@michela09", bio: "Software", picture: "", interests: ["Tech"], profileUrl: "", website: "", followers: 2, following: 3, createdAt: "1 year ago"}
   ];
+
+  const handleAction = (user: User) => {
+    dispatch(setUser(user))
+    setModalActive(true)
+  }
 
   return (
     <section className="bg-mutedLight border-1 border-muted rounded-lg mt-6 mb-10 p-4">
@@ -43,7 +55,7 @@ const UsersTab = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map(user => <UserDisplay key={user.userId} user={user} />)}
+            {users.map(user => <UserDisplay key={user.userId} user={user} action={handleAction} />)}
           </tbody>
         </table>
       </div>
@@ -51,7 +63,11 @@ const UsersTab = () => {
   )
 }
 
-const UserDisplay = ({ user }: { user: User }) => {
+const UserDisplay = ({ user, action }: { user: User, action: (user: User) => void }) => {
+  const showModal = () => {
+    action(user)
+  }
+
   return (
     <tr className="hover:bg-gray-50 cursor-pointer">
       {/* picture */}
@@ -87,7 +103,7 @@ const UserDisplay = ({ user }: { user: User }) => {
       </td>
 
       <td className="truncate py-2">
-        <button className="font-inter text-sm py-2 btn-primary">
+        <button onClick={showModal} className="font-inter text-sm py-2 btn-primary">
           <SlArrowRight />
         </button>
       </td>

@@ -5,16 +5,20 @@ import { FiUser, FiUserCheck, FiUsers, FiUserX } from "react-icons/fi"
 import { PiWarningCircle } from "react-icons/pi"
 import UsersTab from "../../components/UsersTab"
 import AppealsTab from "../../components/AppealsTab"
+import UserModal from "../../components/UserModal"
 
 const AdminPage = () => {
   const [tab, setTab] = useState<"users" | "appeals">("users")
+  const [userModalActive, setUserModalActive] = useState<boolean>(true)
 
   return (
     <main className="px-4">
+      {userModalActive && <UserModal setModalActive={setUserModalActive} />}
+
       {/* page title */}
       <div className="flex-start gap-2 mt-21">
         <BiShield size={33} />
-        <div>
+        <div className="mt-2">
           <H1 font="inter" text="Admin Panel" />
           <p className="text-accent text-sm font-exo ">Manage users, verifications and appeals</p>
         </div>
@@ -61,17 +65,27 @@ const AdminPage = () => {
 
       {/* Tabs */}
       <div className="grid grid-cols-2 p-1 bg-mutedLight rounded-lg mt-8 md:w-[600px] mx-auto">
-        <div onClick={() => setTab("users")} className={`${tab === "users" && "bg-white"} flex-center gap-2 p-2 rounded-md cursor-pointer`}>
+        <div 
+          onClick={() => setTab("users")} 
+          className={`${tab === "users" && "bg-white"} flex-center gap-2 p-2 rounded-md cursor-pointer`}
+        >
           <FiUser />
           <p>Users</p>
         </div>
-        <div onClick={() => setTab("appeals")} className={`${tab === "appeals" && "bg-white"} flex-center gap-2 p-2 rounded-md cursor-pointer`}>
+        <div 
+          onClick={() => setTab("appeals")} 
+          className={`${tab === "appeals" && "bg-white"} flex-center gap-2 p-2 rounded-md cursor-pointer`}
+        >
           <PiWarningCircle size={17} />
           <p>Appeals</p>
         </div>
       </div>
 
-      {tab === "users" ? <UsersTab /> : <AppealsTab />}
+      {tab === "users" ? 
+        <UsersTab setModalActive={setUserModalActive} /> 
+        : 
+        <AppealsTab />
+      }
     </main>
   )
 }
