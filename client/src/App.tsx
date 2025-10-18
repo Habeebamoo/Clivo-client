@@ -7,13 +7,15 @@ import {
 
 import Home from "./pages/home/Home"
 import LoginPage from "./pages/home/Login"
-import Layout from "./layout/Dashboard"
+import DashboardLayout from "./layout/Dashboard"
+import AdminLayout from "./layout/Admin"
 import Dashboard from "./pages/dashboard/Page"
 import Article from "./pages/home/Article"
 import MyProfile from "./pages/dashboard/MyProfile"
 import SettingsPage from "./pages/dashboard/Settings"
 import UserPage from "./pages/home/User"
 import InterestsPage from "./pages/home/Interests"
+import Admin from "./pages/admin/Page"
 import NotFoundPage from "./pages/home/NotFoundPage"
 
 const App = () => {
@@ -24,11 +26,19 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/interests" element={<InterestsPage />} />
         <Route path="/:username" element={<UserPage />} />
-        <Route path="/dashboard" element={<Layout />}>
+
+        {/* Dashboard (Protected) */}
+        <Route path="/dashboard" element={<DashboardLayout />}>
           <Route path="" element={<Dashboard />} />
           <Route path="profile" element={<MyProfile />} />
           <Route path="settings" element={<SettingsPage />} />
         </Route>
+
+        {/* Admin (Protected) */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="" element={<Admin />} />
+        </Route>
+
         <Route path="/posts/:id" element={<Article />} />
         <Route path="*" element={<NotFoundPage />} />
       </>
