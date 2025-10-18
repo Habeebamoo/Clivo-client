@@ -6,19 +6,23 @@ import { PiWarningCircle } from "react-icons/pi"
 import UsersTab from "../../components/UsersTab"
 import AppealsTab from "../../components/AppealsTab"
 import UserModal from "../../components/UserModal"
+import AppealModal from "../../components/AppealModal"
 
 const AdminPage = () => {
   const [tab, setTab] = useState<"users" | "appeals">("users")
-  const [userModalActive, setUserModalActive] = useState<boolean>(true)
+  const [userModalActive, setUserModalActive] = useState<boolean>(false)
+  const [appealModalActive, setAppealModalActive] = useState<boolean>(false)
 
   return (
     <main className="px-4">
+      {/* modals */}
       {userModalActive && <UserModal setModalActive={setUserModalActive} />}
+      {appealModalActive && <AppealModal setModalActive={setAppealModalActive} />}
 
       {/* page title */}
-      <div className="flex-start gap-2 mt-21">
+      <div className="flex-start gap-2 mt-19">
         <BiShield size={33} />
-        <div className="mt-2">
+        <div className="mt-4">
           <H1 font="inter" text="Admin Panel" />
           <p className="text-accent text-sm font-exo ">Manage users, verifications and appeals</p>
         </div>
@@ -84,7 +88,7 @@ const AdminPage = () => {
       {tab === "users" ? 
         <UsersTab setModalActive={setUserModalActive} /> 
         : 
-        <AppealsTab />
+        <AppealsTab setModalActive={setAppealModalActive} />
       }
     </main>
   )
