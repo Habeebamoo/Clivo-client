@@ -20,6 +20,7 @@ type UserRepository interface {
 	GetArticleById(string) (models.Article, int, error)
 	GetArticleAuthorById(string) (models.SafeUserResponse, int, error)
 	GetArticleLikes(string) (int, error)
+	GetArticleTags(string) ([]models.ArticleTags, error)
 	GetArticleComments(string) ([]models.Comment, int, error)
 }
 
@@ -34,7 +35,7 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 func (ar *UserRepo) GetUserById(userId string) (models.UserResponse, int, error) {
 	var user models.UserResponse
 	res := ar.db.Table("users u").
-				Select("u.user_id, u.name, u.email, u.role, u.verified, u.is_banned, p.username, p.bio, p.picture, p.interests, p.profile_url, p.website, p.following, p.followers, u.created_at").
+				Select("u.user_id, u.name, u.email, u.role, u.verified, u.is_banned, p.username, p.bio, p.picture, p.profile_url, p.website, p.following, p.followers, u.created_at").
 				Joins("JOIN profiles p ON u.user_id = p.user_id").
 				Where("u.user_id = ?", userId).
 				Scan(&user)
@@ -160,7 +161,7 @@ func (ur *UserRepo) GetArticlesByUsername(username string) ([]models.Article, in
 	//get user
 	var user models.UserResponse
 	res := ur.db.Table("users u").
-				Select("u.user_id, u.name, u.email, u.role, u.verified, u.is_banned, p.username, p.bio, p.picture, p.interests, p.profile_url, p.website, p.following, p.followers, u.created_at").
+				Select("u.user_id, u.name, u.email, u.role, u.verified, u.is_banned, p.username, p.bio, p.picture, p.profile_url, p.website, p.following, p.followers, u.created_at").
 				Joins("JOIN profiles p ON u.user_id = p.user_id").
 				Where("p.username = ?", username).
 				Scan(&user)
@@ -230,9 +231,20 @@ func (ur *UserRepo) GetArticleLikes(articleId string) (int, error) {
 	return int(likes), nil
 }
 
-func (ar *UserRepo) GetArticleComments(articleId string) ([]models.Comment, int, error) {
+func (ur *UserRepo) GetArticleTags(articleId string) ([]models.ArticleTags, error) {
+	var tags []models.ArticleTags
+	res := ur.db.Find(&tags, "article_id = ?", articleId)
+
+	if res.Error != nil {
+		return tags, fmt.Errorf("internal server error")
+	}
+
+	return tags, nil
+}
+
+func (ur *UserRepo) GetArticleComments(articleId string) ([]models.Comment, int, error) {
 	var comments []models.Comment
-	res := ar.db.Find(&comments, "article_id = ?", articleId)
+	res := ur.db.Find(&comments, "article_id = ?", articleId)
 	if res.Error != nil {
 		if res.Error == gorm.ErrRecordNotFound {
 			return []models.Comment{}, 200, nil

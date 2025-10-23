@@ -2,7 +2,6 @@ package services
 
 import (
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/Habeebamoo/Clivo/server/internal/config"
@@ -38,9 +37,6 @@ func (as *ArticleSvc) CreateArticle(articleReq models.ArticleRequest, userId str
 	//upload article image
 	articleImage := ""
 
-	//create article tags
-	tags := strings.Join(articleReq.Tags, ", ")
-
 	//assign article
 	article := models.Article{
 		ArticleId: utils.GenerateRandomId(),
@@ -50,12 +46,25 @@ func (as *ArticleSvc) CreateArticle(articleReq models.ArticleRequest, userId str
 		CreatedAt: time.Now(),
 		ReadTime: readTime,
 		Slug: "",
-		Tags: tags,
 		Picture: articleImage,
 	}
 
 	//create article
 	code, err := as.articleRepo.CreateArticle(article)
+	if err != nil {
+		return code, err
+	}
+
+	//create tags
+	var articleTags []models.ArticleTags
+	for _, tag := range articleReq.Tags {
+		articleTags = append(articleTags, models.ArticleTags{
+			ArticleId: article.ArticleId,
+			Tag: tag,
+		})
+	}
+
+	code, err = as.articleRepo.CreateArticleTags(articleTags)
 	if err != nil {
 		return code, err
 	}
@@ -91,8 +100,16 @@ func (as *ArticleSvc) GetArticle(id string) (models.ArticleResponse, int, error)
 		return models.ArticleResponse{}, 500, err
 	}
 
-	//formatting article tags
-	articleTagsFormated := strings.Split(article.Tags, ", ")
+	//get article tags
+	articeTags, err := as.articleRepo.GetArticleTags(article.ArticleId)
+	if err != nil {
+		return models.ArticleResponse{}, 500, err
+	}
+
+	var tags []string
+	for _, articleTag := range articeTags {
+		tags = append(tags, articleTag.Tag)
+	}
 
 	//get user
 	author, code, err := as.articleRepo.GetArticleAuthorById(article.AuthorId)
@@ -111,7 +128,7 @@ func (as *ArticleSvc) GetArticle(id string) (models.ArticleResponse, int, error)
 		Title: article.Title,
 		Content: article.Content,
 		Picture: article.Picture,
-		Tags: articleTagsFormated,
+		Tags: tags,
 		Likes: articleLikes,
 		ReadTime: article.ReadTime,
 		Slug: article.Slug,
@@ -212,6 +229,7 @@ func (as *ArticleSvc) DeleteArticle(articleId string, userId string) (int, error
 	}
 	//might not be needed :)
 
+	//delete article
 	return as.articleRepo.DeleteArticle(articleId)
 }
 

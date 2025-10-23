@@ -20,11 +20,15 @@ type Profile struct {
 	Username     string  `json:"username"`
 	Bio          string  `json:"bio"`
 	Picture      string  `json:"picture"`
-	Interests    string  `json:"interests"`
 	ProfileUrl   string  `json:"profileUrl"`
 	Website      string  `json:"website"`
 	Following    int     `json:"following"`
 	Followers    int     `json:"followers"`
+}
+
+type UserInterests struct {
+	UserId  string  `json:"userId"`
+	Tag     string  `json:"tag"`
 }
 
 type Follow struct {

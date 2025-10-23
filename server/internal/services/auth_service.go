@@ -2,7 +2,6 @@ package services
 
 import (
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/Habeebamoo/Clivo/server/internal/models"
@@ -59,9 +58,24 @@ func (as *AuthSvc) SignInUser(userReq models.UserRequest) (string, int, error) {
 		return "", statusCode, err
 	}
 
+	//create user interests
+	var userInterests []models.UserInterests
+
+	for _, interest := range userReq.Interets {
+		userInterests = append(userInterests, models.UserInterests{UserId: createdUser.UserId, Tag: interest})
+	}
+
+	for _, ui := range userReq.Interets {
+		fmt.Println(ui)
+	}
+
+	code, err := as.repo.CreateUserInterests(userInterests)
+	if err != nil {
+		return "", code, err
+	}
+
 	//create profile
 	demoUserBio := fmt.Sprintf("Hey, I am %s", createdUser.Name);
-	userinterests :=	strings.Join(userReq.Interets, ", ")
 
 	//calculate and get unique username for user
 	username := utils.GenerateUniqueUsername(utils.GetUsernameFromEmail(userReq.Email), as.repo.UsernameExists) 
@@ -74,7 +88,6 @@ func (as *AuthSvc) SignInUser(userReq models.UserRequest) (string, int, error) {
 		Username: username,
 		Bio: demoUserBio,
 		Picture: userReq.Picture,
-		Interests: userinterests,
 		ProfileUrl: profile,
 		Website: "",
 		Following: 0,
@@ -82,7 +95,7 @@ func (as *AuthSvc) SignInUser(userReq models.UserRequest) (string, int, error) {
 	}
 
 	//call repo
-	code, err := as.repo.CreateUserProfile(userProfile)
+	code, err = as.repo.CreateUserProfile(userProfile)
 	if err != nil {
 		return "", code, err
 	}

@@ -136,8 +136,16 @@ func (us *UserSvc) GetArticle(articleId string) (models.SafeArticleResponse, int
 		return models.SafeArticleResponse{}, 500, err
 	}
 
-	//format article tags
-	articleTagsFormated := strings.Split(article.Tags, ", ")
+	//get article tags
+	articeTags, err := us.repo.GetArticleTags(article.ArticleId)
+	if err != nil {
+		return models.SafeArticleResponse{}, 500, err
+	}
+
+	var tags []string
+	for _, articleTag := range articeTags {
+		tags = append(tags, articleTag.Tag)
+	}
 
 	//get user
 	author, code, err := us.repo.GetArticleAuthorById(article.AuthorId)
@@ -155,7 +163,7 @@ func (us *UserSvc) GetArticle(articleId string) (models.SafeArticleResponse, int
 		Title: article.Title,
 		Content: article.Content,
 		Picture: article.Picture,
-		Tags: articleTagsFormated,
+		Tags: tags,
 		Likes: articleLikes,
 		ReadTime: article.ReadTime,
 		Slug: article.Slug,
@@ -194,7 +202,16 @@ func (us *UserSvc) GetArticles(username string) ([]models.SafeArticleResponse, i
 
 		createdAt := utils.GetTimeAgo(article.CreatedAt)
 
-		articleTags := strings.Split(article.Tags, ", ")
+		//get tags
+		articeTags, err := us.repo.GetArticleTags(article.ArticleId)
+		if err != nil {
+			return []models.SafeArticleResponse{}, 500, err
+		}
+
+		var tags []string
+		for _, articleTag := range articeTags {
+			tags = append(tags, articleTag.Tag)
+		}
 
 		safeArticle := models.SafeArticleResponse{
 			ArticleId: article.ArticleId,
@@ -205,7 +222,7 @@ func (us *UserSvc) GetArticles(username string) ([]models.SafeArticleResponse, i
 			Title: article.Title,
 			Content: article.Content,
 			Picture: article.Picture,
-			Tags: articleTags,
+			Tags: tags,
 			Likes: likes,
 			ReadTime: article.ReadTime,
 			Slug: article.Slug,

@@ -8,11 +8,17 @@ CREATE TABLE IF NOT EXISTS articles (
   picture TEXT,
   read_time TEXT,
   slug TEXT,
-  tags TEXT,
   created_at TIMESTAMP DEFAULT NOW(),
 
   UNIQUE (article_id),
   FOREIGN KEY (author_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS article_tags (
+  article_id TEXT,
+  tag TEXT,
+
+  FOREIGN KEY (article_id) REFERENCES articles(article_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS likes (
@@ -33,21 +39,14 @@ CREATE TABLE IF NOT EXISTS comments (
   FOREIGN KEY (commenter_user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS follows (
-  follower_id TEXT NOT NULL,
-  following_id TEXT NOT NULL,
 
-  UNIQUE (follower_id, following_id),
-  FOREIGN KEY (follower_id) REFERENCES users(user_id) ON DELETE CASCADE,
-  FOREIGN KEY (following_id) REFERENCES users(user_id) ON DELETE CASCADE
-);
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE follows;
 DROP TABLE likes;
 DROP TABLE comments;
+DROP TABLE article_tags;
 DROP TABLE articles;
 -- +goose StatementEnd
 

@@ -10,8 +10,10 @@ import (
 type ArticleRepository interface {
 	CreateArticle(models.Article) (int, error)
 	CreateArticleSlug(string, string) (int, error)
+	CreateArticleTags([]models.ArticleTags) (int, error)
 	GetArticleById(string) (models.Article, int, error)
 	GetArticles(string) ([]models.Article, int, error)
+	GetArticleTags(string) ([]models.ArticleTags, error)
 	GetUserFeed(string) ([]models.Article, int, error)
 	GetPopularArticles() ([]models.Article, int, error)
 	GetArticleAuthorById(string) (models.UserResponse, int, error)
@@ -50,6 +52,16 @@ func (ar *ArticleRepo) CreateArticleSlug(articleId string, slug string) (int, er
 	return 201, nil
 }
 
+func (ar *ArticleRepo) CreateArticleTags(tags []models.ArticleTags) (int, error) {
+	res := ar.db.Create(&tags)
+
+	if res.Error != nil {
+		return 500, fmt.Errorf("internal server error")
+	}
+	
+	return 201, nil
+}
+
 func (ar *ArticleRepo) GetArticleById(articleId string) (models.Article, int, error) {
 	var article models.Article
 	res := ar.db.First(&article, "article_id = ?", articleId)
@@ -74,6 +86,17 @@ func (ar *ArticleRepo) GetArticles(userId string) ([]models.Article, int, error)
 	}
 
 	return articles, 200, nil
+}
+
+func (ar *ArticleRepo) GetArticleTags(articleId string) ([]models.ArticleTags, error) {
+	var tags []models.ArticleTags
+	res := ar.db.Find(&tags, "article_id = ?", articleId)
+
+	if res.Error != nil {
+		return tags, fmt.Errorf("internal server error")
+	}
+
+	return tags, nil
 }
 
 func (ar *ArticleRepo) GetUserFeed(userId string) ([]models.Article, int, error) {
@@ -129,7 +152,7 @@ func (ar *ArticleRepo) GetPopularArticles() ([]models.Article, int, error) {
 func (ar *ArticleRepo) GetArticleAuthorById(authorId string) (models.UserResponse, int, error) {
 	var user models.UserResponse
 	res := ar.db.Table("users u").
-				Select("u.user_id, u.name, u.email, u.role, u.verified, u.is_banned, p.username, p.bio, p.picture, p.interests, p.profile_url, p.website, p.following, p.followers, u.created_at").
+				Select("u.user_id, u.name, u.email, u.role, u.verified, u.is_banned, p.username, p.bio, p.picture, p.profile_url, p.website, p.following, p.followers, u.created_at").
 				Joins("JOIN profiles p ON u.user_id = p.user_id").
 				Where("u.user_id = ?", authorId).
 				Scan(&user)

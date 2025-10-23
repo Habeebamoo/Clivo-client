@@ -14,8 +14,12 @@ type Article struct {
 	Picture         string     `json:"picture"`
 	ReadTime        string     `json:"readTime"`
 	Slug            string     `json:"slug"`
-	Tags            string     `json:"tags"`
 	CreatedAt       time.Time  `json:"createdAt"`
+}
+
+type ArticleTags struct {
+	ArticleId  string  `json:"articleId"`
+	Tag        string  `json:"tag"`
 }
 
 type Like struct {

@@ -12,6 +12,7 @@ import (
 type AuthRepository interface {
 	CreateUser(models.User) (models.User, int, error)
 	CreateUserProfile(models.Profile) (int, error)
+	CreateUserInterests([]models.UserInterests) (int, error)
 	GetUserByEmail(string) (models.User, int, error)
 	GetUserById(userId string) (models.UserResponse, int, error)
 	UserExists(string) bool
@@ -52,6 +53,15 @@ func (ar *AuthRepo) CreateUserProfile(profile models.Profile) (int, error) {
 	return 201, nil	
 }
 
+func (ar *AuthRepo) CreateUserInterests(userInterests []models.UserInterests) (int, error) {
+	res := ar.db.Create(&userInterests)
+	if res.Error != nil {
+		return 500, fmt.Errorf("internal server error")
+	}
+
+	return 201, nil	
+}
+
 func (ar *AuthRepo) GetUserByEmail(email string) (models.User, int, error) {
 	var user models.User
 	res := ar.db.First(&user, "email = ?", email)
@@ -69,7 +79,7 @@ func (ar *AuthRepo) GetUserByEmail(email string) (models.User, int, error) {
 func (ar *AuthRepo) GetUserById(userId string) (models.UserResponse, int, error) {
 	var user models.UserResponse
 	res := ar.db.Table("users u").
-				Select("u.user_id, u.name, u.email, u.role, u.verified, u.is_banned, p.username, p.bio, p.picture, p.interests, p.profile_url, p.website, p.following, p.followers, u.created_at").
+				Select("u.user_id, u.name, u.email, u.role, u.verified, u.is_banned, p.username, p.bio, p.picture, p.profile_url, p.website, p.following, p.followers, u.created_at").
 				Joins("JOIN profiles p ON u.user_id = p.user_id").
 				Where("u.user_id = ?", userId).
 				Scan(&user)
