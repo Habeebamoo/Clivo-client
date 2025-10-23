@@ -52,6 +52,7 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 		article.POST("", articleHandler.CreateArticle)
 		article.GET("", articleHandler.GetAllMyArticles)
 		article.GET("/feed", articleHandler.GetUserFeed)
+		article.GET("/fyp", articleHandler.GetUserFyp)
 		article.DELETE("/:id", articleHandler.DeleteArticle)
 		article.POST("/like/:id", articleHandler.LikeArticle)
 		article.POST("/comment/:id", articleHandler.CommentArticle)

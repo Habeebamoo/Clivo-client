@@ -15,6 +15,7 @@ type ArticleRepository interface {
 	GetArticles(string) ([]models.Article, int, error)
 	GetArticleTags(string) ([]models.ArticleTags, error)
 	GetUserFeed(string) ([]models.Article, int, error)
+	GetUserFyp(string) ([]models.Article, int, error)
 	GetPopularArticles() ([]models.Article, int, error)
 	GetArticleAuthorById(string) (models.UserResponse, int, error)
 	DeleteArticle(string) (int, error)
@@ -116,7 +117,31 @@ func (ar *ArticleRepo) GetUserFeed(userId string) ([]models.Article, int, error)
 
 	if res.Error != nil {
 		if res.Error == gorm.ErrRecordNotFound {
-			return articles, 404, fmt.Errorf("no articles found")
+			return articles, 200, nil
+		}
+		return articles, 500, fmt.Errorf("internal server error")
+	}
+
+	return articles, 200, nil
+}
+
+func (ar *ArticleRepo) GetUserFyp(userId string) ([]models.Article, int, error) {
+	var articles []models.Article
+
+	res := ar.db.Raw(`
+		SELECT DISTINCT a.*
+		FROM articles a
+			JOIN article_tags at ON at.article_id = a.article_id
+			JOIN user_interests ui ON ui.tag = at.tag
+		WHERE ui.user_id = ?
+		ORDER BY a.created_at DESC
+		LIMIT ?
+	`, userId, 20).
+	Scan(&articles)
+
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return articles, 200, nil
 		}
 		return articles, 500, fmt.Errorf("internal server error")
 	}
@@ -138,13 +163,8 @@ func (ar *ArticleRepo) GetPopularArticles() ([]models.Article, int, error) {
 	Scan(&articles)
 
 	if res.Error != nil {
-		if res.Error == gorm.ErrRecordNotFound {
-			return articles, 404, fmt.Errorf("no articles found")
-		}
 		return articles, 500, fmt.Errorf("internal server error")
 	}
-
-	fmt.Println(articles)
 
 	return articles, 200, nil
 }

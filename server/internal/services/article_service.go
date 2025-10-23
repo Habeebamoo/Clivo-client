@@ -15,6 +15,7 @@ type ArticleService interface {
 	GetArticle(string) (models.ArticleResponse, int, error)
 	GetMyArticles(string) ([]models.ArticleResponse, int, error)
 	GetUserFeed(string) ([]models.SafeArticleResponse, int, error)
+	GetUserFyp(string) ([]models.SafeArticleResponse, int, error)
 	DeleteArticle(string, string) (int, error)
 	LikeArticle(models.Like) (int, error)
 	CommentArticle(models.Comment) (int, error)
@@ -165,19 +166,15 @@ func (as *ArticleSvc) GetUserFeed(userId string) ([]models.SafeArticleResponse, 
 	userFeeds, code, err := as.articleRepo.GetUserFeed(userId)
 
 	//fail early
-	if code == 500 {
+	if err != nil {
 		return []models.SafeArticleResponse{}, code, err
 	}
 
 	//get latest articles from popular accounts
 	popularArticles, code, err := as.articleRepo.GetPopularArticles()
 
-	if code == 404 {
-		return []models.SafeArticleResponse{}, code, err
-	}
-
 	//fail early
-	if code == 500 {
+	if err != nil {
 		return []models.SafeArticleResponse{}, code, err
 	}
 
@@ -188,6 +185,58 @@ func (as *ArticleSvc) GetUserFeed(userId string) ([]models.SafeArticleResponse, 
 	articleFeed := []models.SafeArticleResponse{}
 
 	for _, article := range userFeeds {
+		formattedArticle, code, err := as.GetArticle(article.ArticleId)
+		if err != nil {
+			return articleFeed, code, err
+		}
+
+		//build response
+		safeFormatedArticle := models.SafeArticleResponse{
+			ArticleId: formattedArticle.ArticleId,
+			AuthorPicture: formattedArticle.AuthorPicture,
+			AuthorFullname: formattedArticle.AuthorFullname,
+			AuthorProfileUrl: formattedArticle.AuthorProfileUrl,
+			AuthorVerified: formattedArticle.AuthorVerified,
+			Title: formattedArticle.Title,
+			Content: formattedArticle.Content,
+			Picture: formattedArticle.Picture,
+			Tags: formattedArticle.Tags,
+			Likes: formattedArticle.Likes,
+			ReadTime: formattedArticle.ReadTime,
+			Slug: formattedArticle.Slug,
+			CreatedAt: utils.GetTimeAgo(formattedArticle.CreatedAt),
+		}
+
+		articleFeed = append(articleFeed, safeFormatedArticle)
+	}
+
+	return articleFeed, 200, nil
+}
+
+func (as *ArticleSvc) GetUserFyp(userId string) ([]models.SafeArticleResponse, int, error) {
+	//get user feed
+	userFyps, code, err := as.articleRepo.GetUserFyp(userId)
+
+	//fail early
+	if err != nil {
+		return []models.SafeArticleResponse{}, code, err
+	}
+
+	//get latest articles from popular accounts
+	popularArticles, code, err := as.articleRepo.GetPopularArticles()
+
+	//fail early
+	if err != nil {
+		return []models.SafeArticleResponse{}, code, err
+	}
+
+	//combine articles
+	userFyps = append(userFyps, popularArticles...)
+
+	//build response
+	articleFeed := []models.SafeArticleResponse{}
+
+	for _, article := range userFyps {
 		formattedArticle, code, err := as.GetArticle(article.ArticleId)
 		if err != nil {
 			return articleFeed, code, err

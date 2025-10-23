@@ -109,6 +109,20 @@ func (ah *ArticleHandler) GetUserFeed(c *gin.Context) {
 	utils.Success(c, statusCode, "", articles)
 }
 
+func (ah *ArticleHandler) GetUserFyp(c *gin.Context) {
+	userIdAny, _ := c.Get("userId")
+	userId := userIdAny.(string)
+
+	//call service
+	articles, statusCode, err := ah.service.GetUserFyp(userId)
+	if err != nil {
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	utils.Success(c, statusCode, "", articles)
+}
+
 // func (ah *ArticleHandler) GetUserFyp(c *gin.Context) {
 // 	userIdAny, _ := c.Get("userId")
 // 	userId := userIdAny.(string)
