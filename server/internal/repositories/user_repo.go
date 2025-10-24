@@ -18,7 +18,9 @@ type UserRepository interface {
 	GetUserByUsername(string) (models.SafeUserResponse, int, error)
 	GetArticlesByUsername(string) ([]models.Article, int, error)
 	GetArticleById(string) (models.Article, int, error)
+	GetArticleBySlug(string, string) (models.Article, int, error)
 	GetArticleAuthorById(string) (models.SafeUserResponse, int, error)
+	GetArticleAuthorIdByUsername(string) (string, int, error)
 	GetArticleLikes(string) (int, error)
 	GetArticleTags(string) ([]models.ArticleTags, error)
 	GetArticleComments(string) ([]models.Comment, int, error)
@@ -200,6 +202,19 @@ func (ur *UserRepo) GetArticleById(articleId string) (models.Article, int, error
 	return article, 200, nil
 }
 
+func (ur *UserRepo) GetArticleBySlug(authorId, slug string) (models.Article, int, error) {
+	var article models.Article
+	res := ur.db.Where(&models.Article{AuthorId: authorId, Slug: slug}).First(&article)
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return article, 404, fmt.Errorf("article does not exists")
+		}
+		return article, 500, fmt.Errorf("internal server error")
+	}
+
+	return article, 200, nil
+}
+
 func (ur *UserRepo) GetArticleAuthorById(authorId string) (models.SafeUserResponse, int, error) {
 	var user models.SafeUserResponse
 	res := ur.db.Table("users u").
@@ -216,6 +231,19 @@ func (ur *UserRepo) GetArticleAuthorById(authorId string) (models.SafeUserRespon
 	}
 
 	return user, 200, nil
+}
+
+func (ur *UserRepo) GetArticleAuthorIdByUsername(username string) (string, int, error) {
+	var profile models.Profile
+	res := ur.db.Model(&models.Profile{}).Where("username = ?", username).First(&profile)
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return "", 404, fmt.Errorf("user not found")
+		}
+		return "", 500, fmt.Errorf("internal server error")
+	}
+
+	return profile.UserId, 200, nil
 }
 
 func (ur *UserRepo) GetArticleLikes(articleId string) (int, error) {

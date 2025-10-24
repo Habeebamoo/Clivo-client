@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"slices"
 	"strings"
 
@@ -14,9 +15,9 @@ type UserService interface {
 	FollowUser(string, string) (int, error)
 	UnFollowUser(string, string) (int, error)
 	GetUser(string) (models.SafeUserResponse, int, error)
-	GetArticle(string) (models.SafeArticleResponse, int, error)
+	GetArticle(string, string) (models.SafeArticleResponse, int, error)
 	GetArticles(string) ([]models.SafeArticleResponse, int, error)
-	GetArticleComments(string) ([]models.CommentResponse, int, error)
+	GetArticleComments(string, string) ([]models.CommentResponse, int, error)
 	GetFollowers(string) ([]models.SafeUserResponse, int, error)
 	GetFollowing(string) ([]models.SafeUserResponse, int, error)
 }
@@ -123,9 +124,16 @@ func (us *UserSvc) GetUser(username string) (models.SafeUserResponse, int, error
 	return us.repo.GetUserByUsername(username)
 }
 
-func (us *UserSvc) GetArticle(articleId string) (models.SafeArticleResponse, int, error) {
+func (us *UserSvc) GetArticle(username string, articleTitleCode string) (models.SafeArticleResponse, int, error) {
+	//get authorId
+	authorId, code, err := us.repo.GetArticleAuthorIdByUsername(username)
+	if err != nil {
+		return models.SafeArticleResponse{}, code, err
+	}
+
 	//get article
-	article, code, err := us.repo.GetArticleById(articleId)
+	articleSlug := fmt.Sprintf("%s/%s", username, articleTitleCode)
+	article, code, err := us.repo.GetArticleBySlug(authorId, articleSlug)
 	if err != nil {
 		return models.SafeArticleResponse{}, code, err
 	}
@@ -235,9 +243,22 @@ func (us *UserSvc) GetArticles(username string) ([]models.SafeArticleResponse, i
 	return userArticles, 200, nil
 }
 
-func (as *UserSvc) GetArticleComments(articleId string) ([]models.CommentResponse, int, error) {
+func (us *UserSvc) GetArticleComments(username, articleTitleCode string) ([]models.CommentResponse, int, error) {
+	//get author
+	authorId, code, err := us.repo.GetArticleAuthorIdByUsername(username)
+	if err != nil {
+		return []models.CommentResponse{}, code, err
+	}
+
+	//get article
+	articleSlug := fmt.Sprintf("%s/%s", username, articleTitleCode)
+	article, code, err := us.repo.GetArticleBySlug(authorId, articleSlug)
+	if err != nil {
+		return []models.CommentResponse{}, code, err
+	}
+
 	//get comments
-	comments, code, err := as.repo.GetArticleComments(articleId)
+	comments, code, err := us.repo.GetArticleComments(article.ArticleId)
 	if err != nil {
 		return []models.CommentResponse{}, code, err
 	}
@@ -246,14 +267,14 @@ func (as *UserSvc) GetArticleComments(articleId string) ([]models.CommentRespons
 	commentsReponse := []models.CommentResponse{}
 
 	for _, c := range comments {
-		user, code, err := as.repo.GetUserById(c.CommenterUserId)
+		user, code, err := us.repo.GetUserById(c.CommenterUserId)
 		if err != nil {
 			return commentsReponse, code, err
 		}
 
 		comment := models.CommentResponse{
 			Content: c.Content,
-			ArticleId: articleId, 
+			ArticleId: article.ArticleId, 
 			Name: user.Name,
 			Username: user.Username,
 			Verified: user.Verified,

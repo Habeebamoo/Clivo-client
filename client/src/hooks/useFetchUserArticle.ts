@@ -3,10 +3,10 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setArticleComments, setUserArticle } from "../redux/reducers/article_reducer";
 
-const getArticle = async (id: string) => {
+const getArticle = async (username: string, title: string) => {
   try {
     //article
-    const res1 = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/posts/${id}`, {
+    const res1 = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/${username}/${title}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -22,7 +22,7 @@ const getArticle = async (id: string) => {
     const article = response1.data;
 
     //comment
-    const res2 = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/posts/${id}/comments`, {
+    const res2 = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/${username}/${title}/comments`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -43,12 +43,12 @@ const getArticle = async (id: string) => {
   }
 }
 
-export const useFetchUserArticle = (articleId: string) => {
+export const useFetchUserArticle = (username: string, title: string) => {
   const dispatch = useDispatch()
 
   const { data, isLoading, isSuccess, isError } = useQuery({
     queryKey: ["user-article"],
-    queryFn: () => getArticle(articleId)
+    queryFn: () => getArticle(username, title)
   })
 
   useEffect(() => {

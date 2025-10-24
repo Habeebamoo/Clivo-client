@@ -47,14 +47,14 @@ const ArticleDisplay = ({ article }: { article: Post }) => {
       </div>
 
       {/* tags */}
-      <div className="flex-start flex-wrap gap-1 w-[80%]">
+      <div className="px-1 flex-start flex-wrap gap-1 w-[80%]">
         {article.tags?.map((tag: string, i: any) => {
           return <div key={i} className="text-[12px] font-exo py-1 px-2 border-1 border-accent rounded-sm">{tag}</div>
         })}
       </div>
 
       {/* others */}
-      <div className="mt-3 flex-between">
+      <div className="mt-3 px-2 flex-between">
         <div className="flex-start gap-1">
           <GoHeart color="rgb(165, 163, 161)" />
           <p className="text-[12px]">{article.likes}</p>

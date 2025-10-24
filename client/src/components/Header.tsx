@@ -11,7 +11,7 @@ const Header = ({ type="home" }: { type?: "home" | "dashboard" }) => {
   }
 
   const toLogin = () => {
-    navigate("/login")
+    navigate("/signin")
   }
 
   const toggleMenu = () => {

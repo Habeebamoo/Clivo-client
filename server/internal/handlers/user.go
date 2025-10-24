@@ -118,14 +118,16 @@ func (uhdl *UserHandler) GetUserArticles(c *gin.Context) {
 }
 
 func (uhdl *UserHandler) GetUserArticle(c *gin.Context) {
-	articleId := c.Param("id")
-	if articleId == "" {
+	username := c.Param("username")
+	articleTitle := c.Param("title")
+
+	if username == "" || articleTitle == "" {
 		utils.Error(c, 400, "Article Not Found", nil)
 		return
 	}
 
 	//call service
-	article, statusCode, err := uhdl.service.GetArticle(articleId)
+	article, statusCode, err := uhdl.service.GetArticle(username, articleTitle)
 	if err != nil {
 		utils.Error(c, statusCode, "Article Not Found", nil)
 		return
@@ -135,14 +137,16 @@ func (uhdl *UserHandler) GetUserArticle(c *gin.Context) {
 }
 
 func (uhdl *UserHandler) GetArticleComments(c *gin.Context) {
-	articleId := c.Param("id")
-	if articleId == "" {
-		utils.Error(c, 400, "Article ID Missing", nil)
+	username := c.Param("username")
+	articleTitle := c.Param("title")
+
+	if username == "" || articleTitle == "" {
+		utils.Error(c, 400, "Article Not Found", nil)
 		return
 	}
 
 	//call service
-	comments, statusCode, err := uhdl.service.GetArticleComments(articleId)
+	comments, statusCode, err := uhdl.service.GetArticleComments(username, articleTitle)
 	if err != nil {
 		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
 		return

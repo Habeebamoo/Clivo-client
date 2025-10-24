@@ -1,12 +1,14 @@
 package utils
 
 import (
-	"crypto/rand"
+	crand "crypto/rand"
 	"encoding/hex"
 	"fmt"
 	"log"
 	"math"
+	mrand "math/rand"
 	"net/http"
+	"regexp"
 	"strings"
 	"time"
 
@@ -15,6 +17,23 @@ import (
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
+
+func Slugify(title string) string {
+	slug := strings.ToLower(title)
+
+	re := regexp.MustCompile(`[^a-z0-9]+`)
+	slug = re.ReplaceAllString(slug, "-")
+
+	slug = strings.Trim(slug, "-")
+	return slug
+}
+
+func GenerateArticleSlug(authorUsername string, articleTitle string) string {
+	mrand.Seed(time.Now().UnixNano())
+	randomNum := mrand.Intn(1000)
+	slug := Slugify(articleTitle)
+	return fmt.Sprintf("%s/%s-%d", authorUsername, slug, randomNum)
+}
 
 func FormatText(text string) string {
 	caser := cases.Title(language.English)
@@ -40,7 +59,7 @@ func SetCookies(c *gin.Context, token string) {
 
 func GenerateRandomId() string {
 	b := make([]byte, 16)
-	_, err := rand.Read(b)
+	_, err := crand.Read(b)
 	if err != nil {
 		log.Fatal("failed to read bytes")
 	}

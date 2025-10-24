@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Habeebamoo/Clivo/server/internal/config"
 	"github.com/Habeebamoo/Clivo/server/internal/models"
 	"github.com/Habeebamoo/Clivo/server/internal/repositories"
 	"github.com/Habeebamoo/Clivo/server/pkg/utils"
@@ -70,15 +69,16 @@ func (as *ArticleSvc) CreateArticle(articleReq models.ArticleRequest, userId str
 		return code, err
 	}
 
-	//updated slug
-	clientOrigin, err := config.Get("CLIENT_URL")
+	//get author
+	author, code, err := as.articleRepo.GetArticleAuthorById(article.AuthorId)
 	if err != nil {
-		return 500, err
+		return code, err
 	}
 
-	artcileSlug := fmt.Sprintf("%s/posts/%s", clientOrigin, article.ArticleId)
+	//generate article slug
+	slug := utils.GenerateArticleSlug(author.Username, article.Title)
 
-	code, err = as.articleRepo.CreateArticleSlug(article.ArticleId, artcileSlug)
+	code, err = as.articleRepo.CreateArticleSlug(article.ArticleId, slug)
 	if err != nil {
 		return code, err
 	}

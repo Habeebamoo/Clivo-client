@@ -19,13 +19,12 @@ import Admin from "./pages/admin/Page"
 import NotFoundPage from "./pages/home/NotFoundPage"
 
 const App = () => {
-  const router = createBrowserRouter(
+  const router = createBrowserRouter( 
     createRoutesFromElements(
       <>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signin" element={<LoginPage />} />
         <Route path="/interests" element={<InterestsPage />} />
-        <Route path="/:username" element={<UserPage />} />
 
         {/* Dashboard (Protected) */}
         <Route path="/dashboard" element={<DashboardLayout />}>
@@ -39,7 +38,8 @@ const App = () => {
           <Route path="" element={<Admin />} />
         </Route>
 
-        <Route path="/posts/:id" element={<Article />} />
+        <Route path="/:username" element={<UserPage />} />
+        <Route path="/:username/:title" element={<Article />} />
         <Route path="*" element={<NotFoundPage />} />
       </>
     )

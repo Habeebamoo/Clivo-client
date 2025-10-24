@@ -25,8 +25,8 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 	//free routes (access anywhere)
 	api.GET("/user/:username", userHandler.GetUser)
 	api.GET("/user/:username/articles", userHandler.GetUserArticles)
-	api.GET("/posts/:id", userHandler.GetUserArticle)
-	api.GET("/posts/:id/comments", userHandler.GetArticleComments)
+	api.GET("/user/:username/:title", userHandler.GetUserArticle)
+	api.GET("/user/:username/:title/comments", userHandler.GetArticleComments)
 
 	//authentication routes
 	auth := api.Group("/auth")

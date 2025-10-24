@@ -18,6 +18,10 @@ const MyProfile = () => {
     navigate("/dashboard/settings")
   }
 
+  const toWebsite = () => {
+    window.location.href = user.website;
+  }
+
   if (isLoading) return <Loading />
 
   return (
@@ -65,7 +69,7 @@ const MyProfile = () => {
           {user.website && 
             <div className="flex-start gap-1 mt-2">
               <BiLink />
-              <a href={user.website} className="text-blue-500 text-[12px] underline cursor-pointer">My Website</a>
+              <p onClick={toWebsite} className="text-blue-500 text-[12px] underline cursor-pointer">{user.website}</p>
             </div>
           }
           

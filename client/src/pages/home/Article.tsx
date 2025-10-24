@@ -21,14 +21,14 @@ interface Comment {
 } 
 
 const ArticlePage = () => {
-  const { id } = useParams<{ id: string }>();
-  const { data, isLoading, isError } = useFetchUserArticle(id!)
+  const { username, title } = useParams<{ username: string, title: string }>();
+  const { data, isLoading, isError } = useFetchUserArticle(username!, title!)
   const [commentAction, setCommentAction] = useState<"add" | "send">("add");
   const [commentBarActive, setCommentBarActive] = useState<boolean>(false)
   const [commentValue, setCommentValue] = useState<string>("");
 
   const navigate = useNavigate();
-  if (!id) {
+  if (!username || !title) {
     navigate("/")
   }
 
