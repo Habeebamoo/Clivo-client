@@ -73,9 +73,7 @@ func GetUserProfile(username string) string {
 		log.Fatal(err)
 	}
 
-	trimedUsername := strings.TrimPrefix(username, "@")
-
-	return fmt.Sprintf("%s/%s", clientOrigin, trimedUsername)
+	return fmt.Sprintf("%s/%s", clientOrigin, username)
 }
 
 func GetUsernameFromEmail(email string) string {

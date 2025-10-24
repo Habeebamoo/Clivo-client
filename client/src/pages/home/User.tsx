@@ -14,7 +14,7 @@ const getUser = async (username: string) => {
   try {
     console.log(import.meta.env.SERVER_URL)
     //get user
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/@${username}`, {
+    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/${username}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -31,7 +31,7 @@ const getUser = async (username: string) => {
     console.log("1")
 
     //get user articles
-    const res2 = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/@${username}/articles`, {
+    const res2 = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/${username}/articles`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
