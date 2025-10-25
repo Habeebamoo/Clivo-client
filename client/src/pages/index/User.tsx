@@ -7,8 +7,8 @@ import type { User } from "../../redux/reducers/user_reducer"
 import { useParams } from "react-router"
 import type { Post } from "../../redux/reducers/article_reducer"
 import Loading from "../../components/Loading"
-import NotFound from "../../components/NotFound"
 import ArticleDisplay from "../../components/ArticleDisplay"
+import NotFoundPage from "./NotFoundPage"
 
 const getUser = async (username: string) => {
   try {
@@ -68,7 +68,7 @@ const UserPage = () => {
 
   if (isLoading) return <Loading />;
   
-  if (isError) return <NotFound text="User Not Found" subText="We couldn't find this user. Please visit a valid profile url" />;
+  if (isError) return <NotFoundPage />
 
   return (
     <>

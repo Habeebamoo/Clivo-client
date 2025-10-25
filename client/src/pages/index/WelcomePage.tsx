@@ -1,7 +1,6 @@
 import { useState } from "react"
 import Header from "../../components/Header"
 import PhotoGrid from "../../components/PhotoGrid"
-import { H1 } from "../../components/Typo"
 
 const Home = () => {
   const [email, setEmail] = useState<string>("")
@@ -25,7 +24,7 @@ const Home = () => {
 
       {/* Subscription Section */}
       <div className="mt-20 mb-10 p-4">
-        <H1 font="exo" text="Stay Inspired" others="text-center" />
+        <h1 className="md:text-center font-inter text-3xl font-inter">Stay <span className="text-secondary">Inspired.</span></h1>
         <p className="text-sm font-exo text-center text-accent mt-2 lg:mx-auto md:text-center lg:w-[50%]">Join our community of discerning readers and receive carefully selected stories, writing insights, and exclusive content delivered to your inbox.</p>
         <form onSubmit={subscribe} className="mt-4 px-5 relative sm:w-[400px] mx-auto">
           <input 

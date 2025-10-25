@@ -2,12 +2,12 @@ import { useNavigate } from "react-router"
 import logo from "../assets/logo.jpg"
 import { useState } from "react"
 
-const Header = ({ type="home" }: { type?: "home" | "dashboard" }) => {
+const Header = ({ type="welcome" }: { type?: "welcome" | "home" }) => {
   const [navActive, setNavActive] = useState<boolean>(false)
   const navigate = useNavigate()
 
   const toHome = () => {
-    window.location.href = "/dashboard"
+    window.location.href = "/home"
   }
 
   const toLogin = () => {
@@ -19,7 +19,7 @@ const Header = ({ type="home" }: { type?: "home" | "dashboard" }) => {
   }
 
   const toProfile = () => {
-    window.location.href = "/dashboard/profile"
+    window.location.href = "/home/profile"
   }
 
   return (
@@ -32,7 +32,7 @@ const Header = ({ type="home" }: { type?: "home" | "dashboard" }) => {
 
         {/* Dynamic */}
         <div>
-          {type === "home" ?
+          {type === "welcome" ?
             (
               <button onClick={toLogin} className="btn-primary text-sm font-exo px-3 py-2">Get Started</button>
             ) : (

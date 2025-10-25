@@ -4,7 +4,7 @@ import Header from "../components/Header"
 const Layout = () => {
   return (
     <>
-      <Header type="dashboard" />
+      <Header type="home" />
       {/* margin top to avoid header */}
       <div className="mt-18"></div>
       <Outlet />

@@ -3,11 +3,11 @@ import googleImg from "../../assets/google.png"
 import Button from "../../components/Button"
 import { useNavigate } from "react-router"
 
-const LoginPage = () => {
+const SignInPage = () => {
   const navigate = useNavigate()
 
   const login = () => {
-    navigate("/dashboard")
+    navigate("/home")
   }
 
   return (
@@ -19,4 +19,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage
+export default SignInPage

@@ -5,30 +5,30 @@ import {
   createRoutesFromElements
 } from "react-router-dom"
 
-import Home from "./pages/home/Home"
-import LoginPage from "./pages/home/Login"
-import DashboardLayout from "./layout/Dashboard"
+import WelcomePage from "./pages/index/WelcomePage"
+import SignInPage from "./pages/index/SignIn"
+import HomeLayout from "./layout/Home"
 import AdminLayout from "./layout/Admin"
-import Dashboard from "./pages/dashboard/Page"
-import Article from "./pages/home/Article"
-import MyProfile from "./pages/dashboard/MyProfile"
-import SettingsPage from "./pages/dashboard/Settings"
-import UserPage from "./pages/home/User"
-import InterestsPage from "./pages/home/Interests"
+import Home from "./pages/home/Page"
+import Article from "./pages/index/Article"
+import MyProfile from "./pages/home/MyProfile"
+import SettingsPage from "./pages/home/Settings"
+import UserPage from "./pages/index/User"
+import InterestsPage from "./pages/index/Interests"
 import Admin from "./pages/admin/Page"
-import NotFoundPage from "./pages/home/NotFoundPage"
+import NotFoundPage from "./pages/index/NotFoundPage"
 
 const App = () => {
   const router = createBrowserRouter( 
     createRoutesFromElements(
       <>
-        <Route path="/" element={<Home />} />
-        <Route path="/signin" element={<LoginPage />} />
+        <Route path="/" element={<WelcomePage />} />
+        <Route path="/signin" element={<SignInPage />} />
         <Route path="/interests" element={<InterestsPage />} />
 
-        {/* Dashboard (Protected) */}
-        <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route path="" element={<Dashboard />} />
+        {/* Home (Protected) */}
+        <Route path="/home" element={<HomeLayout />}>
+          <Route path="" element={<Home />} />
           <Route path="profile" element={<MyProfile />} />
           <Route path="settings" element={<SettingsPage />} />
         </Route>
