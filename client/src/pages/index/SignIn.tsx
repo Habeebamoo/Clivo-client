@@ -10,7 +10,7 @@ const SignInPage = () => {
   return (
     <main className="flex-center flex-col h-[100vh]">
       <H2 font="inter" text="Sign In With Google" />
-      <p className="text-accent text-center text-sm font-inter mb-4 mt-2">Sign in with your google account to continue with Clivo.</p>
+      <p className="text-accent text-center text-sm font-inter mb-4 mt-2">Sign in with your Google account to continue with Clivo.</p>
       <Button action={login} text="Continue With Google" img={googleImg} imgClass="h-5" />
     </main>
   )
