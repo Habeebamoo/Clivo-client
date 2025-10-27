@@ -11,6 +11,65 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+func EncodeUser(user models.UserPayload) (string, error) {
+	JWT_KEY, err := config.Get("JWT_KEY")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	claims := jwt.MapClaims{
+		"name": user.Name,
+		"email": user.Email,
+		"picture": user.Picture,
+	}
+
+	tokenString := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return tokenString.SignedString([]byte(JWT_KEY))
+}
+
+func DecodeUser(token string) (models.UserPayload ,error) {
+	JWT_KEY, err := config.Get("JWT_KEY")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	//parse jwt
+	parsedToken, err := jwt.Parse(token, func(t *jwt.Token) (any, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, jwt.ErrSignatureInvalid
+		}
+
+		return []byte(JWT_KEY), nil
+	})
+
+	//error check
+	if err != nil {
+		return models.UserPayload{}, fmt.Errorf("failed to verify token")
+	}
+
+	if !parsedToken.Valid {
+		return models.UserPayload{}, fmt.Errorf("invalid token")
+	}
+
+	//extract claims
+	claims, ok := parsedToken.Claims.(jwt.MapClaims)
+	if !ok {
+		return models.UserPayload{}, fmt.Errorf("invalid token payload")
+	}
+
+	//extract user details from claims
+	name := claims["name"].(string)
+	email := claims["email"].(string)
+	picture := claims["picture"].(string)
+
+	userDetails := models.UserPayload{
+		Name: name,
+		Email: email,
+		Picture: picture,
+	}
+
+	return userDetails, nil
+}
 
 func SignToken(payload models.TokenPayload) (string, error) {
 	JWT_KEY, err := config.Get("JWT_KEY")

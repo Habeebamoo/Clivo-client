@@ -10,7 +10,9 @@ import (
 )
 
 type AuthService interface {
+	SignUpUser(models.UserRequest) (string, int, error)
 	SignInUser(models.UserRequest) (string, int, error)
+	UserExists(string) (bool)
 }
 
 type AuthSvc struct {
@@ -21,28 +23,7 @@ func NewAuthService(repo repositories.AuthRepository) AuthService {
 	return &AuthSvc{repo}
 }
 
-func (as *AuthSvc) SignInUser(userReq models.UserRequest) (string, int, error) {
-	//checks if user already exists and return jwt token
-	exists := as.repo.UserExists(userReq.Email) 
-
-	if exists {
-		//get user
-		foundUser, code, err := as.repo.GetUserByEmail(userReq.Email)
-		if err != nil {
-			return "", code, err
-		}
-
-		//sign jwt
-		token, err := utils.SignToken(models.TokenPayload{ UserId: foundUser.UserId, Role: foundUser.Role })
-		if err != nil {
-			return "", 401, err
-		}
-
-		return token, 200, nil
-	}
-
-	//user was not found
-	//now creating userReq
+func (as *AuthSvc) SignUpUser(userReq models.UserRequest) (string, int, error) {
 	user := models.User{
 		UserId: utils.GenerateRandomId(),
 		Name: userReq.Name,
@@ -109,4 +90,30 @@ func (as *AuthSvc) SignInUser(userReq models.UserRequest) (string, int, error) {
 	return token, 201, nil
 
 	//send email notification to admin
+}
+
+func (as *AuthSvc) SignInUser(userReq models.UserRequest) (string, int, error) {
+	//get user
+	foundUser, code, err := as.repo.GetUserByEmail(userReq.Email)
+	if err != nil {
+		return "", code, err
+	}
+
+	//sign jwt
+	token, err := utils.SignToken(models.TokenPayload{ UserId: foundUser.UserId, Role: foundUser.Role })
+	if err != nil {
+		return "", 401, err
+	}
+
+	return token, 200, nil
+}
+
+func (as *AuthSvc) UserExists(email string) bool {
+	exists := as.repo.UserExists(email)
+
+	if exists {
+		return true
+	} else {
+		return false
+	}
 }

@@ -12,7 +12,6 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 
 	//middlewares chain
 	r.Use(middlewares.CORS())
-	r.Use(middlewares.RequireAPIKey())
 	r.Use(middlewares.CustomRecovery())
 
 	api := r.Group("/api")
@@ -33,11 +32,11 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 	{
 		auth.GET("/google", authHandler.GoogleLogin)
 		auth.GET("/google/callback", authHandler.GoogleCallBack)
-		auth.POST("/login", authHandler.SignIn)
+		auth.POST("/signin", middlewares.RequireAPIKey(), authHandler.SignIn)
 	}
 
 	//user routes
-	user := api.Group("/user", middlewares.AuthenticateUser())
+	user := api.Group("/user", middlewares.RequireAPIKey(), middlewares.AuthenticateUser())
 	{
 		user.GET("/me", userHandler.GetProfile)
 		user.POST("/follow/:id", userHandler.FollowUser)
@@ -47,7 +46,7 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 	}
 
 	//posts/articles routes
-	article := api.Group("/article", middlewares.AuthenticateUser())
+	article := api.Group("/article", middlewares.RequireAPIKey(), middlewares.AuthenticateUser())
 	{
 		article.POST("", articleHandler.CreateArticle)
 		article.GET("", articleHandler.GetAllMyArticles)
@@ -59,7 +58,7 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 	}
 
 	//admin routes
-	admin := api.Group("/admin", middlewares.VerifyAdmin())
+	admin := api.Group("/admin", middlewares.RequireAPIKey(), middlewares.VerifyAdmin())
 	{
 		admin.GET("/users", adminHandler.GetUsers)
 		admin.GET("/users/:id", adminHandler.GetUser)

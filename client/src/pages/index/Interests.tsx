@@ -6,6 +6,8 @@ import { GiEarthAfricaEurope, GiMicrochip, GiWeightLiftingUp } from "react-icons
 import { FaBasketball } from "react-icons/fa6"
 import { SiGooglecloud } from "react-icons/si"
 import { useState } from "react"
+import { useNavigate, useSearchParams } from "react-router-dom"
+import Loading from "../../components/Loading"
 
 interface Interest {
   icon: any,
@@ -14,6 +16,14 @@ interface Interest {
 
 const InterestsPage = () => {
   const [interests, setInterests] = useState<string[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const [ searchParams ] = useSearchParams()
+  const navigate = useNavigate()
+  const token = searchParams.get("token")
+
+  if (!token) {
+    navigate("/signin")
+  }
 
   // list of interests
   const interestsArray: Interest[] = [
@@ -75,6 +85,27 @@ const InterestsPage = () => {
     }
   }
 
+  const signUpUser = async () => {
+    setLoading(true)
+    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/auth/signin?token=${token}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-KEY": import.meta.env.VITE_API_KEY
+      },
+      credentials: "include",
+      body: JSON.stringify(interests)
+    })
+
+    if (!res.ok) {
+      navigate("/signin")
+    }
+
+    navigate("/home")
+  }
+
+  if (loading) return <Loading />
+
   return (
     <section className="bg-white">
       <div className="mt-15"></div>
@@ -96,7 +127,7 @@ const InterestsPage = () => {
         })}
       </div>
 
-      <button className="btn-primary block font-exo mx-auto mt-20">Submit</button>
+      <button onClick={signUpUser} className="btn-primary block font-exo mx-auto mt-20">Submit</button>
       <div className="mb-15"></div>
     </section>
   )

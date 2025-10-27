@@ -17,6 +17,7 @@ import UserPage from "./pages/index/User"
 import InterestsPage from "./pages/index/Interests"
 import Admin from "./pages/admin/Page"
 import NotFoundPage from "./pages/index/NotFoundPage"
+import ErrorPage from "./pages/index/ErrorPage"
 
 const App = () => {
   const router = createBrowserRouter( 
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/" element={<WelcomePage />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/interests" element={<InterestsPage />} />
+        <Route path="/auth/error" element={<ErrorPage />} />
 
         {/* Home (Protected) */}
         <Route path="/home" element={<HomeLayout />}>

@@ -4,28 +4,27 @@ import { useEffect } from "react";
 import { setProfile, type User } from "../redux/reducers/user_reducer";
 
 const getProfile = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 2000)
-  );
+  try {
+    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/me`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-KEY": import.meta.env.VITE_API_KEY
+      },
+      credentials: "include"
+    })
 
-  const me: User = {
-    userId: "",
-    name: "Habeeb Amoo",
-    email: "habeebamoo08@gmail.com",
-    role: "user",
-    verified: true,
-    isBanned: false,
-    username: "@habeebamoo08i",
-    bio: "Clivo CEO",
-    picture: "",
-    interests: ["Tech", "Science"],
-    profileUrl: "",
-    website: "habeebamoo.netlify.app",
-    following: 15,
-    followers: 400,
-    createdAt: "3 months ago"
+    const response = await res.json()
+
+    if (!res.ok) {
+      throw new Error(response.message)
+    } else {
+      const user: User = response.data;
+      return user;
+    }
+  } catch (error: any) {
+    throw new Error(error)
   }
-  
-  return me
 }
 
 export const useFetchProfile = () => {

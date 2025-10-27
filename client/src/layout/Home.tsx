@@ -1,7 +1,15 @@
-import { Outlet } from "react-router"
+import { Outlet, useNavigate } from "react-router"
 import Header from "../components/Header"
+import { useSelector } from "react-redux"
 
 const Layout = () => {
+  const user = useSelector((state: any) => state.user.profile)
+  const navigate = useNavigate()
+
+  if (!user) {
+    navigate("/")
+  }
+  
   return (
     <>
       <Header type="home" />

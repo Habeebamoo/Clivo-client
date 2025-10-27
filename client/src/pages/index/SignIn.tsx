@@ -1,13 +1,10 @@
 import { H2 } from "../../components/Typo"
 import googleImg from "../../assets/google.png"
 import Button from "../../components/Button"
-import { useNavigate } from "react-router"
 
 const SignInPage = () => {
-  const navigate = useNavigate()
-
   const login = () => {
-    navigate("/home")
+    window.location.href = `${import.meta.env.VITE_SERVER_URL}/api/auth/google`
   }
 
   return (
