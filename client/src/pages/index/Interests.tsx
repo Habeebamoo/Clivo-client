@@ -5,7 +5,7 @@ import { TbChefHat } from "react-icons/tb"
 import { GiEarthAfricaEurope, GiMicrochip, GiWeightLiftingUp } from "react-icons/gi"
 import { FaBasketball } from "react-icons/fa6"
 import { SiGooglecloud } from "react-icons/si"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import Loading from "../../components/Loading"
 
@@ -21,9 +21,11 @@ const InterestsPage = () => {
   const navigate = useNavigate()
   const token = searchParams.get("token")
 
-  if (!token) {
-    navigate("/signin")
-  }
+  useEffect(() => {
+    if (!token) {
+      navigate("/signin")
+    }
+  }, [])
 
   // list of interests
   const interestsArray: Interest[] = [
