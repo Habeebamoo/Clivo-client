@@ -13,7 +13,7 @@ const Home = () => {
 
   return (
     <main className="welcome-page bg-center bg-cover min-h-screen">
-      <div className="bg-white/80 inset-0">
+      <div className="bg-white/70 inset-0">
         <Header />
 
         {/* Hero section */}
