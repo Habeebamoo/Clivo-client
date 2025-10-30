@@ -143,7 +143,7 @@ const ArticlePage = () => {
         }
 
         <div>
-          {comments.length == 0 && <NotFound text="No Comments Yet" subText="Be the first to comment on this post." />}
+          {comments.length == 0 && <NotFound img="b" text="No Comments Yet" subText="Be the first to comment on this post." />}
           {comments.length !== 0 && 
             <div className="mt-8">
               {comments.map((comment: Comment) => {

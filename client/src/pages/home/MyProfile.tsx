@@ -15,7 +15,7 @@ const MyProfile = () => {
   const navigate = useNavigate()
 
   const toSettings = () => {
-    navigate("/dashboard/settings")
+    navigate("/home/settings")
   }
 
   const toWebsite = () => {

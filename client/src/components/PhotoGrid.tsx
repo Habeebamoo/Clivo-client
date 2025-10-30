@@ -12,18 +12,18 @@ const PhotoGrid = () => {
       <div className="grid grid-cols-3 gap-2">
 
         <div className="flex flex-col gap-2 justify-center">
-          <img src={commercial} className="aspect-square object-cover w-full" loading="lazy" />
-          <img src={nature} className="aspect-square object-cover w-full" loading="lazy" />
+          <img src={commercial} className="aspect-square object-cover w-full rounded-tl-lg" loading="lazy" />
+          <img src={nature} className="aspect-square object-cover w-full rounded-bl-lg" loading="lazy" />
         </div>
 
         <div className="flex flex-col gap-2">
-          <img src={chefs} className="aspect-square object-cover w-full" loading="lazy" />
-          <img src={tech} className="object-cover w-full" style={{ aspectRatio: "1 / 2"}} loading="lazy" />
+          <img src={chefs} className="aspect-square object-cover w-full rounded-t-lg" loading="lazy" />
+          <img src={tech} className="object-cover w-full rounded-b-lg" style={{ aspectRatio: "1 / 2"}} loading="lazy" />
         </div>
 
         <div className="flex flex-col gap-2 justify-center">
-          <img src={telephone} className="aspect-square object-cover w-full" loading="lazy" />
-          <img src={literature} className="aspect-square object-cover w-full" loading="lazy" />
+          <img src={telephone} className="aspect-square object-cover w-full rounded-tr-lg" loading="lazy" />
+          <img src={literature} className="aspect-square object-cover w-full rounded-br-lg" loading="lazy" />
         </div>
 
       </div>

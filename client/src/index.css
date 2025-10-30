@@ -46,8 +46,8 @@
   @apply border-accent flex-center border-b-2 p-2 cursor-pointer;
 };
 
-.test {
-  color: rgb(116, 114, 113);
+.welcome-page {
+  background-image: url("./assets/welcome-bg.jpeg");
 }
 
 @theme {
