@@ -43,27 +43,27 @@ const SettingsPage = () => {
     <main className="px-6">
       <H2 font="inter" text="Your Details" others="mt-25 sm:text-center" />
 
-      <div className="sm:w-[400px] mx-auto">
+      <div className="sm:w-[400px] mx-auto font-outfit">
         {/* profile picture */}
         <div className="mt-10">
-          <h1 className="font-exo mb-3">Profile Picture</h1>
+          <h1 className="mb-3">Profile Picture</h1>
           <div className="h-24 w-24 bg-muted border-1 border-accentLight rounded-full"></div>
         </div>
 
         {/* Other Details */}
         <form className="mt-8 mb-10">
           <div>
-            <label htmlFor="name" className="font-exo mb-2 block">Full-Name</label>
+            <label htmlFor="name" className="mb-2 block">Full-Name</label>
             <Input type="text" />
           </div>
 
           <div className="mt-4">
-            <label htmlFor="username" className="font-exo mb-2 block">Username</label>
+            <label htmlFor="username" className="mb-2 block">Username</label>
             <Input type="text" />
           </div>
 
           <div className="mt-4">
-            <label htmlFor="bio" className="font-exo mb-2 block">Bio</label>
+            <label htmlFor="bio" className="mb-2 block">Bio</label>
             <textarea 
               name="bio" 
               rows={4} 
@@ -71,7 +71,7 @@ const SettingsPage = () => {
           </div>
 
           <div className="mt-4">
-            <label htmlFor="website" className="font-exo mb-2 block">Website</label>
+            <label htmlFor="website" className="mb-2 block">Website</label>
             <Input type="url" placeholder="https://porfolio.com" />
           </div>
 

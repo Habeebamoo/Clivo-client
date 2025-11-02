@@ -87,7 +87,7 @@ const MyProfile = () => {
           </div>
 
           <div className="mt-6 flex-start gap-4">
-            <button onClick={toSettings} className="text-sm flex-center gap-2 py-2 px-3 border-1 border-accent rounded-full hover:bg-muted active:bg-muted cursor-pointer">
+            <button onClick={toSettings} className="text-sm flex-center gap-2 py-2 px-3 border-1 border-accent rounded-full hover:bg-muted active:bg-muted cursor-pointer font-outfit">
               <BiPencil />
               <span>Edit Profile</span>
             </button>

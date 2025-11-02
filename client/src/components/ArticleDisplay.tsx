@@ -59,7 +59,7 @@ const ArticleDisplay = ({ article }: { article: Post }) => {
           <GoHeart color="rgb(165, 163, 161)" />
           <p className="text-[12px] font-outfit">{article.likes}</p>
         </div>
-        <p className="text-[12px] font-outfit text-accentLight">{article.readTime}</p>
+        <p className="text-[12px] font-outfit-rich text-accentLight">{article.readTime}</p>
       </div>
 
     </div>
