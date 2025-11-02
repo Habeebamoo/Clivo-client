@@ -29,7 +29,7 @@ const ArticleDisplay = ({ article }: { article: Post }) => {
             {article.authorVerified && <MdVerified color="rgba(93, 110, 189, 1)" />}
           </div>
         </div>
-        <p className="text-[12px] text-accent pl-7">{article.createdAt}</p>
+        <p className="text-[12px] text-accent font-outfit pl-7">{article.createdAt}</p>
       </div>
 
       {/* title & picture */}
@@ -57,9 +57,9 @@ const ArticleDisplay = ({ article }: { article: Post }) => {
       <div className="mt-3 px-2 flex-between">
         <div className="flex-start gap-1">
           <GoHeart color="rgb(165, 163, 161)" />
-          <p className="text-[12px]">{article.likes}</p>
+          <p className="text-[12px] font-outfit">{article.likes}</p>
         </div>
-        <p className="text-[12px] font-exo text-accentLight">{article.readTime}</p>
+        <p className="text-[12px] font-outfit text-accentLight">{article.readTime}</p>
       </div>
 
     </div>

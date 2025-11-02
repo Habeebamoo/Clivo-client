@@ -34,7 +34,7 @@ const Header = ({ type="welcome" }: { type?: "welcome" | "home" }) => {
         <div>
           {type === "welcome" ?
             (
-              <button onClick={toLogin} className="btn-primary text-sm font-exo px-3 py-2">Get Started</button>
+              <button onClick={toLogin} className="btn-primary text-sm font-outfit px-3 py-2">Get Started</button>
             ) : (
               <div className="cursor-pointer">
                 <div onClick={toggleMenu} className="h-8 w-8 rounded-full bg-muted border-1 border-accentLight"></div>

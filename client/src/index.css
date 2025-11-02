@@ -10,6 +10,16 @@
   src: url("./fonts/Exo/static/Exo-Medium.ttf");
 }
 
+@font-face {
+  font-family: "outfit";
+  src: url("./fonts/Outfit/static/Outfit-Regular.ttf");
+}
+
+@font-face {
+  font-family: "outfitRich";
+  src: url("./fonts//Outfit/static/Outfit-Medium.ttf");
+}
+
 @utility flex-start {
   @apply flex items-center justify-start;
 };
@@ -39,11 +49,11 @@
 };
 
 @utility home-tab {
-  @apply border-accentLight text-accentLight flex-center border-b-1 p-2 cursor-pointer;
+  @apply border-accentLight text-accentLight flex-center border-b-1 p-2 cursor-pointer font-inter;
 };
 
 @utility home-tab-active {
-  @apply border-accent flex-center border-b-2 p-2 cursor-pointer;
+  @apply border-accent flex-center border-b-2 p-2 cursor-pointer font-inter;
 };
 
 .welcome-page {
@@ -60,4 +70,6 @@
   --color-mutedLight: rgb(240, 238, 236);
   --font-inter: "inter";
   --font-exo: "exo";
+  --font-outfit: "outfit";
+  --font-outfit-rich: "outfitRich"
 }
