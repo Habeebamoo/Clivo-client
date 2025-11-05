@@ -2,22 +2,27 @@
 
 @font-face {
   font-family: "inter";
-  src: url("./fonts/Inter/static/Inter_18pt-Medium.ttf");
+  src: url("./fonts/Inter_18pt-Medium.ttf");
+}
+
+@font-face {
+  font-family: "dmSans";
+  src: url("./fonts/DMSans-Medium.ttf");
 }
 
 @font-face {
   font-family: "exo";
-  src: url("./fonts/Exo/static/Exo-Medium.ttf");
+  src: url("./fonts/Exo-Medium.ttf");
 }
 
 @font-face {
   font-family: "outfit";
-  src: url("./fonts/Outfit/static/Outfit-Regular.ttf");
+  src: url("./fonts/Outfit-Regular.ttf");
 }
 
 @font-face {
   font-family: "outfitRich";
-  src: url("./fonts//Outfit/static/Outfit-Medium.ttf");
+  src: url("./fonts/Outfit-Medium.ttf");
 }
 
 @utility flex-start {
@@ -71,5 +76,6 @@
   --font-inter: "inter";
   --font-exo: "exo";
   --font-outfit: "outfit";
-  --font-outfit-rich: "outfitRich"
+  --font-outfit-rich: "outfitRich";
+  --font-dm: "dmSans"
 }
