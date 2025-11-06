@@ -22,6 +22,10 @@ const Header = ({ type="welcome" }: { type?: "welcome" | "home" }) => {
     window.location.href = "/home/profile"
   }
 
+  const toCreate = () => {
+    window.location.href = "/home/create"
+  }
+
   return (
     <header className="py-4 px-6 sm:px-8 flex-between bg-white fixed top-0 left-0 right-0 z-20 shadow">
       <nav className="flex-between w-full">
@@ -49,8 +53,8 @@ const Header = ({ type="welcome" }: { type?: "welcome" | "home" }) => {
                         <p>View Profile</p>
                       </div>
 
-                      <div className="nav-text border-b-1 border-b-muted">
-                        <p>New Article</p>
+                      <div onClick={toCreate} className="nav-text border-b-1 border-b-muted">
+                        <p>Create Article</p>
                       </div>
 
                       <div className="nav-text">

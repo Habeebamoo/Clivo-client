@@ -61,6 +61,10 @@
   @apply border-accent flex-center border-b-2 p-2 cursor-pointer font-inter;
 };
 
+.ProseMirror:focus {
+	outline: none;
+}
+
 @theme {
   --color-primary: rgb(20,20,20);
   --color-secondary: rgb(238,150,109);

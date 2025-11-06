@@ -1,14 +1,11 @@
 import { BiRedo, BiUndo } from "react-icons/bi"
 import { FiLink } from "react-icons/fi"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { EditorContent, useEditor } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 import Link from "@tiptap/extension-link"
 
-const TextEditor = () => {
-  const [loading, setLoading] = useState<boolean>(false)
-  const [content, setContent] = useState<string>("")
-
+const TextEditor = ({ setContent }: { setContent: React.Dispatch<React.SetStateAction<string>> }) => {
   const editor = useEditor({
     extensions: [
       StarterKit, 
@@ -37,7 +34,7 @@ const TextEditor = () => {
 
   return (
     <div>
-      <div className="mt-8 p-4 border-bg2 border-1 rounded-lg w-full mx-auto bg-white">
+      <div className="mt-8 p-4 border-muted border-1 rounded-lg w-full mx-auto bg-white">
         <div className="flex flex-end gap-2 border-b-accent pb-2 mb-2">
           <button 
             onClick={() => editor.chain().focus().toggleBold().run()}
@@ -67,11 +64,6 @@ const TextEditor = () => {
           </button>
         </div>
         <EditorContent editor={editor} className="max-w-none rounded-lg"  />
-      </div>
-      <div className="mt-4 mb-8">     
-      <button className="py-2 btn-primary max-sm:w-full flex-center gap-2">
-        <span>Send Mail</span>
-      </button>
       </div>
     </div>
   )

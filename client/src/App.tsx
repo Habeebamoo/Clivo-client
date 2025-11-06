@@ -18,7 +18,7 @@ import InterestsPage from "./pages/index/Interests"
 import Admin from "./pages/admin/Page"
 import NotFoundPage from "./pages/index/NotFoundPage"
 import ErrorPage from "./pages/index/ErrorPage"
-import TextEditor from "./components/TextEditor"
+import CreateArticle from "./pages/home/CreateArticle"
 
 const App = () => {
   const router = createBrowserRouter( 
@@ -32,6 +32,7 @@ const App = () => {
         {/* Home (Protected) */}
         <Route path="/home" element={<HomeLayout />}>
           <Route path="" element={<Home />} />
+          <Route path="create" element={<CreateArticle />} />
           <Route path="profile" element={<MyProfile />} />
           <Route path="settings" element={<SettingsPage />} />
         </Route>
@@ -43,7 +44,6 @@ const App = () => {
 
         <Route path="/:username" element={<UserPage />} />
         <Route path="/:username/:title" element={<Article />} />
-        <Route path="/edit" element={<TextEditor />} />
         <Route path="*" element={<NotFoundPage />} />
       </>
     )
