@@ -39,7 +39,7 @@ const TextEditor = ({ setContent }: { setContent: React.Dispatch<React.SetStateA
 
   return (
     <div className="mt-8 p-4 rounded-lg w-full mx-auto bg-white">
-      <div className="flex flex-end gap-2 border-b-accent pb-2 mb-2">
+      <div className="flex flex-end gap-2 border-b-accent pb-2 mb-4">
         <button 
           onClick={() => editor.chain().focus().toggleBold().run()}
           className={`px-3 py-1 rounded text-sm cursor-pointer ${editor.isActive("bold") ? "bg-primary text-white" : "bg-gray-100"}`}
