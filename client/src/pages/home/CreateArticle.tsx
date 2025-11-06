@@ -40,8 +40,8 @@ const CreateArticle = () => {
           </div>
 
           <textarea 
-            rows={1}
-            className="p-4 focus:outline-none w-full font-dm break-words rounded-lg placeholder:text-accentLight text-2xl resize-none"
+            rows={2}
+            className="p-4 focus:outline-none w-full font-dm break-words rounded-lg placeholder:text-accent text-2xl resize-none"
             placeholder="Title Here"
             value={title}
             onChange={e => setTitle(e.target.value)}

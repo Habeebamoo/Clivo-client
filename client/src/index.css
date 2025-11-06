@@ -65,6 +65,10 @@
 	outline: none;
 }
 
+.ProseMirror {
+  color: rgb(97,96,95);
+}
+
 @theme {
   --color-primary: rgb(20,20,20);
   --color-secondary: rgb(238,150,109);
