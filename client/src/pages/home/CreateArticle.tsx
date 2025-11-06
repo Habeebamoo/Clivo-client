@@ -36,9 +36,9 @@ const CreateArticle = () => {
       {step === 1 ?
         <section>
           <div className="flex-end">
-            <button onClick={nextStep} className="btn-primary mt-8">Next</button>
+            <button onClick={nextStep} className="btn-primary">Next</button>
           </div>
-          
+
           <textarea 
             rows={1}
             className="p-4 focus:outline-none w-full font-dm break-words rounded-lg placeholder:text-accentLight text-2xl resize-none"
