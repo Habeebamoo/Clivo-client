@@ -32,7 +32,7 @@ const CreateArticle = () => {
   }
 
   return (
-    <main className="w-[93%] md:w-[600px] mx-auto mt-25 mb-20">
+    <main className="w-[93%] md:w-[600px] mx-auto mt-20 mb-20">
       {step === 1 ?
         <section>
           <div className="flex-end">
@@ -50,7 +50,7 @@ const CreateArticle = () => {
           <TextEditor setContent={setContent} />
         </section>
       :
-        <section>
+        <section className="p-2">
           <div>
             <label 
               htmlFor="picture" 
