@@ -61,10 +61,6 @@
   @apply border-accent flex-center border-b-2 p-2 cursor-pointer font-inter;
 };
 
-.welcome-page {
-  background-image: url("./assets/welcome-bg.jpeg");
-}
-
 @theme {
   --color-primary: rgb(20,20,20);
   --color-secondary: rgb(238,150,109);
@@ -77,5 +73,5 @@
   --font-exo: "exo";
   --font-outfit: "outfit";
   --font-outfit-rich: "outfitRich";
-  --font-dm: "dmSans"
+  --font-dm: "dmSans";
 }

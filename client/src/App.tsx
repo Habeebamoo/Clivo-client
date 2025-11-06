@@ -18,6 +18,7 @@ import InterestsPage from "./pages/index/Interests"
 import Admin from "./pages/admin/Page"
 import NotFoundPage from "./pages/index/NotFoundPage"
 import ErrorPage from "./pages/index/ErrorPage"
+import TextEditor from "./components/TextEditor"
 
 const App = () => {
   const router = createBrowserRouter( 
@@ -42,6 +43,7 @@ const App = () => {
 
         <Route path="/:username" element={<UserPage />} />
         <Route path="/:username/:title" element={<Article />} />
+        <Route path="/edit" element={<TextEditor />} />
         <Route path="*" element={<NotFoundPage />} />
       </>
     )
