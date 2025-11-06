@@ -32,12 +32,12 @@ const CreateArticle = () => {
   }
 
   return (
-    <main className="w-[95%] md:w-[600px] mx-auto mt-25 mb-20">
+    <main className="w-[93%] md:w-[600px] mx-auto mt-25 mb-20">
       {step === 1 ?
         <section>
           <textarea 
-            rows={2}
-            className="border-1 border-muted p-6 focus:outline-none w-full break-words rounded-lg text-accentLight text-2xl resize-none"
+            rows={1}
+            className="p-4 focus:outline-none w-full font-dm break-words rounded-lg placeholder:text-accentLight text-2xl resize-none"
             placeholder="Title Here"
             value={title}
             onChange={e => setTitle(e.target.value)}
