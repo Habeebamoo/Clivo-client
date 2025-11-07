@@ -1,19 +1,60 @@
-import { useEffect, useState, type ChangeEvent } from "react"
+import { useState, type ChangeEvent } from "react"
 import TextEditor from "../../components/TextEditor"
 import InterestsCard from "../../components/InterestsCard"
+import Spinner from "../../components/Spinner"
+import { toast } from "react-toastify"
+import { useNavigate } from "react-router"
 
 const CreateArticle = () => {
   const [step, setStep] = useState<1 | 2>(1)
   const [title, setTitle] = useState<string>("")
   const [content, setContent] = useState<string>("")
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
   const [interest, setInterests] = useState<string[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const navigate = useNavigate()
 
-  useEffect(() => console.log(content), [content])
+  const handleSubmit = async () => {
+    setLoading(true)
+
+    const formData = new FormData();
+    formData.append("title", title)
+    formData.append("content", content)
+    formData.append("picture", selectedFile!)
+    interest.forEach((tag) => formData.append("tags[]", tag))
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/article`, {
+        method: "POST",
+        headers: {
+          "X-API-KEY": import.meta.env.VITE_API_KEY
+        },
+        body: formData,
+        credentials: "include"
+      })
+
+      const response = await res.json()
+
+      if (!res.ok) {
+        toast.error(response.message)
+        return
+      }
+
+      toast.success(response.message)
+      setTimeout(() => navigate("/home/profile"), 3000)
+    } catch (error) {
+      toast.error("Something went wrong. Please try again")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return;
+
+    setSelectedFile(file)
 
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -51,7 +92,10 @@ const CreateArticle = () => {
         </section>
       :
         <section className="p-2">
-          <div>
+          <button onClick={prevStep} className="btn-primary">
+            Previous
+          </button>
+          <div className="mt-4">
             <label 
               htmlFor="picture" 
               className={`cursor-pointer transition h-60 border-1 font-inter border-dashed border-accentLight block ${preview ? "bg-cover bg-center" : "text-gray-600"}`}
@@ -76,11 +120,14 @@ const CreateArticle = () => {
             />
           </div>
 
-          <div className="flex-start gap-4 mt-8">
-            <button onClick={prevStep} className="btn-primary bg-red-500 border-red-500 hover:text-red-500">
-              Previous
-            </button>
-            <button className="btn-primary">Publish</button>
+          <div className="flex-center gap-2 mt-10">
+            {loading ? 
+              <button className="btn-primary bg-gray-300 border-gray-300 hover:bg-gray-300 hover:text-white cursor-not-allowed py-3 w-[100px] flex-center">
+                <Spinner size={18} color="white" />
+              </button> 
+            : 
+              <button onClick={handleSubmit} className="btn-primary py-2 px-4">Publish</button>
+            }
           </div>
         </section>
       }

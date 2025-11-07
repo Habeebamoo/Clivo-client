@@ -82,17 +82,6 @@ type ArticleRequest struct {
 	Tags     []string         `json:"tags"`
 }
 
-func (a ArticleRequest) Validate() error {
-	if a.Title == "" {
-		return fmt.Errorf("missing field: title")
-	} else if a.Content == "" {
-		return fmt.Errorf("missing field: content")
-	} else if len(a.Tags) == 0 {
-		return fmt.Errorf("missing field: tags")
-	}
-	return nil
-}
-
 func (l Like) Validate() error {
 	if l.ArticleId == "" {
 		return fmt.Errorf("missing field: articleId")

@@ -19,6 +19,7 @@ import Admin from "./pages/admin/Page"
 import NotFoundPage from "./pages/index/NotFoundPage"
 import ErrorPage from "./pages/index/ErrorPage"
 import CreateArticle from "./pages/home/CreateArticle"
+import { ToastContainer } from "react-toastify"
 
 const App = () => {
   const router = createBrowserRouter( 
@@ -52,6 +53,7 @@ const App = () => {
   return (
     <>
       <RouterProvider router={router} />
+      <ToastContainer position="top-center" />
     </>
   )
 }

@@ -101,6 +101,7 @@ const InterestsPage = () => {
 
     if (!res.ok) {
       navigate("/signin")
+      return
     }
 
     navigate("/home")

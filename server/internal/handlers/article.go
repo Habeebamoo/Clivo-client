@@ -26,17 +26,28 @@ func (ah *ArticleHandler) CreateArticle(c *gin.Context) {
 
 	userId := userIdAny.(string)
 
-	//bind body
-	var articleReq models.ArticleRequest
-	if err := c.ShouldBindJSON(&articleReq); err != nil {
-		utils.Error(c, 400, "Invaild JSON Format", nil)
+	//validate request
+	title := c.PostForm("title")
+	content := c.PostForm("content")
+	tags := c.PostFormArray("tags[]")
+
+	if title == "" || content == "" || len(tags) == 0 {
+		utils.Error(c, 400, "All fields must be complete", nil)
 		return
 	}
 
-	//validate request
-	if err := articleReq.Validate(); err != nil {
-		utils.Error(c, 400, utils.FormatText(err.Error()), nil)
-		return
+	picture, _, err := c.Request.FormFile("picture")
+	if err != nil {
+		utils.Error(c, 400, "All fields must be complete", nil)
+		return	
+	}
+
+	//bind body
+	articleReq := models.ArticleRequest{
+		Title: title,
+		Content: content,
+		Picture: &picture,
+		Tags: tags,
 	}
 
 	//call article service

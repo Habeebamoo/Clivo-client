@@ -22,7 +22,7 @@ const TextEditor = ({ setContent }: { setContent: React.Dispatch<React.SetStateA
 
   useEffect(() => {
     editor.on("update", () => {
-      setContent(editor.getHTML())
+      setContent(editor.getText())
     })
 
     return () => {
