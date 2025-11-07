@@ -35,7 +35,10 @@ func (as *ArticleSvc) CreateArticle(articleReq models.ArticleRequest, userId str
 	readTime := fmt.Sprintf("%d mins", minutes)
 
 	//upload article image
-	articleImage := ""
+	articleImage, err := utils.UploadImage(*articleReq.Picture)
+	if err != nil {
+		return 500, fmt.Errorf("failed to upload")
+	}
 
 	//assign article
 	article := models.Article{

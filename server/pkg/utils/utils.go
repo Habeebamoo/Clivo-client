@@ -1,17 +1,21 @@
 package utils
 
 import (
+	"context"
 	crand "crypto/rand"
 	"encoding/hex"
 	"fmt"
 	"log"
 	"math"
 	mrand "math/rand"
+	"mime/multipart"
 	"net/http"
 	"regexp"
 	"strings"
 	"time"
 
+	"github.com/cloudinary/cloudinary-go/v2"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/Habeebamoo/Clivo/server/internal/config"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/text/cases"
@@ -119,4 +123,43 @@ func GetTimeAgo(t time.Time) string {
 	default:
 		return fmt.Sprintf("%d years ago", int(duration.Hours()/(24*365)))
 	}
+}
+
+func UploadImage(file multipart.File) (string, error) {
+	cldName, _ := config.Get("CLD_CLOUD_NAME")
+	apiKey, _ := config.Get("CLD_API_KEY")
+	apiSecret, _ := config.Get("CLD_API_SECRET")
+
+	if cldName == "" || apiKey == "" || apiSecret == "" {
+		return "", fmt.Errorf("env variables missing")
+	}
+
+	cld, err := cloudinary.NewFromParams(cldName, apiKey, apiSecret)
+
+	if err != nil {
+		return "", fmt.Errorf("failed to connect to storage")
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	uploadRes, err := cld.Upload.Upload(ctx, file, uploader.UploadParams{
+		Folder: "profile_pics",
+	})
+	if err != nil {
+		return "", fmt.Errorf("upload error")
+	}
+
+	image, err := cld.Image(uploadRes.PublicID)
+	if err != nil {
+		return "", fmt.Errorf("internal server error")
+	}
+
+	image.Transformation = "c_fill,h_150,w_150"
+	imageUrl, err := image.String()
+	if err != nil {
+		return "", fmt.Errorf("internal server error")
+	}
+
+	return imageUrl, nil
 }

@@ -10,6 +10,7 @@ import { CgShare } from "react-icons/cg";
 import NotFound from "../../components/NotFound";
 import Loading from "../../components/Loading";
 import { useFetchUserArticle } from "../../hooks/useFetchUserArticle";
+import { toast } from "react-toastify";
 
 interface Comment {
 	articleId: string,
@@ -23,9 +24,17 @@ interface Comment {
 const ArticlePage = () => {
   const { username, title } = useParams<{ username: string, title: string }>();
   const { data, isLoading, isError } = useFetchUserArticle(username!, title!)
+
+  const article: Post | undefined | void = data?.article;
+  const comments: Comment[] = data?.comments;
+
   const [commentAction, setCommentAction] = useState<"add" | "send">("add");
   const [commentBarActive, setCommentBarActive] = useState<boolean>(false)
   const [commentValue, setCommentValue] = useState<string>("");
+
+  const [hasUserLiked, setHasUserLiked] = useState<boolean>(false)
+  const [isArticleLiked, setIsArticleLiked] = useState<boolean>(false)
+  const [articleLikes, setArticleLikes] = useState<number>(article?.likes!)
 
   const navigate = useNavigate();
   if (!username || !title) {
@@ -38,15 +47,27 @@ const ArticlePage = () => {
     }
   }, [commentValue])
 
-  const article: Post | undefined | void = data?.article;
-  const comments: Comment[] = data?.comments;
-
   const handleCommentAction = () => {
     if (commentAction === "add") {
       setCommentBarActive(true)
     } else {
       //send comments
     }
+  }
+
+  const toUser = () => {
+    window.location.href = `${article?.authorProfileUrl!}`
+  }
+
+  const copyArticleSlug = () => {
+    navigator.clipboard.
+      writeText(`${import.meta.env.VITE_BASE_URL}/${article?.slug}`).
+      then(() => toast.success("URL Copied")).
+      catch(err => toast.error("Failed to copy " + err))
+  }
+
+  const likeArticle = () => {
+    setIsArticleLiked
   }
 
   if (isLoading) return <Loading />
@@ -69,19 +90,20 @@ const ArticlePage = () => {
 
       {/* Author */}
       <div className="text-[12px] text-accentLight flex-start gap-3 mt-4">
-        <p>{article!.readTime}</p>
+        <p>{article!.readTime} read time</p>
         <div className="bg-accentLight h-1 w-1 rounded-full"></div>
         <p>{article!.createdAt}</p>
       </div>
+
       <div className="flex-start gap-3 mt-2">
-        <div className="h-7 w-7 rounded-full overflow-hidden">
+        <div onClick={toUser} className="h-7 w-7 rounded-full overflow-hidden cursor-pointer">
           {article!.authorPicture ? (
             <img src={article!.authorPicture} className="h-full w-full object-cover" />
           ) : (
             <div className="w-full h-full rounded-full bg-muted border-1 border-accentLight"></div>
           )}
         </div>
-        <div className="flex-start gap-1">
+        <div onClick={toUser} className="flex-start gap-1 cursor-pointer">
           <p>{article!.authorFullname}</p>
           {article!.authorVerified && 
             <MdVerified color="rgba(93, 110, 189, 1)" />
@@ -90,7 +112,10 @@ const ArticlePage = () => {
         <div className="flex-start gap-1 ml-4">
           <button className="btn-primary text-[12px] rounded-full font-inter">Follow</button>
 
-          <button className="text-[12px] flex-center gap-1 border-1 border-accent py-1 px-3 rounded-full cursor-pointer text-black hover:bg-muted active:bg-muted">
+          <button 
+            onClick={copyArticleSlug}
+            className="text-[12px] flex-center gap-1 border-1 border-accent py-1 px-3 rounded-full cursor-pointer text-black hover:bg-muted active:bg-muted"
+          >
           <FaUpload />
           <span>Share</span>
         </button>
@@ -99,7 +124,7 @@ const ArticlePage = () => {
       <hr className="text-muted mt-6 mb-4" />
 
       {/* Article Content */}
-      <div className="font-exo text-text">
+      <div className="font-inter text-text">
         {article!.content}
       </div>
 

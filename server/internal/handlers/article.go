@@ -36,9 +36,14 @@ func (ah *ArticleHandler) CreateArticle(c *gin.Context) {
 		return
 	}
 
-	picture, _, err := c.Request.FormFile("picture")
+	picture, file, err := c.Request.FormFile("picture")
 	if err != nil {
 		utils.Error(c, 400, "All fields must be complete", nil)
+		return	
+	}
+
+	if file.Size > 2 << 20 {
+		utils.Error(c, 400, "Image must be 2MB or less", nil)
 		return	
 	}
 
