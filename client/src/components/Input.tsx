@@ -1,13 +1,14 @@
 interface Props {
   type: string,
   placeholder?: string,
+  color?: string
 }
 
-const Input = ({ type, placeholder }: Props) => {
+const Input = ({ type, placeholder, color }: Props) => {
   return (
     <input 
       type={type} 
-      className="border-1 border-accentLight rounded-lg focus:outline-none w-full py-2 px-3 font-inter placeholder:text-accentLight"
+      className={`${color} border-b-1 border-b-accentLight focus:outline-none w-full py-1 font-inter placeholder:text-accentLight`}
       required
       placeholder={placeholder}
     />
