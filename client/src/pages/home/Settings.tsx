@@ -16,7 +16,7 @@ const Modal = ({ setModal }: { setModal: React.Dispatch<React.SetStateAction<boo
     setLoading(true)
 
     try {
-      
+      console.log(file)
     } catch (error) {
       
     } finally {

@@ -32,9 +32,12 @@ const ArticlePage = () => {
   const [commentBarActive, setCommentBarActive] = useState<boolean>(false)
   const [commentValue, setCommentValue] = useState<string>("");
 
-  const [hasUserLiked, setHasUserLiked] = useState<boolean>(false)
-  const [isArticleLiked, setIsArticleLiked] = useState<boolean>(false)
-  const [articleLikes, setArticleLikes] = useState<number>(article?.likes!)
+  const [hasUserLiked] = useState<boolean>(false)
+  const [isArticleLiked] = useState<boolean>(false)
+  const [articleLikes] = useState<number>(article?.likes!)
+
+  //dev
+  console.log(`${hasUserLiked}, ${isArticleLiked}, ${articleLikes}`)
 
   const navigate = useNavigate();
   if (!username || !title) {
@@ -64,10 +67,6 @@ const ArticlePage = () => {
       writeText(`${import.meta.env.VITE_BASE_URL}/${article?.slug}`).
       then(() => toast.success("URL Copied")).
       catch(err => toast.error("Failed to copy " + err))
-  }
-
-  const likeArticle = () => {
-    setIsArticleLiked
   }
 
   if (isLoading) return <Loading />
