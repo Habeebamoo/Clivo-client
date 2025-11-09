@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"mime/multipart"
 	"time"
 )
 
@@ -41,6 +42,15 @@ type UserRequest struct {
 	Email      string     `json:"email"`
 	Picture    string     `json:"picture"`
 	Interets   []string   `json:"interests"`
+}
+
+type ProfileUpdateRequest struct {
+	Name    string
+	Email    string
+	Website  string
+	Bio      string
+	Picture  *multipart.File
+	FileAvailable bool
 }
 
 type UserProfileResponse struct {

@@ -4,24 +4,62 @@ import { BiPencil } from "react-icons/bi"
 import pic from "../../assets/logo.jpg"
 import Input from "../../components/Input"
 import Spinner from "../../components/Spinner"
+import { toast } from "react-toastify"
 
 const Modal = ({ setModal }: { setModal: React.Dispatch<React.SetStateAction<boolean | undefined>> }) => {
   const [preview, setPreview] = useState<string | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
-  const [file, setFile] = useState<File | string>(pic)
+  const [file, setFile] = useState<File | string>("")
   const [picture] = useState<string>(pic)
+  const [form, setForm] = useState({
+    name: "Habeeb",
+    email: "habeeb@gmail.com",
+    website: "habeeb.com",
+    bio: "Software Engineer"
+  })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  console.log(form)
+  console.log(file)
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
 
-    try {
-      console.log(file)
-    } catch (error) {
-      
-    } finally {
+    const formData = new FormData()
+    formData.append("name", form.name)
+    formData.append("email", form.email)
+    formData.append("website", form.website)
+    formData.append("bio", form.bio)
 
+    if (file) formData.append("picture", file)
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/profile`, {
+        method: "PATCH",
+        headers: {
+          "X-API-KEY": import.meta.env.VITE_API_KEY
+        },
+        body: formData,
+        credentials: "include"
+      })
+
+      const response = await res.json()
+
+      if (!res.ok) {
+        toast.error(response.message)
+        return
+      }
+      toast.success(response.message)
+
+    } catch (error) {
+      toast.error("Something went wrong")
+    } finally {
+      setLoading(false)
     }
+  }
+
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value })
   }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,27 +108,46 @@ const Modal = ({ setModal }: { setModal: React.Dispatch<React.SetStateAction<boo
         {/* name */}
         <div>
           <p className="font-inter mb-2">Name</p>
-          <Input type="text" placeholder="" />
+          <Input 
+            type="text" 
+            name="name"   
+            value={form.name} 
+            onChange={handleFormChange} 
+          />
         </div>
 
         {/* email */}
         <div className="mt-6">
           <p className="font-inter mb-2">Email</p>
-          <Input type="email" placeholder="" />
+          <Input 
+            type="email" 
+            name="email" 
+            value={form.email} 
+            onChange={handleFormChange} 
+          />
         </div>
 
         {/* website */}
         <div className="mt-6">
-          <p className="font-inter mb-2">Website</p>
-          <Input type="url" placeholder="" color="text-blue-500" />
+          <p className="font-inter mb-2">Link</p>
+          <Input 
+            type="url" 
+            name="website" 
+            color="text-blue-500" 
+            value={form.website}
+            onChange={handleFormChange} 
+          />
         </div>
 
         {/* bio */}
         <div className="mt-6">
           <p className="font-inter mb-2">Bio</p>
-          <textarea className="border-b-1 border-b-accentLight focus:outline-none w-full py-1 font-inter placeholder:text-accentLight resize-none">
-
-          </textarea>
+          <textarea 
+            name="bio"
+            value={form.bio}
+            onChange={handleFormChange}
+            className="border-b-1 border-b-accentLight focus:outline-none w-full py-1 font-inter placeholder:text-accentLight resize-none"
+          ></textarea>
         </div>
 
         {loading ?

@@ -8,7 +8,9 @@ import (
 )
 
 type UserRepository interface {
-	GetUserById(userId string) (models.UserResponse, int, error)
+	GetUserById(string) (models.UserResponse, int, error)
+	UpdateUserProfile(string, models.ProfileUpdateRequest) (int, error)
+	UpdateUserProfileWithPicture(string, models.ProfileUpdateRequest, string) (int, error)
 	CreateFollow(models.Follow) (int, error)
 	RemoveFollow(models.Follow) (int, error)
 	IncrementFollows(string, string) error
@@ -34,9 +36,9 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 	return &UserRepo{db}
 }
 
-func (ar *UserRepo) GetUserById(userId string) (models.UserResponse, int, error) {
+func (ur *UserRepo) GetUserById(userId string) (models.UserResponse, int, error) {
 	var user models.UserResponse
-	res := ar.db.Table("users u").
+	res := ur.db.Table("users u").
 				Select("u.user_id, u.name, u.email, u.role, u.verified, u.is_banned, p.username, p.bio, p.picture, p.profile_url, p.website, p.following, p.followers, u.created_at").
 				Joins("JOIN profiles p ON u.user_id = p.user_id").
 				Where("u.user_id = ?", userId).
@@ -50,6 +52,59 @@ func (ar *UserRepo) GetUserById(userId string) (models.UserResponse, int, error)
 	}
 
 	return user, 200, nil
+}
+
+func (ur *UserRepo) UpdateUserProfile(userId string, profileReq models.ProfileUpdateRequest) (int, error) {
+	res := ur.db.Model(&models.User{}).
+				Where("user_id = ?", userId).
+				Updates(map[string]interface{}{
+					"Name": profileReq.Name,
+					"Email": profileReq.Email,
+				})
+
+	if res.Error != nil {
+		return 500, fmt.Errorf("failed to update profile")
+	}
+
+	res = ur.db.Model(&models.Profile{}).
+			Where("user_id = ?", userId).
+			Updates(map[string]interface{}{
+				"Website": profileReq.Website,
+				"Bio": profileReq.Bio,
+			})
+
+	if res.Error != nil {
+		return 500, fmt.Errorf("failed to update profile")
+	}
+
+	return 201, nil
+}
+
+func (ur *UserRepo) UpdateUserProfileWithPicture(userId string, profileReq models.ProfileUpdateRequest, image string) (int, error) {
+	res := ur.db.Model(&models.User{}).
+				Where("user_id = ?", userId).
+				Updates(map[string]interface{}{
+					"Name": profileReq.Name,
+					"Email": profileReq.Email,
+				})
+
+	if res.Error != nil {
+		return 500, fmt.Errorf("failed to update profile")
+	}
+
+	res = ur.db.Model(&models.Profile{}).
+			Where("user_id = ?", userId).
+			Updates(map[string]interface{}{
+				"Website": profileReq.Website,
+				"Bio": profileReq.Bio,
+				"Picture": image,
+			})
+
+	if res.Error != nil {
+		return 500, fmt.Errorf("failed to update profile")
+	}
+
+	return 201, nil
 }
 
 func (ur *UserRepo) CreateFollow(followReq models.Follow) (int, error) {

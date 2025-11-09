@@ -43,6 +43,7 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 		user.POST("/unfollow/:id", userHandler.UnFollowUser)
 		user.GET("/followers", userHandler.GetUserFollowers)
 		user.GET("/following", userHandler.GetUsersFollowing)
+		user.PATCH("/profile", userHandler.UpdateProfile)
 	}
 
 	//posts/articles routes

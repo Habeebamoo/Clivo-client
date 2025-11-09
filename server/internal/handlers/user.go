@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"github.com/Habeebamoo/Clivo/server/internal/models"
 	"github.com/Habeebamoo/Clivo/server/internal/services"
 	"github.com/Habeebamoo/Clivo/server/pkg/utils"
 	"github.com/gin-gonic/gin"
@@ -153,6 +154,47 @@ func (uhdl *UserHandler) GetArticleComments(c *gin.Context) {
 	}
 
 	utils.Success(c, statusCode, "", comments)
+}
+
+func (uhdl *UserHandler) UpdateProfile(c *gin.Context) {
+	userIdAny, exists := c.Get("userId")
+	if !exists {
+		utils.Error(c, 401, "Unauthorized Access", nil)
+		return
+	}
+
+	userId := userIdAny.(string)
+
+	//receive form data
+	name := c.PostForm("name")
+	email := c.PostForm("email")
+	website := c.PostForm("website")
+	bio := c.PostForm("bio")
+	picture, _, err := c.Request.FormFile("picture")
+
+	if name == "" || email == "" || website == "" || bio == "" {
+		utils.Error(c, 400, "No fields must be empty", nil)
+		return
+	}
+
+	//build request
+	profileUpdateReq := models.ProfileUpdateRequest{
+		Name: name,
+		Email: email,
+		Website: website,
+		Bio: bio,
+		Picture: &picture,
+		FileAvailable: err == nil,
+	}
+
+	//call service
+	statusCode, err := uhdl.service.UpdateUserProfile(userId, profileUpdateReq)
+	if err != nil {
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	utils.Success(c, 201, "Profile Update Successfully", nil)
 }
 
 func (uhdl *UserHandler) GetUserFollowers(c *gin.Context) {

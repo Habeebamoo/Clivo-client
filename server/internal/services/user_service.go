@@ -12,6 +12,7 @@ import (
 
 type UserService interface {
 	GetUserProfile(string) (models.UserProfileResponse, int, error)
+	UpdateUserProfile(string, models.ProfileUpdateRequest) (int, error)
 	FollowUser(string, string) (int, error)
 	UnFollowUser(string, string) (int, error)
 	GetUser(string) (models.SafeUserResponse, int, error)
@@ -30,9 +31,9 @@ func NewUserService(repo repositories.UserRepository) UserService {
 	return &UserSvc{repo}
 }
 
-func (as *UserSvc) GetUserProfile(userId string) (models.UserProfileResponse, int, error) {
+func (us *UserSvc) GetUserProfile(userId string) (models.UserProfileResponse, int, error) {
 	//get user
-	user, code, err := as.repo.GetUserById(userId)
+	user, code, err := us.repo.GetUserById(userId)
 	if err != nil {
 		return models.UserProfileResponse{}, code, err
 	}
@@ -61,6 +62,21 @@ func (as *UserSvc) GetUserProfile(userId string) (models.UserProfileResponse, in
 	}
 
 	return userProfile, 200, nil
+}
+
+func (us *UserSvc) UpdateUserProfile(userId string, profileReq models.ProfileUpdateRequest) (int, error) {
+	if !profileReq.FileAvailable {
+		//update profile without picture
+		return us.repo.UpdateUserProfile(userId, profileReq)
+	}
+
+	//upload picture and update profile
+	imageUrl, err := utils.UploadImage(*profileReq.Picture)
+	if err != nil {
+		return 500, fmt.Errorf("failed to update profile")
+	}
+
+	return us.repo.UpdateUserProfileWithPicture(userId, profileReq, imageUrl)
 }
 
 func (us *UserSvc) FollowUser(followerId string, followingId string) (int, error) {
