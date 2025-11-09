@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/Habeebamoo/Clivo/server/internal/models"
@@ -87,9 +88,13 @@ func (as *AuthSvc) SignUpUser(userReq models.UserRequest) (string, int, error) {
 		return "", 401, err
 	}
 
-	return token, 201, nil
+	//send email notification to both admin and user
+	go func() {
+		NewEmailService().SendWelcomeEmail(user.Name, user.Email, username)
+		NewEmailService().SendWelcomeEmailToAdmin(user.Name, user.Email, username, strings.Join(userReq.Interets, ", "))
+	}()
 
-	//send email notification to admin
+	return token, 201, nil
 }
 
 func (as *AuthSvc) SignInUser(userReq models.UserRequest) (string, int, error) {

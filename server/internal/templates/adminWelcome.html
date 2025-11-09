@@ -5,29 +5,27 @@
       <!-- logo -->
       <tr>
         <td style="padding: 20px; display: flex; align-items: center; gap: 10px;">
-          <img src="./internal/assets/logo.png" style="height: 40px">
+          <img src="" style="height: 40px">
           <h1 style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Clivo</h1>
         </td>
       </tr>
 
       <tr>
         <td style="padding: 0 30px; color: #333333; font-size: 16px; line-height: 1.6;">
-          <p>Hi %s,</p>
-          <p>Welcome to Clivo. we're excited to have you join our growing community of thinkers, writers, and readers.</p>
+          <p>Good day Habeeb</p>
+          <p>A new user recently signed up on Clivo. Below are the user details</p>
 
           <div style="line-height: 1.5;">
-            <p>Here's what you can do next.</p>
-            <p>&#9989; <span style="font-weight: bold;">Create</span> your first post and share your thoughts with the world.</p>
-            <p>&#9989; <span style="font-weight: bold;">Discover</span> inspiring content from others who share your interests.</p>
-            <p>&#9989; <span style="font-weight: bold;">Engage</span> with the community - like, comment and connect.</p>
+            <p>&#9989; <span style="font-weight: bold;">Name</span> {{ .Name }}</p>
+            <p>&#9989; <span style="font-weight: bold;">Email</span> {{ .Email }}</p>
+            <p>&#9989; <span style="font-weight: bold;">Username</span> {{ .Username }}</p>
+            <p>&#9989; <span style="font-weight: bold;">Interests</span> {{ .Interests }}</p>
           </div>
 
-          <div style="line-height: 0.4; margin-top: 30px;">
-            <p>Ready to start writing?</p>
-            <p>Click the button below to create your first aticle.</p>
-          </div>
-          <p style="margin: 30px 0;">
-            <a href="%s" style="background-color: rgb(20,20,20); color: #ffffff; padding: 12px 25px; border-radius: 5px; text-decoration: none; font-weight: bold;">Create Article</a>
+          <p style="margin-top: 20px;">To view more about this user, click on the button below to visit the user's profile</p>
+
+          <p style="margin: 50px 0;">
+            <a href=`{{ .Profile }}` style="background-color: rgb(20,20,20); color: #ffffff; padding: 12px 25px; border-radius: 5px; text-decoration: none; font-weight: bold;">View Profile</a>
           </p>
         </td>
       </tr>
@@ -36,12 +34,12 @@
         <td style="background-color: #f1f1f1; padding: 15px; text-align: center; font-size: 14px; color: #888888; line-height: 0;">
           <p style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">from</p>
           <div style="display: flex; align-items: center; gap: 3px; justify-content: center;">
-            <img src="./internal/assets/logo.png" style="height: 15px">
+            <img src="" style="height: 15px">
             <p style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: black; font-weight: bold;">Clivo</p>  
           </div>
           <p style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif">
             This message was sent to 
-            <span style="text-decoration: underline;">habeebamoo@gmail.com</span>
+            <span style="text-decoration: underline;">habeebamoo08@gmail.com</span>
           </p>
         </td>
       </tr>
