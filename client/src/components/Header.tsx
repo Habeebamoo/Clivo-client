@@ -1,8 +1,11 @@
 import { useNavigate } from "react-router"
 import logo from "../assets/logo.jpg"
 import { useState } from "react"
+import { useSelector } from "react-redux";
+import type { User } from "../redux/reducers/user_reducer";
 
 const Header = ({ type="welcome" }: { type?: "welcome" | "home" }) => {
+  const user: User = useSelector((state: any) => state.user.profile);
   const [navActive, setNavActive] = useState<boolean>(false)
   const navigate = useNavigate()
 
@@ -41,10 +44,12 @@ const Header = ({ type="welcome" }: { type?: "welcome" | "home" }) => {
               <button onClick={toLogin} className="btn-primary text-sm font-outfit px-3 py-2">Get Started</button>
             ) : (
               <div className="cursor-pointer">
-                <div onClick={toggleMenu} className="h-8 w-8 rounded-full bg-muted border-1 border-accentLight"></div>
+                <div onClick={toggleMenu} className="h-9 w-9 rounded-full overflow-hidden border-1 border-accentLight">
+                  <img src={user.picture} className="w-full h-full object-cover object-center" />
+                </div>
                   {/* navbar */}
                   {navActive && 
-                    <div className="fixed right-[23px] sm:right-[33px] bg-white border-1 border-muted mt-1 text-[12px] text-accent w-40">
+                    <div className="fixed right-[23px] sm:right-[33px] bg-white border-1 border-muted mt-1 font-open text-accent w-50">
                       <div onClick={toHome} className="nav-text border-b-1 border-b-muted ">
                         <p>Home</p>
                       </div>

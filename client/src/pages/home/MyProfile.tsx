@@ -19,7 +19,7 @@ const MyProfile = () => {
   }
 
   const toWebsite = () => {
-    window.location.href = user.website;
+    window.open(user.website, '_blank', 'noopener,noreferrer')
   }
 
   if (isLoading) return <Loading />

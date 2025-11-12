@@ -1,25 +1,25 @@
 import { useState } from "react"
-import { H2 } from "../../components/Typo"
+import { H1 } from "../../components/Typo"
 import { BiPencil } from "react-icons/bi"
-import pic from "../../assets/logo.jpg"
 import Input from "../../components/Input"
 import Spinner from "../../components/Spinner"
 import { toast } from "react-toastify"
+import { FiLink } from "react-icons/fi"
+import { useSelector } from "react-redux"
+import type { User } from "../../redux/reducers/user_reducer"
 
 const Modal = ({ setModal }: { setModal: React.Dispatch<React.SetStateAction<boolean | undefined>> }) => {
+  const user: User = useSelector((state: any) => state.user.profile)
   const [preview, setPreview] = useState<string | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [file, setFile] = useState<File | string>("")
-  const [picture] = useState<string>(pic)
+  const [picture] = useState<string>(user.picture)
   const [form, setForm] = useState({
-    name: "Habeeb",
-    email: "habeeb@gmail.com",
-    website: "habeeb.com",
-    bio: "Software Engineer"
+    name: user.name,
+    email: user.email,
+    website: user.website,
+    bio: user.bio
   })
-
-  console.log(form)
-  console.log(file)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -49,7 +49,9 @@ const Modal = ({ setModal }: { setModal: React.Dispatch<React.SetStateAction<boo
         toast.error(response.message)
         return
       }
+
       toast.success(response.message)
+      setTimeout(() => window.location.href = "/home/profile", 3000)
 
     } catch (error) {
       toast.error("Something went wrong")
@@ -71,12 +73,13 @@ const Modal = ({ setModal }: { setModal: React.Dispatch<React.SetStateAction<boo
   }
 
   const closeModal = () => {
+    if (loading) return
     setModal(false)
   }
 
   return (
     <section className="bg-black/80 fixed top-0 bottom-0 left-0 right-0 z-20 flex-center">
-      <form className="bg-white p-6 border-1 border-gray-100 rounded-md w-[90%] sm:w-[400px] mx-auto">
+      <form onSubmit={handleSubmit} className="bg-white p-6 border-1 border-gray-100 rounded-md w-[90%] sm:w-[400px] mx-auto">
         {/* cancel */}
         <div className="flex-end mb-4">
           <button onClick={closeModal} className="py-1 px-3 bg-red-600 text-white text-sm font-outfit rounded-md border-1 border-red-600 hover:bg-transparent hover:text-red-600 active:bg-transparent active:text-red-600 cursor-pointer">Cancel</button>
@@ -106,8 +109,8 @@ const Modal = ({ setModal }: { setModal: React.Dispatch<React.SetStateAction<boo
         </div>
 
         {/* name */}
-        <div>
-          <p className="font-inter mb-2">Name</p>
+        <div className="font-open text-sm">
+          <p className="mb-2">Name</p>
           <Input 
             type="text" 
             name="name"   
@@ -117,8 +120,8 @@ const Modal = ({ setModal }: { setModal: React.Dispatch<React.SetStateAction<boo
         </div>
 
         {/* email */}
-        <div className="mt-6">
-          <p className="font-inter mb-2">Email</p>
+        <div className="mt-6 font-open text-sm">
+          <p className="mb-2">Email</p>
           <Input 
             type="email" 
             name="email" 
@@ -128,25 +131,26 @@ const Modal = ({ setModal }: { setModal: React.Dispatch<React.SetStateAction<boo
         </div>
 
         {/* website */}
-        <div className="mt-6">
-          <p className="font-inter mb-2">Link</p>
+        <div className="font-open text-sm mt-6">
+          <p className="mb-2">Link</p>
           <Input 
             type="url" 
             name="website" 
             color="text-blue-500" 
+            placeholder="https://"
             value={form.website}
             onChange={handleFormChange} 
           />
         </div>
 
         {/* bio */}
-        <div className="mt-6">
-          <p className="font-inter mb-2">Bio</p>
+        <div className="font-open text-sm mt-6">
+          <p className="mb-2">Bio</p>
           <textarea 
             name="bio"
             value={form.bio}
             onChange={handleFormChange}
-            className="border-b-1 border-b-accentLight focus:outline-none w-full py-1 font-inter placeholder:text-accentLight resize-none"
+            className="border-b-1 border-b-accentLight focus:outline-none w-full py-1 placeholder:text-accentLight resize-none"
           ></textarea>
         </div>
 
@@ -155,7 +159,7 @@ const Modal = ({ setModal }: { setModal: React.Dispatch<React.SetStateAction<boo
             <Spinner size={18} color="white" />
           </button>
         :
-          <button onClick={handleSubmit} className="btn-primary w-full mt-6 py-2">
+          <button className="btn-primary w-full mt-6 py-2">
             Update Profile
           </button>
         }
@@ -165,41 +169,59 @@ const Modal = ({ setModal }: { setModal: React.Dispatch<React.SetStateAction<boo
 }
 
 const SettingsPage = () => {
+  const user: User = useSelector((state: any) => state.user.profile)
   const [modal, setModal] = useState<boolean>()
 
   const showModal = () => {
     setModal(true)
   }
 
+  const copyProfileLink = () => {
+    navigator.clipboard.writeText(user.profileUrl).
+      then(() => toast.success("Profile URL Copied.")).
+      catch((e) => toast.error(`Something went wrong ${e.message}`))
+  }
+
   return (
-    <main className="w-[93%] sm:w-[400px] mx-auto">
+    <main className="w-[90%] sm:w-[400px] mx-auto">
       {modal && <Modal setModal={setModal} />}
-      <H2 font="inter" text="Settings" others="mt-25" />
-      <div className="text-accent text-sm font-inter mt-12">
-        <div className="h-18 w-18 rounded-full overflow-hidden mb-6">
-          <img src={pic} alt="h-full w-full" />
-        </div>
+      <H1 font="inter" text="Settings" others="mt-25" />
+      <div className="my-10">
+        <p className="font-inter mb-2">Account</p>
+        <hr className="text-gray-200" />
+      </div>
+      <div className="text-accent text-sm font-open">
         <div className="flex-between mb-6">
           <p>Name</p>
-          <p>Habeeb Amoo</p>
+          <p>{user.name}</p>
         </div>
         <div className="flex-between mb-6">
           <p>Email</p>
-          <p>habeebamoo08@gmail.com</p>
+          <p>{user.email}</p>
         </div>
         <div className="flex-between mb-6">
-          <p>Website</p>
-          <a href="#" className="text-blue-600 text-underline">habeebamoo.netlify.app</a>
+          <p>Link</p>
+          <a href="#" className="text-blue-600 text-underline">
+            {user.website}
+          </a>
         </div>
         <div className="">
           <p>Bio</p>
-          <p className="mt-4 font-dm pl-2">Software Developer</p>
+          <p className="mt-4 font-dm">{user.bio}</p>
         </div>
       </div>
-      <button onClick={showModal} className="btn-primary flex-center gap-2 mt-8">
-        <p>Edit</p>
-        <BiPencil />
-      </button>
+
+      {/* buttons */}
+      <div className="mt-10 flex-start gap-4">
+        <button onClick={showModal} className="btn-primary flex-center gap-2">
+          <p>Edit</p>
+          <BiPencil />
+        </button>
+        <button onClick={copyProfileLink} className="btn-primary flex-center gap-2">
+          <p>Share Profile</p>
+          <FiLink />
+        </button>
+      </div>
     </main>
   )
 }

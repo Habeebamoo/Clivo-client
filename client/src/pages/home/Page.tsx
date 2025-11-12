@@ -11,24 +11,24 @@ const Dashboard = () => {
 
   return (
     <main>
-      {/* Tabs */}
-      <div className="w-[90%] sm:w-[400px] mx-auto grid grid-cols-2 text-sm font-exo mb-3">
-        <div 
-          onClick={() => toggleTab("fyp")} 
-          className={`${activeTab == "fyp" ? "home-tab-active" : "home-tab"}`}
-        >
-          For You
-        </div>
-        <div 
-          onClick={() => toggleTab("feed")} 
-          className={`${activeTab == "feed" ? "home-tab-active" : "home-tab"}`}
-        >
-          Feed
-        </div>
-      </div>
-
-      {/* Posts */}
       <section className="w-[90%] sm:w-[400px] md:w-[500px] mx-auto">
+        {/* Tabs */}
+        <div className="flex-start text-[12px] mb-4">
+          <div 
+            onClick={() => toggleTab("fyp")} 
+            className={`${activeTab == "fyp" ? "home-tab-active" : "home-tab"}`}
+          >
+            For You
+          </div>
+          <div 
+            onClick={() => toggleTab("feed")} 
+            className={`${activeTab == "feed" ? "home-tab-active" : "home-tab"}`}
+          >
+            Feed
+          </div>
+        </div>
+
+        {/* Posts */}
         {activeTab == "fyp" && <FYPSection />}
         {activeTab == "feed" && <FeedSection />}
       </section>

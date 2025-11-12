@@ -6,6 +6,11 @@
 }
 
 @font-face {
+  font-family: "open";
+  src: url("./fonts/OpenSans-Regular.ttf");
+}
+
+@font-face {
   font-family: "dmSans";
   src: url("./fonts/DMSans-Medium.ttf");
 }
@@ -50,15 +55,15 @@
 };
 
 @utility nav-text {
-  @apply hover:bg-primary hover:text-white hover:border-b-white active:bg-primary active:text-white px-3 py-3;
+  @apply hover:bg-primary hover:text-white hover:border-b-white active:bg-primary active:text-white px-4 py-4 text-sm;
 };
 
 @utility home-tab {
-  @apply border-accentLight text-accentLight flex-center border-b-1 p-2 cursor-pointer font-inter;
+  @apply border-accentLight text-accentLight flex-center border-b-1 py-2 px-6 cursor-pointer font-open;
 };
 
 @utility home-tab-active {
-  @apply border-accent flex-center border-b-2 p-2 cursor-pointer font-inter;
+  @apply border-accent flex-center border-b-2 py-2 px-6 cursor-pointer font-open;
 };
 
 .ProseMirror:focus {
@@ -78,6 +83,7 @@
   --color-muted: rgb(223, 221, 218);
   --color-mutedLight: rgb(240, 238, 236);
   --font-inter: "inter";
+  --font-open: "open";
   --font-exo: "exo";
   --font-outfit: "outfit";
   --font-outfit-rich: "outfitRich";
