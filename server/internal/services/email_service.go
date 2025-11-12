@@ -2,6 +2,7 @@ package services
 
 import (
 	"bytes"
+	"embed"
 	"fmt"
 	"html/template"
 	"log"
@@ -21,12 +22,8 @@ func NewEmailService() EmailService {
 	return &EmailSvc{}
 }
 
-//welcome email
-type WelcomeEmailData struct {
-	Name string
-	Email string
-	Page string
-}
+//go:embed templates/*.html
+var templatesFS embed.FS
 
 func (ems *EmailSvc) SendWelcomeEmail(userName, userEmail, userUsername string) {
 	email, _ := config.Get("EMAIL_SENDER")
@@ -37,12 +34,21 @@ func (ems *EmailSvc) SendWelcomeEmail(userName, userEmail, userUsername string) 
 		log.Fatal("failed to get env variables")
 	}
 
-	templ, err := template.ParseFiles("/internal/templates/welcome.html")
+	templContent, err := templatesFS.ReadFile(fmt.Sprintf("templates/%s", "welcome.html"))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	data := WelcomeEmailData{ 
+	templ, err := template.New("welcome.html").Parse(string(templContent))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	data := struct{
+		Name string
+		Email string
+		Page string
+	} { 
 		Name: userName, 
 		Email: userEmail, 
 		Page: fmt.Sprintf("%s/%s", clientUrl, userUsername),
@@ -68,13 +74,6 @@ func (ems *EmailSvc) SendWelcomeEmail(userName, userEmail, userUsername string) 
 }
 
 //welcome email to admin
-type WelcomeEmailToAdminData struct {
-	Name string
-	Email string
-	Username string
-	Interests string
-	Profile string
-}
 
 func (ems *EmailSvc) SendWelcomeEmailToAdmin(userName, userEmail, userUsername, interests string) {
 	email, _ := config.Get("EMAIL_SENDER")
@@ -85,12 +84,23 @@ func (ems *EmailSvc) SendWelcomeEmailToAdmin(userName, userEmail, userUsername, 
 		log.Fatal("failed to get env variables")
 	}
 
-	templ, err := template.ParseFiles("/internal/templates/adminWelcome.html")
+	templContent, err := templatesFS.ReadFile(fmt.Sprintf("templates/%s", "adminWelcome.html"))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	data := WelcomeEmailToAdminData{ 
+	templ, err := template.New("adminWelcome.html").Parse(string(templContent))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	data := struct {
+		Name string
+		Email string
+		Username string
+		Interests string
+		Profile string
+	} { 
 		Name: userName, 
 		Email: userEmail, 
 		Username: userUsername,
