@@ -145,8 +145,27 @@ const ArticlePage = () => {
         </div>
       </div>
 
+      {/* Profile */}
+      <div className="mt-10">
+        <H3 font="exo" text="About The Author." />
+        <div onClick={toUser} className="cursor-pointer mt-8">
+          <div className="h-20 w-20 rounded-full overflow-hidden mb-4">
+            <img src={article?.authorPicture} className="w-full h-full object-cover object-center" />
+          </div>
+          <div className="flex-start gap-2">
+            <H2 font="inter" text={`${article?.authorFullname}`} />
+            {article!.authorVerified && 
+              <MdVerified size={22} color="rgba(93, 110, 189, 1)" />
+            }
+          </div>
+          <p className="text-accent font-inter mt-2 text-sm">{article?.authorBio}</p>
+        </div>
+
+        <button className="btn-primary rounded-full px-4 py-2 mt-4">Follow</button>
+      </div>
+
       {/* Comments */}
-      <div className="mt-10 mb-15">
+      <div className="my-15">
         <div className="flex-between">
           <H3 font="exo" text="Comments" />
           <button onClick={handleCommentAction} className="btn-primary text-sm">

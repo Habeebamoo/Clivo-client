@@ -5,6 +5,7 @@ export interface Post {
   authorPicture: string,
   authorFullname: string,
   authorProfileUrl: string,
+  authorBio: string,
   authorVerified: boolean,
   title: string,
   content: string,

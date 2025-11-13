@@ -8,16 +8,16 @@ const SignInPage = () => {
 
   const login = () => {
     //prod
-    //window.location.href = `${import.meta.env.VITE_SERVER_URL}/api/auth/google`
+    window.location.href = `${import.meta.env.VITE_SERVER_URL}/api/auth/google`
 
     //dev
-    navigate("/home")
+    //navigate("/home")
   }
 
   return (
     <main className="flex-center flex-col h-[100vh]">
       <H2 font="inter" text="Join Clivo" />
-      <p className="text-accent text-center text-sm font-inter mb-4 mt-4 w-[90%]">Sign in with your Google account to continue with Clivo.</p>
+      <p className="text-accent text-center text-sm font-open mb-4 mt-4 w-[90%]">Sign in with your Google account to continue with Clivo.</p>
       <Button action={login} text="Continue With Google" img={googleImg} imgClass="h-5" />
     </main>
   )

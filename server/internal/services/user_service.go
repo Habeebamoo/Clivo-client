@@ -184,6 +184,7 @@ func (us *UserSvc) GetArticle(username string, articleTitleCode string) (models.
 		AuthorFullname: author.Name,
 		AuthorProfileUrl: author.ProfileUrl,
 		AuthorVerified: author.Verified,
+		AuthorBio: author.Bio,
 		Title: article.Title,
 		Content: article.Content,
 		Picture: article.Picture,

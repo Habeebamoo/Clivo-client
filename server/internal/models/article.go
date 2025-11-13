@@ -64,6 +64,7 @@ type SafeArticleResponse struct {
 	AuthorPicture     string     `json:"authorPicture"`
 	AuthorFullname    string     `json:"authorFullname"`
 	AuthorProfileUrl  string     `json:"authorProfileUrl"`
+	AuthorBio         string     `json:"authorBio"`
 	AuthorVerified    bool       `json:"authorVerified"`
 	Title             string     `json:"title"`
 	Content           string     `json:"content"`
