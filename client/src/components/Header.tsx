@@ -49,7 +49,7 @@ const Header = ({ type="welcome" }: { type?: "welcome" | "home" }) => {
                 </div>
                   {/* navbar */}
                   {navActive && 
-                    <div className="fixed right-[23px] sm:right-[33px] bg-white border-1 border-muted mt-1 font-open text-accent w-50">
+                    <div className="fixed right-[23px] sm:right-[33px] bg-white border-1 border-muted mt-1 text-accent w-50">
                       <div onClick={toHome} className="nav-text border-b-1 border-b-muted ">
                         <p>Home</p>
                       </div>

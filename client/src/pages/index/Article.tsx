@@ -11,6 +11,10 @@ import NotFound from "../../components/NotFound";
 import Loading from "../../components/Loading";
 import { useFetchUserArticle } from "../../hooks/useFetchUserArticle";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import type { User } from "../../redux/reducers/user_reducer";
+import Spinner from "../../components/Spinner";
+import { useFetchProfile } from "../../hooks/useFetchProfile";
 
 interface Comment {
 	articleId: string,
@@ -23,7 +27,9 @@ interface Comment {
 
 const ArticlePage = () => {
   const { username, title } = useParams<{ username: string, title: string }>();
-  const { data, isLoading, isError } = useFetchUserArticle(username!, title!)
+  const { data, isLoading, isError } = useFetchUserArticle(username!, title!);
+  const {} = useFetchProfile();
+  const user: User = useSelector((state: any) => state.user.profile);
 
   const article: Post | undefined | void = data?.article;
   const comments: Comment[] = data?.comments;
@@ -31,6 +37,7 @@ const ArticlePage = () => {
   const [commentAction, setCommentAction] = useState<"add" | "send">("add");
   const [commentBarActive, setCommentBarActive] = useState<boolean>(false)
   const [commentValue, setCommentValue] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false)
 
   const [hasUserLiked] = useState<boolean>(false)
   const [isArticleLiked] = useState<boolean>(false)
@@ -50,11 +57,45 @@ const ArticlePage = () => {
     }
   }, [commentValue])
 
-  const handleCommentAction = () => {
+  const handleCommentAction = async () => {
     if (commentAction === "add") {
       setCommentBarActive(true)
-    } else {
-      //send comments
+      return
+    }
+
+    setLoading(true)
+
+    const data = {
+      articleId: article?.articleId,
+      commenterUserId: user.userId,
+      content: commentValue
+    }
+
+    console.log(user.userId)
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/article/comment/${article?.articleId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-KEY": import.meta.env.VITE_API_KEY
+        },
+        body: JSON.stringify(data),
+        credentials: "include"
+      })
+
+      const response = await res.json()
+
+      if (!res.ok) {
+        toast.error(response.message)
+        return
+      }
+
+      toast.success(response.message)
+    } catch (error) {
+      toast.error("Something went wrong.")
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -168,9 +209,15 @@ const ArticlePage = () => {
       <div className="my-15">
         <div className="flex-between">
           <H3 font="exo" text="Comments" />
-          <button onClick={handleCommentAction} className="btn-primary text-sm">
-            {commentAction == "add" ? "Add Comment" : "Send"}
-          </button>
+          {loading ?
+            <button className="py-2 px-4 bg-gray-200 cursor-not-allowed rounded-md">
+              <Spinner size={16} color="white" />
+            </button>
+          : 
+            <button onClick={handleCommentAction} className="btn-primary text-sm">
+              {commentAction == "add" ? "Add Comment" : "Send"}
+            </button>       
+          }
         </div>
 
         {commentBarActive &&

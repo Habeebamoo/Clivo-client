@@ -5,6 +5,7 @@ import avatar from "../assets/avatar.jpg"
 import ArticleDisplay from "./ArticleDisplay";
 import { H2 } from "./Typo";
 import Spinner from "./Spinner";
+import NotFound from "./NotFound";
 
 const MyArticles = () => {
   const myArticles: Article[] = useSelector((state: any) => state.articles.articles);
@@ -16,7 +17,7 @@ const MyArticles = () => {
     </div>
   )
 
-  if (isError) return <p>Error</p>
+  if (isError) return <NotFound img="b" text="An Error Occurred" subText="An unexpected error has occurred" />
 
   return (
     <>

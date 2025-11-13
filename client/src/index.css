@@ -55,7 +55,7 @@
 };
 
 @utility nav-text {
-  @apply hover:bg-primary hover:text-white hover:border-b-white active:bg-primary active:text-white px-4 py-4 text-sm;
+  @apply hover:bg-primary hover:text-white hover:border-b-white active:bg-primary active:text-white px-4 font-inter py-4 text-[12px];
 };
 
 @utility home-tab {

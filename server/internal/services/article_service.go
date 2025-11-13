@@ -136,7 +136,7 @@ func (as *ArticleSvc) GetArticle(id string) (models.ArticleResponse, int, error)
 		Likes: articleLikes,
 		ReadTime: article.ReadTime,
 		Slug: article.Slug,
-		CreatedAt: article.CreatedAt,
+		CreatedAt: utils.GetTimeAgo(article.CreatedAt),
 	}
 
 	return articleRespose, 200, nil
@@ -207,7 +207,7 @@ func (as *ArticleSvc) GetUserFeed(userId string) ([]models.SafeArticleResponse, 
 			Likes: formattedArticle.Likes,
 			ReadTime: formattedArticle.ReadTime,
 			Slug: formattedArticle.Slug,
-			CreatedAt: utils.GetTimeAgo(formattedArticle.CreatedAt),
+			CreatedAt: formattedArticle.CreatedAt,
 		}
 
 		articleFeed = append(articleFeed, safeFormatedArticle)
@@ -259,7 +259,7 @@ func (as *ArticleSvc) GetUserFyp(userId string) ([]models.SafeArticleResponse, i
 			Likes: formattedArticle.Likes,
 			ReadTime: formattedArticle.ReadTime,
 			Slug: formattedArticle.Slug,
-			CreatedAt: utils.GetTimeAgo(formattedArticle.CreatedAt),
+			CreatedAt: formattedArticle.CreatedAt,
 		}
 
 		articleFeed = append(articleFeed, safeFormatedArticle)

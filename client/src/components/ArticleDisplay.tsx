@@ -1,16 +1,16 @@
 import { H3 } from "./Typo"
 import { shorten } from "../utils/utils"
-import type { Post } from "../redux/reducers/article_reducer"
+import type { Article, Post } from "../redux/reducers/article_reducer"
 import { MdVerified } from "react-icons/md"
 import { GoHeart } from "react-icons/go"
 
-const ArticleDisplay = ({ article }: { article: Post }) => {
+const ArticleDisplay = ({ article }: { article: Post | Article }) => {
   const toUser = () => {
     window.location.href = article.authorProfileUrl;
   }
 
   const toPost = () => {
-    window.location.href = article.slug;
+    window.location.href = `${import.meta.env.VITE_BASE_URL}/${article.slug}`;
   }
 
   return (
