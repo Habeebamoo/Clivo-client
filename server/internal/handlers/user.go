@@ -156,6 +156,24 @@ func (uhdl *UserHandler) GetArticleComments(c *gin.Context) {
 	utils.Success(c, statusCode, "", comments)
 }
 
+func (uhdl *UserHandler) GetCommentReplys(c *gin.Context) {
+	commentId := c.Param("id")
+
+	if commentId == "" {
+		utils.Error(c, 400, "Invalid Comment", nil)
+		return
+	}
+
+	//call service
+	comments, statusCode, err := uhdl.service.GetCommentReplys(commentId)
+	if err != nil {
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	utils.Success(c, statusCode, "", comments)
+}
+
 func (uhdl *UserHandler) UpdateProfile(c *gin.Context) {
 	userIdAny, exists := c.Get("userId")
 	if !exists {

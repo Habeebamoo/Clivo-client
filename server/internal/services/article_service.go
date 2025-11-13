@@ -17,7 +17,8 @@ type ArticleService interface {
 	GetUserFyp(string) ([]models.SafeArticleResponse, int, error)
 	DeleteArticle(string, string) (int, error)
 	LikeArticle(models.Like) (int, error)
-	CommentArticle(models.Comment) (int, error)
+	CommentArticle(models.CommentRequest) (int, error)
+	ReplyComment(models.ReplyRequest) (int, error)
 }
 
 type ArticleSvc struct {
@@ -296,6 +297,26 @@ func (as *ArticleSvc) LikeArticle(likeReq models.Like) (int, error) {
 	return as.articleRepo.CreateLike(likeReq)
 }
 
-func (as *ArticleSvc) CommentArticle(commentReq models.Comment) (int, error) {
-	return as.articleRepo.CreateComment(commentReq)
+func (as *ArticleSvc) CommentArticle(commentReq models.CommentRequest) (int, error) {
+	comment := models.Comment{
+		CommentId: utils.GenerateRandomId(),
+		ArticleId: commentReq.ArticleId,
+		UserId: commentReq.UserId,
+		ReplyId: "",
+		Content: commentReq.Content,
+	}
+
+	return as.articleRepo.CreateComment(comment)
+}
+
+func (as *ArticleSvc) ReplyComment(replyReq models.ReplyRequest) (int, error) {
+	comment := models.Comment{
+		CommentId: utils.GenerateRandomId(),
+		ArticleId: replyReq.ArticleId,
+		UserId: replyReq.UserId,
+		ReplyId: replyReq.CommentId,
+		Content: replyReq.Content,
+	}
+
+	return as.articleRepo.CreateComment(comment)
 }

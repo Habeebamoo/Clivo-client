@@ -26,6 +26,7 @@ type UserRepository interface {
 	GetArticleLikes(string) (int, error)
 	GetArticleTags(string) ([]models.ArticleTags, error)
 	GetArticleComments(string) ([]models.Comment, int, error)
+	GetCommentReplys(string) ([]models.Comment, int, error)
 }
 
 type UserRepo struct {
@@ -328,6 +329,19 @@ func (ur *UserRepo) GetArticleTags(articleId string) ([]models.ArticleTags, erro
 func (ur *UserRepo) GetArticleComments(articleId string) ([]models.Comment, int, error) {
 	var comments []models.Comment
 	res := ur.db.Find(&comments, "article_id = ?", articleId)
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return []models.Comment{}, 200, nil
+		}
+		return []models.Comment{}, 500, fmt.Errorf("internal server error")
+	}
+
+	return comments, 200, nil
+}
+
+func (ur *UserRepo) GetCommentReplys(commentId string) ([]models.Comment, int, error) {
+	var comments []models.Comment
+	res := ur.db.Find(&comments, "comment_id = ?", commentId)
 	if res.Error != nil {
 		if res.Error == gorm.ErrRecordNotFound {
 			return []models.Comment{}, 200, nil

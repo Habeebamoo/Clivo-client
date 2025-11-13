@@ -202,24 +202,47 @@ func (ah *ArticleHandler) LikeArticle(c *gin.Context) {
 }
 
 func (ah *ArticleHandler) CommentArticle(c *gin.Context) {
-	var articleCommentRequest models.Comment
-	if err := c.ShouldBindJSON(&articleCommentRequest); err != nil {
+	var replyRequest models.CommentRequest
+	if err := c.ShouldBindJSON(&replyRequest); err != nil {
 		utils.Error(c, 400, "Invalid JSON Format", nil)
 		return
 	}
 
 	//validate request
-	if err := articleCommentRequest.Validate(); err != nil {
+	if err := replyRequest.Validate(); err != nil {
 		utils.Error(c, 400, utils.FormatText(err.Error()), nil)
 		return
 	}
 
 	//call service
-	statusCode, err := ah.service.CommentArticle(articleCommentRequest)
+	statusCode, err := ah.service.CommentArticle(replyRequest)
 		if err != nil {
 		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
 		return
 	}
 
 	utils.Success(c, statusCode, "Comment Sent.", nil)
+}
+
+func (ah *ArticleHandler) ReplyComment(c *gin.Context) {
+	var replyRequest models.ReplyRequest
+	if err := c.ShouldBindJSON(&replyRequest); err != nil {
+		utils.Error(c, 400, "Invalid JSON Format", nil)
+		return
+	}
+
+	//validate request
+	if err := replyRequest.Validate(); err != nil {
+		utils.Error(c, 400, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	//call service
+	statusCode, err := ah.service.ReplyComment(replyRequest)
+		if err != nil {
+		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
+		return
+	}
+
+	utils.Success(c, statusCode, "Reply Sent.", nil)
 }

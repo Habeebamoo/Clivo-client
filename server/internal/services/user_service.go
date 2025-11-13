@@ -19,6 +19,7 @@ type UserService interface {
 	GetArticle(string, string) (models.SafeArticleResponse, int, error)
 	GetArticles(string) ([]models.SafeArticleResponse, int, error)
 	GetArticleComments(string, string) ([]models.CommentResponse, int, error)
+	GetCommentReplys(string) ([]models.CommentResponse, int, error)
 	GetFollowers(string) ([]models.SafeUserResponse, int, error)
 	GetFollowing(string) ([]models.SafeUserResponse, int, error)
 }
@@ -284,14 +285,50 @@ func (us *UserSvc) GetArticleComments(username, articleTitleCode string) ([]mode
 	commentsReponse := []models.CommentResponse{}
 
 	for _, c := range comments {
-		user, code, err := us.repo.GetUserById(c.CommenterUserId)
+		user, code, err := us.repo.GetUserById(c.UserId)
 		if err != nil {
 			return commentsReponse, code, err
 		}
 
 		comment := models.CommentResponse{
+			CommentId: c.CommentId,
 			Content: c.Content,
 			ArticleId: article.ArticleId, 
+			Name: user.Name,
+			Username: user.Username,
+			Verified: user.Verified,
+			Picture: user.Picture,
+		}
+
+		commentsReponse = append(commentsReponse, comment)
+	}
+
+	//sort by latest
+	slices.Reverse(commentsReponse)
+
+	return commentsReponse, 200, nil
+}
+
+func (us *UserSvc) GetCommentReplys(commentId string) ([]models.CommentResponse, int, error) {
+	//get comments
+	comments, code, err := us.repo.GetCommentReplys(commentId)
+	if err != nil {
+		return []models.CommentResponse{}, code, err
+	}
+
+	//format comments
+	commentsReponse := []models.CommentResponse{}
+
+	for _, c := range comments {
+		user, code, err := us.repo.GetUserById(c.UserId)
+		if err != nil {
+			return commentsReponse, code, err
+		}
+
+		comment := models.CommentResponse{
+			CommentId: c.CommentId,
+			Content: c.Content,
+			ArticleId: c.ArticleId, 
 			Name: user.Name,
 			Username: user.Username,
 			Verified: user.Verified,

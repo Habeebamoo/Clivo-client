@@ -28,9 +28,11 @@ type Like struct {
 }
 
 type Comment struct {
-	ArticleId        string  `json:"articleId"`
-	CommenterUserId  string  `json:"commenterUserId"`
-	Content          string  `json:"content"`
+	CommentId  string  `json:"commentId"`
+	ArticleId  string  `json:"articleId"`
+	UserId     string  `json:"userId"`
+	ReplyId    string  `json:"replyId"`
+	Content    string  `json:"content"`
 }
 
 type ArticleResponse struct {
@@ -51,6 +53,7 @@ type ArticleResponse struct {
 }
 
 type CommentResponse struct {
+	CommentId  string  `json:"commentId"`
 	ArticleId  string  `json:"articleId"`
 	Content    string  `json:"content"`
 	Name       string  `json:"name"`
@@ -83,6 +86,19 @@ type ArticleRequest struct {
 	Tags     []string         `json:"tags"`
 }
 
+type CommentRequest struct {
+	ArticleId  string  `json:"articleId"`
+	UserId     string  `json:"userId"`
+	Content    string  `json:"content"`
+}
+
+type ReplyRequest struct {
+	CommentId  string  `json:"commentId"`
+	ArticleId  string  `json:"articleId"`
+	UserId     string  `json:"userId"`
+	Content    string  `json:"content"`
+}
+
 func (l Like) Validate() error {
 	if l.ArticleId == "" {
 		return fmt.Errorf("missing field: articleId")
@@ -92,12 +108,25 @@ func (l Like) Validate() error {
 	return nil
 }
 
-func (c Comment) Validate() error {
+func (c CommentRequest) Validate() error {
 	if c.ArticleId == "" {
 		return fmt.Errorf("missing field: articleId")
-	} else if c.CommenterUserId == "" {
+	} else if c.UserId == "" {
 		return fmt.Errorf("missing field: userId")
 	} else if c.Content == "" {
+		return fmt.Errorf("missing field: comment")
+	}
+	return nil
+}
+
+func (r ReplyRequest) Validate() error {
+	if r.ArticleId == "" {
+		return fmt.Errorf("missing field: articleId")
+	} else if r.CommentId == "" {
+		return fmt.Errorf("missing field: commentId")
+	} else if r.UserId == "" {
+		return fmt.Errorf("missing field: userId")
+	} else if r.Content == "" {
 		return fmt.Errorf("missing field: comment")
 	}
 	return nil
