@@ -1,16 +1,32 @@
 import { useDispatch } from "react-redux";
-import { setPosts, type Post } from "../redux/reducers/article_reducer";
+import { setPosts, type Article } from "../redux/reducers/article_reducer";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 const getfeed = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 2000)
-  );
-  const articles: Post[] = [
-    {articleId: "weio", authorPicture: "", authorFullname: "Habeeb Amoo", authorProfileUrl: "", authorVerified: false, title:"Go or Rust for backend developement", content: "welcome", createdAt: "4 weeks ago", picture: "", tags: ["Tech", "Software"], likes: 16, readTime: "6 mins read time", slug: ""},
-  ]
-  
-  return articles
+  //real logic
+  try {
+    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/article`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-KEY": import.meta.env.VITE_API_KEY
+      },
+      credentials: "include"
+    })
+
+    const response = await res.json()
+
+    if (!res.ok) {
+      throw new Error(response.message)
+    }
+
+    const articles: Article = response.data;
+
+    return articles;
+  } catch (error) {
+    throw new Error("Something went wrong")
+  }
 }
 
 export const useFetchFeed = () => {
