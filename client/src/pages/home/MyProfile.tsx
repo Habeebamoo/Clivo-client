@@ -18,6 +18,10 @@ const MyProfile = () => {
     navigate("/home/settings")
   }
 
+  const toCreateArticle = () => {
+    navigate("/home/create")
+  }
+
   const toWebsite = () => {
     window.open(user.website, '_blank', 'noopener,noreferrer')
   }
@@ -91,7 +95,7 @@ const MyProfile = () => {
               <BiPencil />
               <span>Edit Profile</span>
             </button>
-            <button className="text-sm flex-center gap-2 py-2 px-3 btn-primary rounded-full">
+            <button onClick={toCreateArticle} className="text-sm flex-center gap-2 py-2 px-3 btn-primary rounded-full">
               <BiPlus />
               <span>New Article</span>
             </button>

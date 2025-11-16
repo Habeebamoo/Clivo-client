@@ -17,7 +17,13 @@ const MyArticles = () => {
     </div>
   )
 
-  if (isError) return <NotFound img="b" text="An Error Occurred" subText="An unexpected error has occurred" />
+  if (isError) {
+    return (
+      <div className="mb-20">
+        <NotFound img="b" text="An Error Occurred" subText="An unexpected error has occurred" />
+      </div>
+    )
+  }
 
   return (
     <>

@@ -31,17 +31,17 @@ func (ems *EmailSvc) SendWelcomeEmail(userName, userEmail, userUsername string) 
 	clientUrl, _ := config.Get("CLIENT_URL")
 
 	if email == "" || pass == "" || clientUrl == "" {
-		log.Fatal("failed to get env variables")
+		panic("failed to get env variables")
 	}
 
 	templContent, err := templatesFS.ReadFile(fmt.Sprintf("templates/%s", "welcome.html"))
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	templ, err := template.New("welcome.html").Parse(string(templContent))
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	data := struct{
@@ -67,7 +67,7 @@ func (ems *EmailSvc) SendWelcomeEmail(userName, userEmail, userUsername string) 
 	d.SSL = true
 
 	if err := d.DialAndSend(m); err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	log.Println("...Welcome Email Sent...")
@@ -81,17 +81,17 @@ func (ems *EmailSvc) SendWelcomeEmailToAdmin(userName, userEmail, userUsername, 
 	clientUrl, _ := config.Get("CLIENT_URL")
 
 	if email == "" || pass == "" || clientUrl == "" {
-		log.Fatal("failed to get env variables")
+		panic("failed to get env variables")
 	}
 
 	templContent, err := templatesFS.ReadFile(fmt.Sprintf("templates/%s", "adminWelcome.html"))
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	templ, err := template.New("adminWelcome.html").Parse(string(templContent))
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	data := struct {
@@ -121,7 +121,7 @@ func (ems *EmailSvc) SendWelcomeEmailToAdmin(userName, userEmail, userUsername, 
 	d.SSL = true
 
 	if err := d.DialAndSend(m); err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	log.Println("...Welcome Email To Admin Sent...")

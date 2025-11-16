@@ -6,7 +6,7 @@ import { useEffect } from "react";
 const getfeed = async () => {
   //real logic
   try {
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/article`, {
+    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/article/feed`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

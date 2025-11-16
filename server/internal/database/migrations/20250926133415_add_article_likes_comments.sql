@@ -32,13 +32,13 @@ CREATE TABLE IF NOT EXISTS likes (
 
 CREATE TABLE IF NOT EXISTS comments (
   comment_id TEXT NOT NULL,
-  article_id TEXT NOT NULL,
+  article_id TEXT,
   user_id TEXT NOT NULL,
   reply_id TEXT,
+  replys INTEGER,
   content TEXT NOT NULL,
 
   UNIQUE (comment_id),
-  FOREIGN KEY (article_id) REFERENCES articles(article_id) ON DELETE CASCADE,
   FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 -- +goose StatementEnd

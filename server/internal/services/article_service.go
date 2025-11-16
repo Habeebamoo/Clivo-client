@@ -303,6 +303,7 @@ func (as *ArticleSvc) CommentArticle(commentReq models.CommentRequest) (int, err
 		ArticleId: commentReq.ArticleId,
 		UserId: commentReq.UserId,
 		ReplyId: "",
+		Replys: 0,
 		Content: commentReq.Content,
 	}
 
@@ -312,11 +313,19 @@ func (as *ArticleSvc) CommentArticle(commentReq models.CommentRequest) (int, err
 func (as *ArticleSvc) ReplyComment(replyReq models.ReplyRequest) (int, error) {
 	comment := models.Comment{
 		CommentId: utils.GenerateRandomId(),
-		ArticleId: replyReq.ArticleId,
+		ArticleId: "",
 		UserId: replyReq.UserId,
 		ReplyId: replyReq.CommentId,
+		Replys: 0,
 		Content: replyReq.Content,
 	}
 
-	return as.articleRepo.CreateComment(comment)
+	//create reply(comment)
+	code, err := as.articleRepo.CreateComment(comment)
+	if err != nil {
+		return code, err
+	}
+
+	//update replys
+	return as.articleRepo.UpdateReplys(comment.ReplyId)
 }

@@ -1,14 +1,19 @@
 import { Outlet, useNavigate } from "react-router"
 import Header from "../components/Header"
 import { useSelector } from "react-redux"
+import { useFetchProfile } from "../hooks/useFetchProfile"
+import Loading from "../components/Loading"
 
 const Layout = () => {
+  const { isLoading } = useFetchProfile()
   const user = useSelector((state: any) => state.user.profile)
   const navigate = useNavigate()
 
   if (!user) {
     navigate("/")
   }
+
+  if (isLoading) return <Loading />
   
   return (
     <>

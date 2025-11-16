@@ -130,7 +130,7 @@ const InterestsPage = () => {
         })}
       </div>
 
-      <button onClick={signUpUser} className="btn-primary block font-exo mx-auto mt-20">Submit</button>
+      <button onClick={signUpUser} className="btn-primary block font-outfit mx-auto mt-20">Submit</button>
       <div className="mb-15"></div>
     </section>
   )

@@ -341,7 +341,7 @@ func (ur *UserRepo) GetArticleComments(articleId string) ([]models.Comment, int,
 
 func (ur *UserRepo) GetCommentReplys(commentId string) ([]models.Comment, int, error) {
 	var comments []models.Comment
-	res := ur.db.Find(&comments, "comment_id = ?", commentId)
+	res := ur.db.Find(&comments, "reply_id = ?", commentId)
 	if res.Error != nil {
 		if res.Error == gorm.ErrRecordNotFound {
 			return []models.Comment{}, 200, nil

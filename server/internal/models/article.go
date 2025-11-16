@@ -32,6 +32,7 @@ type Comment struct {
 	ArticleId  string  `json:"articleId"`
 	UserId     string  `json:"userId"`
 	ReplyId    string  `json:"replyId"`
+	Replys     int     `json:"replys"`
 	Content    string  `json:"content"`
 }
 
@@ -56,6 +57,7 @@ type CommentResponse struct {
 	CommentId  string  `json:"commentId"`
 	ArticleId  string  `json:"articleId"`
 	Content    string  `json:"content"`
+	Replys     int     `json:"replys"`
 	Name       string  `json:"name"`
 	Username   string  `json:"username"`
 	Verified   bool    `json:"verified"`

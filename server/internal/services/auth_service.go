@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"log"
 	"strings"
 	"time"
 
@@ -90,6 +91,13 @@ func (as *AuthSvc) SignUpUser(userReq models.UserRequest) (string, int, error) {
 
 	//send email notification to both admin and user
 	go func() {
+		//panic recovery
+		defer func() {
+			if r := recover(); r != nil {
+				log.Printf("panic recovered from %v", r)
+			}
+		}()
+
 		NewEmailService().SendWelcomeEmail(user.Name, user.Email, username)
 		NewEmailService().SendWelcomeEmailToAdmin(user.Name, user.Email, username, strings.Join(userReq.Interets, ", "))
 	}()

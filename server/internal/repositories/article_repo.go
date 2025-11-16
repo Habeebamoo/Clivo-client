@@ -23,6 +23,7 @@ type ArticleRepository interface {
 	CreateLike(models.Like) (int, error)
 	RemoveLike(models.Like) (int, error)
 	CreateComment(models.Comment) (int, error)
+	UpdateReplys(string) (int, error)
 	GetArticleLikes(string) (int, error)
 }
 
@@ -235,6 +236,18 @@ func (ar *ArticleRepo) CreateComment(commentReq models.Comment) (int, error) {
 	}
 
 	return 201, nil
+}
+
+func (ar *ArticleRepo) UpdateReplys(commentId string) (int, error) {
+	res := ar.db.Model(&models.Comment{}).
+							Where("comment_id = ?", commentId).
+							Update("replys", gorm.Expr("replys + ?", 1))
+
+	if res.Error != nil {
+		return 500, fmt.Errorf("failed to update comment")
+	}
+
+	return 200, nil
 }
 
 func (ar *ArticleRepo) GetArticleLikes(articleId string) (int, error) {
