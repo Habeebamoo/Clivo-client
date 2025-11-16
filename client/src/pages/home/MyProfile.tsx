@@ -5,11 +5,8 @@ import { MdDateRange, MdVerified } from "react-icons/md"
 import { useNavigate } from "react-router"
 import type { User } from "../../redux/reducers/user_reducer"
 import MyArticles from "../../components/MyArticles"
-import { useFetchProfile } from "../../hooks/useFetchProfile"
-import Loading from "../../components/Loading"
 
 const MyProfile = () => {
-  const { isLoading, } = useFetchProfile()
   const user: User = useSelector((state: any) => state.user.profile);
   console.log(user)
   const navigate = useNavigate()
@@ -25,8 +22,6 @@ const MyProfile = () => {
   const toWebsite = () => {
     window.open(user.website, '_blank', 'noopener,noreferrer')
   }
-
-  if (isLoading) return <Loading />
 
   return (
     <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:w-[900px] mx-auto items-start">
