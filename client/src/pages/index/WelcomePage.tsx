@@ -19,7 +19,11 @@ const Home = () => {
         {/* Hero section */}
         <div className="mt-18 pt-10 px-4">
           <h1 className="md:text-center font-dm text-3xl font-inter">Where <span className="text-secondary">Simple Stories</span> Find Their Voices.</h1>
-          <p className="font-open text-accent text-sm mt-3 mb-20 lg:mx-auto md:text-center lg:w-[50%]">Clivo is a platform for writers who demands excellence | Craft, Publish, and share your stories with a community that values quality</p>
+
+          <p className="font-jsl text-gray-700 text-sm mt-4 mb-20 lg:mx-auto md:text-center lg:w-[50%]">
+            Clivo is a platform for writers who demands excellence - Craft, Publish, and share your stories with a community that values quality
+          </p>
+
           <PhotoGrid />
         </div>
 

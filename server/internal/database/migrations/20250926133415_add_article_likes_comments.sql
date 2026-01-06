@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS articles (
   article_id TEXT NOT NULL,
   author_id TEXT NOT NULL,
   title TEXT NOT NULL,
-  content TEXT NOT NULL,
+  content JSONB NOT NULL,
   picture TEXT,
   read_time TEXT,
   slug TEXT,

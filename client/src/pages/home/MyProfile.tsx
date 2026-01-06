@@ -8,7 +8,6 @@ import MyArticles from "../../components/MyArticles"
 
 const MyProfile = () => {
   const user: User = useSelector((state: any) => state.user.profile);
-  console.log(user)
   const navigate = useNavigate()
 
   const toSettings = () => {
@@ -101,7 +100,7 @@ const MyProfile = () => {
 
       <hr className="lg:hidden text-mutedLight" />
       
-      <section className="px-8">
+      <section className="px-8 mb-20">
         {/* Articles */}
         <MyArticles />
       </section>

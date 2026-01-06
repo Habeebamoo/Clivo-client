@@ -30,6 +30,16 @@
   src: url("./fonts/Outfit-Medium.ttf");
 }
 
+@font-face {
+  font-family: "jsl";
+  src: url("./fonts/PlusJakartaSans-Light.ttf");
+}
+
+@font-face {
+  font-family: "jsans";
+  src: url("./fonts/PlusJakartaSans-Medium.ttf");
+}
+
 @utility flex-start {
   @apply flex items-center justify-start;
 };
@@ -54,8 +64,20 @@
   @apply bg-primary py-1 px-3 border-1 border-primary text-white rounded-sm hover:text-primary active:text-primary hover:bg-transparent active:bg-transparent cursor-pointer font-outfit;
 };
 
+@utility btn-gray {
+  @apply bg-gray-200 hover:bg-gray-300 active:bg-gray-300 px-4 py-2 font-jsans cursor-pointer;
+}
+
+@utility code {
+  @apply bg-dark inline-block text-white rounded-lg p-6 text-sm mb-4;
+}
+
+@utility render {
+  @apply mb-4;
+}
+
 @utility nav-text {
-  @apply hover:bg-primary hover:text-white hover:border-b-white active:bg-primary active:text-white px-4 font-inter py-4 text-[12px];
+  @apply hover:bg-primary hover:text-white hover:border-b-white active:bg-primary active:text-white px-4 font-jsans py-4 text-[12px];
 };
 
 @utility home-tab {
@@ -78,8 +100,13 @@
   font-family: "open";
 }
 
+.j {
+  color: rgb(26, 25, 25);
+}
+
 @theme {
   --color-primary: rgb(20,20,20);
+  --color-dark: rgb(26, 25, 25);
   --color-secondary: rgb(238,150,109);
   --color-accent: rgb(97,96,95);
   --color-accentLight: rgb(165, 163, 161);
@@ -90,6 +117,8 @@
   --font-open: "open";
   --font-exo: "exo";
   --font-outfit: "outfit";
+  --font-jsans: "jsans";
+  --font-jsl: "jsl";
   --font-outfit-rich: "outfitRich";
   --font-dm: "dmSans";
 }

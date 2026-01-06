@@ -2,7 +2,7 @@ import { useState } from "react"
 import FYPSection from "../../components/FYP"
 import FeedSection from "../../components/Feed"
 
-const Dashboard = () => {
+const HomePage = () => {
   const [activeTab, setActiveTab] = useState<"fyp" | "feed">("fyp")
 
   const toggleTab = (tab: "fyp" | "feed") => {
@@ -36,4 +36,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default HomePage

@@ -32,7 +32,7 @@ func NewArticleService(articleRepo repositories.ArticleRepository, authRepo repo
 
 func (as *ArticleSvc) CreateArticle(articleReq models.ArticleRequest, userId string) (int, error) {
 	//calculate read time
-  minutes := utils.GetArticleReadTime(articleReq.Content)
+  minutes := 1
 	readTime := fmt.Sprintf("%d mins", minutes)
 
 	//upload article image

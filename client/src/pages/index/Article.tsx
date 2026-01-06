@@ -17,6 +17,7 @@ import Spinner from "../../components/Spinner";
 import { useFetchProfile } from "../../hooks/useFetchProfile";
 import { PiArrowBendDoubleUpLeftBold } from "react-icons/pi";
 import ReplyBox from "../../components/ReplysBox";
+import BlockRenderer from "../../components/BlockRenderer";
 
 export interface Comment {
   commentId: string,
@@ -106,7 +107,7 @@ const ArticlePage = () => {
   const toUser = () => {
     window.location.href = `${article?.authorProfileUrl!}`
   }
-
+  
   const copyArticleSlug = () => {
     navigator.clipboard.
       writeText(`${import.meta.env.VITE_BASE_URL}/${article?.slug}`).
@@ -169,7 +170,7 @@ const ArticlePage = () => {
 
       {/* Article Content */}
       <div className="font-dm text-text">
-        {article!.content}
+        <BlockRenderer blocks={article?.content.blocks} />
       </div>
 
       {/* tags */}

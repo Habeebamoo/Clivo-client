@@ -1,20 +1,21 @@
 package models
 
 import (
+	"encoding/json"
 	"fmt"
 	"mime/multipart"
 	"time"
 )
 
 type Article struct {
-	ArticleId       string     `json:"articleId"`
-	AuthorId        string     `json:"authorId"`
-	Title           string     `json:"title"`
-	Content         string     `json:"content"`
-	Picture         string     `json:"picture"`
-	ReadTime        string     `json:"readTime"`
-	Slug            string     `json:"slug"`
-	CreatedAt       time.Time  `json:"createdAt"`
+	ArticleId       string           `json:"articleId"`
+	AuthorId        string           `json:"authorId"`
+	Title           string           `json:"title"`
+	Content         json.RawMessage  `json:"content"`
+	Picture         string           `json:"picture"`
+	ReadTime        string           `json:"readTime"`
+	Slug            string           `json:"slug"`
+	CreatedAt       time.Time        `json:"createdAt"`
 }
 
 type ArticleTags struct {
@@ -37,20 +38,20 @@ type Comment struct {
 }
 
 type ArticleResponse struct {
-	ArticleId        string      `json:"articleId"`
-	AuthorId          string     `json:"authorId"`
-	AuthorPicture     string     `json:"authorPicture"`
-	AuthorFullname    string     `json:"authorFullname"`
-	AuthorProfileUrl  string     `json:"authorProfileUrl"`
-	AuthorVerified    bool       `json:"authorVerified"`
-	Title             string     `json:"title"`
-	Content           string     `json:"content"`
-	Picture           string     `json:"picture"`
-	Tags              []string   `json:"tags"`
-	Likes             int        `json:"likes"`
-	ReadTime          string     `json:"readTime"`
-	Slug              string     `json:"slug"`
-	CreatedAt         string  `json:"createdAt"`
+	ArticleId        string            `json:"articleId"`
+	AuthorId          string           `json:"authorId"`
+	AuthorPicture     string           `json:"authorPicture"`
+	AuthorFullname    string           `json:"authorFullname"`
+	AuthorProfileUrl  string           `json:"authorProfileUrl"`
+	AuthorVerified    bool             `json:"authorVerified"`
+	Title             string           `json:"title"`
+	Content           json.RawMessage  `json:"content"`
+	Picture           string           `json:"picture"`
+	Tags              []string         `json:"tags"`
+	Likes             int              `json:"likes"`
+	ReadTime          string           `json:"readTime"`
+	Slug              string           `json:"slug"`
+	CreatedAt         string           `json:"createdAt"`
 }
 
 type CommentResponse struct {
@@ -65,25 +66,25 @@ type CommentResponse struct {
 }
 
 type SafeArticleResponse struct {
-	ArticleId         string     `json:"articleId"`
-	AuthorPicture     string     `json:"authorPicture"`
-	AuthorFullname    string     `json:"authorFullname"`
-	AuthorProfileUrl  string     `json:"authorProfileUrl"`
-	AuthorBio         string     `json:"authorBio"`
-	AuthorVerified    bool       `json:"authorVerified"`
-	Title             string     `json:"title"`
-	Content           string     `json:"content"`
-	Picture           string     `json:"picture"`
-	Tags              []string   `json:"tags"`
-	Likes             int        `json:"likes"`
-	ReadTime          string     `json:"readTime"`
-	Slug              string     `json:"slug"`
-	CreatedAt         string     `json:"createdAt"`
+	ArticleId         string           `json:"articleId"`
+	AuthorPicture     string           `json:"authorPicture"`
+	AuthorFullname    string           `json:"authorFullname"`
+	AuthorProfileUrl  string           `json:"authorProfileUrl"`
+	AuthorBio         string           `json:"authorBio"`
+	AuthorVerified    bool             `json:"authorVerified"`
+	Title             string           `json:"title"`
+	Content           json.RawMessage  `json:"content"`
+	Picture           string           `json:"picture"`
+	Tags              []string         `json:"tags"`
+	Likes             int              `json:"likes"`
+	ReadTime          string           `json:"readTime"`
+	Slug              string           `json:"slug"`
+	CreatedAt         string     				`json:"createdAt"`
 }
 
 type ArticleRequest struct {
 	Title    string           `json:"title"`
-	Content  string           `json:"content"`
+	Content  json.RawMessage  `json:"content"`
 	Picture  *multipart.File  `json:"picture"`
 	Tags     []string         `json:"tags"`
 }

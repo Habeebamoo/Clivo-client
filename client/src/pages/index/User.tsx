@@ -121,14 +121,16 @@ const UserPage = () => {
               <p>{user!.followers} Followers</p>
             </div>
 
-            <button className="btn-primary px-4 mt-4 text-sm rounded-full">Follow</button>
+            <button className="btn-primary px-6 py-3 mt-4 text-sm rounded-full">
+              Follow
+            </button>
           </div>
 
         </section>
 
         <hr className="lg:hidden text-mutedLight" />
         
-        <section className="px-8">
+        <section className="px-8 mb-20">
           {/* Articles */}
           {articles!.length == 0 && 
             <div className="flex-center flex-col mb-20 lg:mt-10">

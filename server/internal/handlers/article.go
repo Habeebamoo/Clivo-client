@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"encoding/json"
+
 	"github.com/Habeebamoo/Clivo/server/internal/models"
 	"github.com/Habeebamoo/Clivo/server/internal/services"
 	"github.com/Habeebamoo/Clivo/server/pkg/utils"
@@ -31,6 +33,8 @@ func (ah *ArticleHandler) CreateArticle(c *gin.Context) {
 	content := c.PostForm("content")
 	tags := c.PostFormArray("tags[]")
 
+	var jsonContent json.RawMessage = []byte(content)
+
 	if title == "" || content == "" || len(tags) == 0 {
 		utils.Error(c, 400, "All fields must be complete", nil)
 		return
@@ -50,7 +54,7 @@ func (ah *ArticleHandler) CreateArticle(c *gin.Context) {
 	//bind body
 	articleReq := models.ArticleRequest{
 		Title: title,
-		Content: content,
+		Content: jsonContent,
 		Picture: &picture,
 		Tags: tags,
 	}
