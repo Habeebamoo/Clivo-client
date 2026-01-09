@@ -205,6 +205,28 @@ func (ah *ArticleHandler) LikeArticle(c *gin.Context) {
 	utils.Success(c, statusCode, "", nil)
 }
 
+func (ah *ArticleHandler) HasLikedArticle(c *gin.Context) {
+	articleId := c.Param("articleId")
+	userId := c.Param("userId")
+
+	if articleId == "" || userId == "" {
+		utils.Error(c, 400, "Params Missing", nil)
+		return
+	}
+
+	articleLikeRequest := models.Like{
+		ArticleId: articleId,
+		LikerUserId: userId,
+	}
+
+	//call service
+	liked := ah.service.HasUserLiked(articleLikeRequest)
+
+	response := map[string]bool{ "liked": liked }
+	utils.Success(c, 200, "", response)
+
+}
+
 func (ah *ArticleHandler) CommentArticle(c *gin.Context) {
 	var replyRequest models.CommentRequest
 	if err := c.ShouldBindJSON(&replyRequest); err != nil {

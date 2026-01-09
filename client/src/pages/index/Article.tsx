@@ -1,11 +1,11 @@
 import { H2, H3 } from "../../components/Typo"
 import { useNavigate, useParams } from "react-router";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { type Post } from "../../redux/reducers/article_reducer";
 import { shorten } from "../../utils/utils";
 import { FaRegEye, FaUpload } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
-import { GoHeart } from "react-icons/go";
+import { GoHeart, GoHeartFill } from "react-icons/go";
 import { CgShare } from "react-icons/cg";
 import NotFound from "../../components/NotFound";
 import Loading from "../../components/Loading";
@@ -44,12 +44,32 @@ const ArticlePage = () => {
   const [commentValue, setCommentValue] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false)
 
-  const [hasUserLiked] = useState<boolean>(false)
-  const [isArticleLiked] = useState<boolean>(false)
-  const [articleLikes] = useState<number>(article?.likes!)
+  // const [hasUserLiked, setHasUserLiked] = useState<boolean>(false)
+  // const [isArticleLiked, setIsArticleLiked] = useState<boolean>(false)
 
-  //dev
-  console.log(`${hasUserLiked}, ${isArticleLiked}, ${articleLikes}`)
+  // useEffect(() => {
+  //   const fetchHasUserLiked = async () => {
+  //     const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/article/${article?.articleId}/liked/${user.userId}`, {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "X-API-KEY": import.meta.env.VITE_API_KEY
+  //       },
+  //       credentials: "include"
+  //     })
+
+  //     const response = await res.json()
+  //     console.log(response)
+
+  //     if (response.data.liked) {
+  //       setHasUserLiked(true)
+  //     } else {
+  //       setHasUserLiked(false)
+  //     }
+  //   }
+
+  //   fetchHasUserLiked()
+  // }, [])
 
   const navigate = useNavigate();
   if (!username || !title) {
@@ -101,6 +121,36 @@ const ArticlePage = () => {
       toast.error("Something went wrong.")
     } finally {
       setLoading(false)
+    }
+  }
+
+  const likeArticle = async () => {
+    const data = {
+      articleId: article?.articleId,
+      likerUserId: user.userId
+    }
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/article/like`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-KEY": import.meta.env.VITE_API_KEY
+        },
+        body: JSON.stringify(data),
+        credentials: "include"
+      })
+
+      if (!res.ok) {
+        toast.error("Failed to like post, Try again")
+        return
+      }
+
+      // setIsArticleLiked(true)
+      // setHasUserLiked(true)
+      window.location.reload()
+    } catch (error) {
+      toast.error("Failed to like post, Try again")
     }
   }
 
@@ -182,9 +232,20 @@ const ArticlePage = () => {
 
       {/* Info's */}
       <div className="border-t-1 border-b-1 border-muted p-3 mt-8 flex-between">
-        <div className="flex-start gap-1">
-          <GoHeart color="rgb(165, 163, 161)" size={19} />
-          <p className="text-sm">{article!.likes}</p>
+        <div 
+          onClick={likeArticle}  
+          className="flex-start gap-1 cursor-pointer"
+        >
+          {/* {hasUserLiked ? (
+            <GoHeartFill color="black" size={19} />
+          ) : isArticleLiked ? (
+            <GoHeartFill color="grey" size={19} /> // optional: show filled heart for others
+          ) : (
+            <GoHeart color="rgb(165, 163, 161)" size={19} />
+          )} */}
+
+          <GoHeartFill color="rgb(165, 163, 161)" size={19} />
+          <p className="text-sm">{article?.likes}</p>
         </div>
         <div>
           <CgShare color="rgb(165, 163, 161)" size={19} />

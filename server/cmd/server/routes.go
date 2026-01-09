@@ -55,7 +55,8 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 		article.GET("/feed", articleHandler.GetUserFeed)
 		article.GET("/fyp", articleHandler.GetUserFyp)
 		article.DELETE("/:id", articleHandler.DeleteArticle)
-		article.POST("/like/:id", articleHandler.LikeArticle)
+		article.POST("/like", articleHandler.LikeArticle)
+		article.GET("/:articleId/liked/:userId", articleHandler.HasLikedArticle)
 		article.POST("/comment/:id", articleHandler.CommentArticle)
 		article.POST("/comment/:id/reply", articleHandler.ReplyComment)
 	}

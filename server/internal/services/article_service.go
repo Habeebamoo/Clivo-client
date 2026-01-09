@@ -17,6 +17,7 @@ type ArticleService interface {
 	GetUserFyp(string) ([]models.SafeArticleResponse, int, error)
 	DeleteArticle(string, string) (int, error)
 	LikeArticle(models.Like) (int, error)
+	HasUserLiked(models.Like) (bool)
 	CommentArticle(models.CommentRequest) (int, error)
 	ReplyComment(models.ReplyRequest) (int, error)
 }
@@ -295,6 +296,10 @@ func (as *ArticleSvc) LikeArticle(likeReq models.Like) (int, error) {
 	}
 
 	return as.articleRepo.CreateLike(likeReq)
+}
+
+func (as *ArticleSvc) HasUserLiked(likeReq models.Like) bool {
+	return as.articleRepo.IsLikedBy(likeReq)
 }
 
 func (as *ArticleSvc) CommentArticle(commentReq models.CommentRequest) (int, error) {
