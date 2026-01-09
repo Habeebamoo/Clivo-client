@@ -1,11 +1,11 @@
 import { H2, H3 } from "../../components/Typo"
 import { useNavigate, useParams } from "react-router";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { type Post } from "../../redux/reducers/article_reducer";
 import { shorten } from "../../utils/utils";
 import { FaRegEye, FaUpload } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
-import { GoHeart, GoHeartFill } from "react-icons/go";
+import { GoHeartFill } from "react-icons/go";
 import { CgShare } from "react-icons/cg";
 import NotFound from "../../components/NotFound";
 import Loading from "../../components/Loading";
