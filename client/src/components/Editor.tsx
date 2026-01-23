@@ -33,9 +33,24 @@ const Editor = ({ saveContent }: Props) => {
           config: {
             uploader: {
               uploadByFile: async (file: File) => {
+
+                const formData = new FormData()
+                formData.append("image", file)
+
+                const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/article/image`, {
+                  method: "POST",
+                  headers: {
+                    "X-API-KEY": import.meta.env.VITE_API_KEY
+                  },
+                  body: formData,
+                  credentials: "include"
+                })
+
+                const data = await res.json();
+
                 return {
                   success: 1,
-                  file: { url: URL.createObjectURL(file) }
+                  file: { url: data.data.url }
                 }
               }
             }

@@ -69,19 +69,19 @@
 }
 
 @utility code {
-  @apply bg-dark inline-block text-white rounded-lg p-6 text-sm mb-4;
+  @apply bg-dark inline-block text-white rounded-lg p-6 text-sm mb-8;
 }
 
 @utility header {
-  @apply mb-6 text-xl text-black font-jsans;
+  @apply mb-8 text-xl text-black font-jsans;
 }
 
 @utility paragraph {
-  @apply mb-6 text-gray-700 font-jsans;
+  @apply mb-8 text-gray-700 font-jsans;
 }
 
 @utility ordered-cont {
-  @apply mb-6;
+  @apply mb-8;
 }
 
 @utility ordered {
@@ -89,7 +89,7 @@
 }
 
 @utility bullet-cont {
-  @apply mb-6;
+  @apply mb-8;
 }
 
 @utility bullet-dot {
@@ -101,7 +101,7 @@
 }
 
 @utility checklist-cont {
-  @apply mb-6;
+  @apply mb-8;
 }
 
 @utility checklist-box {
@@ -112,8 +112,12 @@
   @apply flex-start gap-3;
 }
 
-@utility render {
-  @apply mb-6;
+@utility image {
+  @apply mb-8;
+}
+
+@utility image-caption {
+  @apply text-sm font-jsl mt-2 text-center;
 }
 
 @utility nav-text {

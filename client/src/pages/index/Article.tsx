@@ -117,6 +117,7 @@ const ArticlePage = () => {
       }
 
       toast.success(response.message)
+      window.location.reload()
     } catch (error) {
       toast.error("Something went wrong.")
     } finally {
@@ -170,21 +171,21 @@ const ArticlePage = () => {
   if (isError) return <NotFound text="Couldn't Find Article" subText="This article has either been deleted or moved to a new URL" />
 
   return (
-    <main className="w-[90%] sm:w-[400px] md:w-[500px] mx-auto">
+    <main className="w-[90%] sm:w-100 md:w-125 mx-auto">
       {/* Heading section */}
       <div className="p-1 w-full mt-6">
         <div>
           {article!.picture ? (
-            <img src={article!.picture} className="h-35 mb-4 mx-auto" />
+            <img src={article!.picture} className="h-full w-full object-cover object-center mb-4 mx-auto" />
           ) : (
-            <div className="bg-muted w-full flex-grow h-35 mb-4"></div>
+            <div className="bg-muted w-full grow h-35 mb-4"></div>
           )}
         </div>
-        <H2 font="exo" text={shorten(article!.title, 50)} others="text-center" />
+        <H2 font="exo" text={shorten(article!.title, 50)} others="text-center mt-10" />
       </div>
 
       {/* Author */}
-      <div className="text-[12px] text-accentLight font-outfit flex-start gap-3 mt-4">
+      <div className="text-[12px] text-accentLight font-outfit flex-start gap-3 mt-8">
         <p>{article!.readTime} read time</p>
         <div className="bg-accentLight h-1 w-1 rounded-full"></div>
         <p>{article!.createdAt}</p>
@@ -209,7 +210,7 @@ const ArticlePage = () => {
 
           <button 
             onClick={copyArticleSlug}
-            className="text-[12px] flex-center gap-1 border-1 border-accent py-1 px-3 rounded-full cursor-pointer text-black hover:bg-muted active:bg-muted"
+            className="text-[12px] flex-center gap-1 border border-accent py-1 px-3 rounded-full cursor-pointer text-black hover:bg-muted active:bg-muted"
           >
           <FaUpload />
           <span>Share</span>
@@ -226,12 +227,12 @@ const ArticlePage = () => {
       {/* tags */}
       <div className="mt-10 flex-start gap-2 flex-wrap">
         {article!.tags?.map((tag: string, i: any) => {
-          return <div key={i} className="text-[12px] font-exo py-1 px-2 border-1 border-accent rounded-sm">{tag}</div>
+          return <div key={i} className="text-[12px] font-exo py-1 px-2 border border-accent rounded-sm">{tag}</div>
         })}
       </div>
 
       {/* Info's */}
-      <div className="border-t-1 border-b-1 border-muted p-3 mt-8 flex-between">
+      <div className="border-t border-b border-muted p-3 mt-8 flex-between">
         <div 
           onClick={likeArticle}  
           className="flex-start gap-1 cursor-pointer"
@@ -291,7 +292,7 @@ const ArticlePage = () => {
             <textarea 
               name="bio" 
               rows={4} 
-              className="resize-none border-1 border-accentLight rounded-lg focus:outline-none w-full py-2 px-3 font-inter"
+              className="resize-none border border-accentLight rounded-lg focus:outline-none w-full py-2 px-3 font-jsans"
               value={commentValue}
               onChange={(e) => setCommentValue(e.target.value)}>
             </textarea>
@@ -362,7 +363,7 @@ const CommentDisplay = ({ comment }: { comment: Comment}) => {
   }
 
   return (
-    <div className="border-t-1 border-muted py-4">
+    <div className="border-t border-muted py-4">
       {replysBox && 
         <ReplyBox 
           commentId={comment.commentId} 
@@ -406,7 +407,7 @@ const CommentDisplay = ({ comment }: { comment: Comment}) => {
         {replybarActive && 
           <textarea 
             rows={2}
-            className="p-3 border-1 border-gray-300 resize-none rounded-xl focus:outline-none font-open"
+            className="p-3 border border-gray-300 resize-none rounded-xl focus:outline-none font-open"
             value={content}
             onChange={(e) => setContent(e.target.value)}
           ></textarea>

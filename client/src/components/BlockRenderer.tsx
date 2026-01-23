@@ -37,9 +37,14 @@ const BlockRenderer = ({ blocks }: { blocks: Block[] }) => {
 
           case "image":
             return (
-              <figure key={i} className="render">
-                <img src={block.data.file.url} alt={block.data.caption || ""} />
-                {block.data.caption && <figcaption>{block.data.caption}</figcaption>}
+              <figure key={i} className="image">
+                <img 
+                  src={block.data.file.url} 
+                  alt={block.data.caption || ""} 
+                  className="min-w-full"
+                />
+
+                {block.data.caption && <figcaption className="image-caption">{block.data.caption}</figcaption>}
               </figure>
             )
 

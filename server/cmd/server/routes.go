@@ -51,6 +51,7 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 	article := api.Group("/article", middlewares.RequireAPIKey(), middlewares.AuthenticateUser())
 	{
 		article.POST("", articleHandler.CreateArticle)
+		article.POST("/image", articleHandler.UploadArticleImage)
 		article.GET("", articleHandler.GetAllMyArticles)
 		article.GET("/feed", articleHandler.GetUserFeed)
 		article.GET("/fyp", articleHandler.GetUserFyp)

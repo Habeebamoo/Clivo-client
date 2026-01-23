@@ -150,16 +150,5 @@ func UploadImage(file multipart.File) (string, error) {
 		return "", fmt.Errorf("upload error")
 	}
 
-	image, err := cld.Image(uploadRes.PublicID)
-	if err != nil {
-		return "", fmt.Errorf("internal server error")
-	}
-
-	image.Transformation = "c_fill,h_150,w_150"
-	imageUrl, err := image.String()
-	if err != nil {
-		return "", fmt.Errorf("internal server error")
-	}
-
-	return imageUrl, nil
+	return uploadRes.SecureURL, nil
 }

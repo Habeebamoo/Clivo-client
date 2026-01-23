@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 
 	"github.com/Habeebamoo/Clivo/server/internal/models"
 	"github.com/Habeebamoo/Clivo/server/internal/services"
@@ -69,34 +70,28 @@ func (ah *ArticleHandler) CreateArticle(c *gin.Context) {
 	utils.Success(c, statusCode, "Article Created Successfully", nil)
 }
 
-//Get 1 article
-// func (ah *ArticleHandler) GetMyArticle(c *gin.Context) {
-// 	_, exists := c.Get("userId")
-// 	if !exists {
-// 		utils.Error(c, 401, "UserId is missing", nil)
-// 		return
-// 	}
+func (ah *ArticleHandler) UploadArticleImage(c *gin.Context) {
+	//get image
+	image, _, err := c.Request.FormFile("image")
+	if err != nil {
+		utils.Error(c, 400, "Image Missing", nil)
+		return
+	}
 
-// 	//validate request
-// 	articleId := c.Param("id")
-// 	if articleId == "" {
-// 		utils.Error(c, 400, "Article Id Missing", nil)
-// 		return
-// 	}
+	//call service
+	imageUrl, err := ah.service.UploadArticleImage(image)
+	if err != nil {
+		utils.Error(c, 500, utils.FormatText(err.Error()), nil)
+	}
 
-// 	//call service
-// 	article, statusCode, err := ah.service.GetArticle(articleId)
-// 	if err != nil {
-// 		utils.Error(c, statusCode, utils.FormatText(err.Error()), nil)
-// 		return
-// 	}
+	log.Printf("...%s...", imageUrl)
 
-// 	utils.Success(c, statusCode, "", article)
-// }
+	data := map[string]string{ "url" : imageUrl }
+	utils.Success(c, 200, "", data)
+}
 
 //Get all my articles
 func (ah *ArticleHandler) GetAllMyArticles(c *gin.Context) {
-	//use this in production instead of (userId in article request)
 	userIdAny, exists := c.Get("userId")
 	if !exists {
 		utils.Error(c, 401, "UserId is missing", nil)

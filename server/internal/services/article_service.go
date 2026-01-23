@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"mime/multipart"
 	"time"
 
 	"github.com/Habeebamoo/Clivo/server/internal/models"
@@ -11,6 +12,7 @@ import (
 
 type ArticleService interface {
 	CreateArticle(models.ArticleRequest, string) (int, error)
+	UploadArticleImage(multipart.File) (string, error)
 	GetArticle(string) (models.ArticleResponse, int, error)
 	GetMyArticles(string) ([]models.ArticleResponse, int, error)
 	GetUserFeed(string) ([]models.SafeArticleResponse, int, error)
@@ -91,6 +93,10 @@ func (as *ArticleSvc) CreateArticle(articleReq models.ArticleRequest, userId str
 	return code, err
 
 	//notify followers here
+}
+
+func (as *ArticleSvc) UploadArticleImage(file multipart.File) (string, error) {
+	return utils.UploadImage(file)
 }
 
 func (as *ArticleSvc) GetArticle(id string) (models.ArticleResponse, int, error) {
