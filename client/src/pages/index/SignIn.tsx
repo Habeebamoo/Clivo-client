@@ -9,14 +9,14 @@ const SignInPage = () => {
 
   const login = () => {
     //prod
-    window.location.href = `${import.meta.env.VITE_SERVER_URL}/api/auth/google`
+    //window.location.href = `${import.meta.env.VITE_SERVER_URL}/api/auth/google`
 
     //dev
-    //navigate("/home")
+    navigate("/home")
   }
 
   return (
-    <main className="flex-center flex-col h-[100vh]">
+    <main className="flex-center flex-col h-screen">
       <img src={logo} className="h-20 mb-6" />
 
       <H2 font="inter" text="Welcome To Clivo" />
