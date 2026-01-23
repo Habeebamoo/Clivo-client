@@ -23,7 +23,7 @@ const MyProfile = () => {
   }
 
   return (
-    <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:w-[900px] mx-auto items-start">
+    <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:w-225 mx-auto items-start">
       <section>
         {/* Profile Picture */}
         <div>
@@ -33,7 +33,7 @@ const MyProfile = () => {
 
             {/* profile pic */}
             <div className="bg-white p-1 h-26 w-26 rounded-full flex-center absolute left-7 bottom-[-70px]">
-              <div className="h-24 w-24 rounded-full overflow-hidden border-1 border-accentLight">
+              <div className="h-24 w-24 rounded-full overflow-hidden border border-accentLight">
                 {user.picture ? (
                   <img src={user.picture} className="h-full w-full object-cover" />
                 ) : (
@@ -85,7 +85,7 @@ const MyProfile = () => {
           </div>
 
           <div className="mt-6 flex-start gap-4">
-            <button onClick={toSettings} className="text-sm flex-center gap-2 py-2 px-3 border-1 border-accent rounded-full hover:bg-muted active:bg-muted cursor-pointer font-outfit">
+            <button onClick={toSettings} className="text-sm flex-center gap-2 py-2 px-3 border border-accent rounded-full hover:bg-muted active:bg-muted cursor-pointer font-outfit">
               <BiPencil />
               <span>Edit Profile</span>
             </button>

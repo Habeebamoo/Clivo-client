@@ -12,7 +12,7 @@ const MyArticles = () => {
   const { isLoading, isError } = useFetchArticles();
 
   if (isLoading) return (
-    <div className="flex-center h-[200px]">
+    <div className="flex-center h-50">
       <Spinner color="accentLight" size={20} />
     </div>
   )

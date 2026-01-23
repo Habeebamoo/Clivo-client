@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Header from "../../components/Header"
 import PhotoGrid from "../../components/PhotoGrid"
 
@@ -10,6 +10,19 @@ const Home = () => {
     if (!email) return
     alert(email)
   }
+
+  useEffect(() => {
+    const checkAPIHealth = async () => {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/health`, {
+        method: "GET",
+      })
+
+      const data = await res.json()
+      console.log(data)
+    }
+
+    checkAPIHealth()
+  }, [])
 
   return (
     <main className="bg-center bg-cover min-h-screen">
