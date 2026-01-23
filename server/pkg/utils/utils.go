@@ -4,6 +4,7 @@ import (
 	"context"
 	crand "crypto/rand"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"log"
 	"math"
@@ -14,9 +15,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Habeebamoo/Clivo/server/internal/config"
+	"github.com/Habeebamoo/Clivo/server/internal/models"
 	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
-	"github.com/Habeebamoo/Clivo/server/internal/config"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -97,14 +99,38 @@ func GenerateUniqueUsername(base string, exists func(string) bool) string {
 	return username
 }
 
-func GetArticleReadTime(content string) int {
-	words := strings.Fields(content)
-	wordCount := len(words)
+// func GetArticleReadTime(content string) int {
+// 	words := strings.Fields(content)
+// 	wordCount := len(words)
 
-	minutes := float64(wordCount) / 200.00
+// 	minutes := float64(wordCount) / 200.00
 
+// 	return int(math.Ceil(minutes))
+// }
+
+func GetArticleReadTime(jsonContent string) int {
+	var content models.EditorJSContent
+	err := json.Unmarshal([]byte(jsonContent), &content)
+	if err != nil {
+		return 1
+	}
+
+	wordCount := 0
+	for _, block := range content.Blocks {
+		if block.Type == "paragraph" || block.Type == "header" {
+			words := strings.Fields(block.Data.Text)
+			wordCount += len(words)
+		}
+	}
+
+	minutes := float64(wordCount) / 200.0
+	if minutes < 1 {
+		return 1
+	}
+	
 	return int(math.Ceil(minutes))
 }
+
 
 func GetTimeAgo(t time.Time) string {
 	duration := time.Since(t)

@@ -54,6 +54,17 @@ type ArticleResponse struct {
 	CreatedAt         string           `json:"createdAt"`
 }
 
+type EditorJSBlock struct {
+	Type string `json:"type"`
+	Data struct {
+		Text string `json:"text,omitempty"`
+	} `json:"data"`
+}
+
+type EditorJSContent struct {
+	Blocks []EditorJSBlock `json:"blocks"`
+}
+
 type CommentResponse struct {
 	CommentId  string  `json:"commentId"`
 	ArticleId  string  `json:"articleId"`
