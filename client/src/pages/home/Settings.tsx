@@ -17,7 +17,7 @@ const Modal = ({ setModal }: { setModal: React.Dispatch<React.SetStateAction<boo
   const [form, setForm] = useState({
     name: user.name,
     email: user.email,
-    website: user.website,
+    website: user.website || "https://",
     bio: user.bio
   })
 
@@ -82,7 +82,7 @@ const Modal = ({ setModal }: { setModal: React.Dispatch<React.SetStateAction<boo
       <form onSubmit={handleSubmit} className="bg-white p-6 border-1 border-gray-100 rounded-md w-[90%] sm:w-[400px] mx-auto">
         {/* cancel */}
         <div className="flex-end mb-4">
-          <button onClick={closeModal} className="py-1 px-3 bg-red-600 text-white text-sm font-outfit rounded-md border-1 border-red-600 hover:bg-transparent hover:text-red-600 active:bg-transparent active:text-red-600 cursor-pointer">Cancel</button>
+          <button onClick={closeModal} className="py-1 px-3 bg-red-600 text-white text-sm font-outfit rounded-md border border-red-600 hover:bg-transparent hover:text-red-600 active:bg-transparent active:text-red-600 cursor-pointer">Cancel</button>
         </div>
 
         {/* picture */}
