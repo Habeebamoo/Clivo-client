@@ -20,6 +20,7 @@ import NotFoundPage from "./pages/index/NotFoundPage"
 import ErrorPage from "./pages/index/ErrorPage"
 import CreateArticle from "./pages/home/CreateArticle"
 import { ToastContainer } from "react-toastify"
+import ErrorElement from "./components/ErrorElement"
 
 const App = () => {
   const router = createBrowserRouter( 
@@ -31,7 +32,7 @@ const App = () => {
         <Route path="/auth/error" element={<ErrorPage />} />
 
         {/* Home (Protected) */}
-        <Route path="/home" element={<HomeLayout />}>
+        <Route path="/home" element={<HomeLayout />} errorElement={<ErrorElement to="/signin" />}>
           <Route path="" element={<Home />} />
           <Route path="create" element={<CreateArticle />} />
           <Route path="profile" element={<MyProfile />} />
@@ -39,7 +40,7 @@ const App = () => {
         </Route>
 
         {/* Admin (Protected) */}
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route path="/admin" element={<AdminLayout />} errorElement={<ErrorElement to="/admin" />}>
           <Route path="" element={<Admin />} />
         </Route>
 
