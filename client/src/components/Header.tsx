@@ -3,11 +3,16 @@ import logo from "../assets/logo.jpg"
 import { useState } from "react"
 import { useSelector } from "react-redux";
 import type { User } from "../redux/reducers/user_reducer";
+import { useFetchProfile } from "../hooks/useFetchProfile";
+import Spinner from "./Spinner";
 
 const Header = ({ type="welcome" }: { type?: "welcome" | "home" }) => {
+  const { isLoading } = useFetchProfile()
   const user: User = useSelector((state: any) => state.user.profile);
   const [navActive, setNavActive] = useState<boolean>(false)
   const navigate = useNavigate()
+
+  console.log(user)
 
   const toHome = () => {
     window.location.href = "/home"
@@ -37,40 +42,48 @@ const Header = ({ type="welcome" }: { type?: "welcome" | "home" }) => {
           <h1 className="text-2xl font-bold font-inter">Clivo</h1>
         </div>
 
+        {isLoading && 
+          <div>
+            <Spinner color="white" size={25} />
+          </div>
+        }
+
         {/* Dynamic */}
-        <div>
-          {type === "welcome" ?
-            (
-              <button onClick={toLogin} className="btn-primary text-sm font-outfit px-3 py-2">Get Started</button>
-            ) : (
-              <div className="cursor-pointer">
-                <div onClick={toggleMenu} className="h-9 w-9 rounded-full overflow-hidden border-1 border-accentLight">
-                  <img src={user.picture} className="w-full h-full object-cover object-center" />
+        {!isLoading && 
+          <div>
+            {type === "welcome" ?
+              (
+                <button onClick={toLogin} className="btn-primary text-sm font-outfit px-3 py-2">Get Started</button>
+              ) : (
+                <div className="cursor-pointer">
+                  <div onClick={toggleMenu} className="h-9 w-9 rounded-full overflow-hidden border border-accentLight">
+                    <img src={user!.picture} className="w-full h-full object-cover object-center" />
+                  </div>
+                    {/* navbar */}
+                    {navActive && 
+                      <div className="fixed right-5.75 sm:right-8.25 bg-white border border-muted mt-1 text-accent w-50">
+                        <div onClick={toHome} className="nav-text border-b border-b-muted ">
+                          <p>Home</p>
+                        </div>
+
+                        <div onClick={toProfile} className="nav-text border-b border-b-muted">
+                          <p>View Profile</p>
+                        </div>
+
+                        <div onClick={toCreate} className="nav-text border-b border-b-muted">
+                          <p>Create Article</p>
+                        </div>
+
+                        <div className="nav-text">
+                          <p>Sign Out</p>
+                        </div>
+                      </div>
+                    }
                 </div>
-                  {/* navbar */}
-                  {navActive && 
-                    <div className="fixed right-[23px] sm:right-[33px] bg-white border-1 border-muted mt-1 text-accent w-50">
-                      <div onClick={toHome} className="nav-text border-b-1 border-b-muted ">
-                        <p>Home</p>
-                      </div>
-
-                      <div onClick={toProfile} className="nav-text border-b-1 border-b-muted">
-                        <p>View Profile</p>
-                      </div>
-
-                      <div onClick={toCreate} className="nav-text border-b-1 border-b-muted">
-                        <p>Create Article</p>
-                      </div>
-
-                      <div className="nav-text">
-                        <p>Sign Out</p>
-                      </div>
-                    </div>
-                  }
-              </div>
-            )
-          }
-        </div>
+              )
+            }
+          </div>
+        }
       </nav>
     </header>
   )

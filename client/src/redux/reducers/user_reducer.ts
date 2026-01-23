@@ -19,7 +19,7 @@ export type User = {
 }
 
 interface UserReducerState {
-  profile: User | {}
+  profile: User | {},
 }
 
 const initialState: UserReducerState = {
