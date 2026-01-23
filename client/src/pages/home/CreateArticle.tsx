@@ -18,9 +18,14 @@ const CreateArticle = () => {
 
   const handleSubmit = async () => {
     setLoading(true)
-    if (!content) return
+
+    if (!content) {
+      setLoading(false)
+      return
+    }
 
     const formData = new FormData();
+
     formData.append("title", title)
     formData.append("content", JSON.stringify(content))
     formData.append("picture", selectedFile!)
@@ -74,6 +79,11 @@ const CreateArticle = () => {
   }
 
   const nextStep = () => {
+    if (!content) {
+      toast.error("Please save your blog")
+      return
+    }
+
     setStep(2)
   }
 
@@ -86,7 +96,7 @@ const CreateArticle = () => {
   }
 
   return (
-    <main className="w-[93%] md:w-[600px] mx-auto mt-22 mb-20">
+    <main className="w-[93%] md:w-150 mx-auto mt-22 mb-20">
       {step === 1 ?
         <section className="px-2">
           <div className="flex-end">
@@ -101,7 +111,7 @@ const CreateArticle = () => {
 
           <textarea 
             rows={2}
-            className="focus:outline-none w-full font-dm break-words rounded-lg placeholder:text-gray-500 text-2xl resize-none my-8"
+            className="focus:outline-none w-full font-dm wrap-break-word rounded-lg placeholder:text-gray-500 text-2xl resize-none my-8"
             placeholder="Title Here"
             value={title}
             onChange={e => setTitle(e.target.value)}
@@ -118,7 +128,7 @@ const CreateArticle = () => {
           <div className="mt-6">
             <label 
               htmlFor="picture" 
-              className={`cursor-pointer transition h-60 border-1 font-inter border-dashed border-accentLight block ${preview ? "bg-cover bg-center" : "text-gray-600"}`}
+              className={`cursor-pointer transition h-60 border font-inter border-dashed border-accentLight block ${preview ? "bg-cover bg-center" : "text-gray-600"}`}
               style={preview ? {backgroundImage: `url(${preview})`} : {}}
             >
               {!preview && <p className="h-full flex-center">Add Picture</p>}
@@ -142,11 +152,16 @@ const CreateArticle = () => {
 
           <div className="flex-center gap-2 mt-10">
             {loading ? 
-              <button className="btn-primary bg-gray-300 border-gray-300 hover:bg-gray-300 hover:text-white cursor-not-allowed py-3 w-[100px] flex-center">
+              <button className="btn-primary bg-gray-300 border-gray-300 hover:bg-gray-300 hover:text-white cursor-not-allowed py-3 w-25 flex-center">
                 <Spinner size={18} color="white" />
               </button> 
             : 
-              <button onClick={handleSubmit} className="btn-primary py-3 px-6">Publish</button>
+              <button 
+                onClick={handleSubmit} 
+                className="btn-primary py-3 px-6"
+              >
+                Publish
+              </button>
             }
           </div>
         </section>

@@ -7,8 +7,7 @@ import Loading from "../components/Loading"
 const Layout = () => {
   const { isLoading } = useFetchProfile()
 
-  const user = useSelector((state: any) => state.user.profile)
-  console.log(user)
+  // const user = useSelector((state: any) => state.user.profile)
 
   if (isLoading) return <Loading />
   

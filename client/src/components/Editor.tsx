@@ -3,7 +3,8 @@ import Header from "@editorjs/header"
 import List from "@editorjs/list"
 import Code from "@editorjs/code"
 import Image from "@editorjs/image"
-import { memo, useEffect, useRef } from "react"
+import { memo, useEffect, useRef, useState } from "react"
+import { BiCheckCircle } from "react-icons/bi"
 
 const tools: Record<string, ToolConstructable> = {
   header: Header as unknown as ToolConstructable,
@@ -17,6 +18,7 @@ interface Props {
 }
 
 const Editor = ({ saveContent }: Props) => {
+  const [isSaved, setisSaved] = useState<boolean>(false)
   const editorRef = useRef<EditorJs | null>(null);
 
   useEffect(() => {
@@ -48,10 +50,12 @@ const Editor = ({ saveContent }: Props) => {
       ();
       editorRef.current = null;
     }
-  })
+  }, [])
 
   const onSave = async () => {
     if (!editorRef.current) return;
+
+    setisSaved(true)
 
     const output = await editorRef.current.save();
     saveContent(output)
@@ -59,9 +63,17 @@ const Editor = ({ saveContent }: Props) => {
 
   return (
     <>
-      <button onClick={onSave} className="btn-primary mb-4">
-        Save
-      </button>
+      {!isSaved ? 
+        <button onClick={onSave} className="btn-primary mb-4">
+          Save
+        </button>
+      : 
+        <button className="bg-green-500 rounded-md mb-4 py-2 px-3 flex-center gap-1 font-outfit text-sm text-white">
+          <span>Saved</span>
+          <BiCheckCircle />
+        </button> 
+      }
+
       <div id="editor" className="font-jsans" />
     </>
   )

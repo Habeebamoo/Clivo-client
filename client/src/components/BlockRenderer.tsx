@@ -6,28 +6,31 @@ type Block = {
 }
 
 const BlockRenderer = ({ blocks }: { blocks: Block[] }) => {
+  console.log(blocks)
   return (
     <>
       {blocks.map((block, i) => {
         switch (block.type) {
           case "header":
             const Tag = `h${block.data.level}` as keyof JSX.IntrinsicElements;
-            return <Tag key={i} className="render">
+            return <Tag key={i} className="header">
               {block.data.text}
             </Tag>;
 
           case "code":
             return (
-              <div className="code">
-                <pre key={i}>
-                  <code>{block.data.code}</code>
-                </pre>
+              <div className="flex-center">
+                <div className="code">
+                  <pre key={i}>
+                    <code>{block.data.code}</code>
+                  </pre>
+                </div>
               </div>
             )
 
           case "paragraph":
             return (
-              <p key={i} className="render">
+              <p key={i} className="paragraph">
                 {block.data.text}
               </p>
             )
@@ -42,21 +45,43 @@ const BlockRenderer = ({ blocks }: { blocks: Block[] }) => {
 
           case "list":
             return block.data.style === "ordered" ? (
-              <ol key={i} className="render">
+              <ol key={i} className="ordered-cont">
                 {block.data.items.map((item: any, index: number) => (
-                  <li key={index}>
-                    {item.content}
-                  </li>
+                  <div className="ordered">
+                    <span>{index + 1}. </span>
+                  
+                    <li key={index}>
+                      {item.content}
+                    </li>
+                  </div>
                 ))}
               </ol>
             ) : (
-              <ul key={i} className="render">
-                {block.data.items.map((item: any, index: number) => (
-                  <li key={index}>
-                    {item.content}
-                  </li>
-                ))}
-              </ul>
+              block.data.style === "unordered" ? (
+                <ul key={i} className="bullet-cont">
+                  {block.data.items.map((item: any, index: number) => (
+                    <div className="bullet">
+                      <div className="bullet-dot"></div>
+
+                      <li key={index}>
+                        {item.content}
+                      </li>
+                    </div>
+                  ))}
+                </ul>
+              ) : (
+                <div key={i} className="checklist-cont">
+                  {block.data.items.map((item: any, index: number) => (
+                    <div className="checklist">
+                      <div className="checklist-box"></div>
+
+                      <p key={index}>
+                        {item.content}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )
             );
 
           default:

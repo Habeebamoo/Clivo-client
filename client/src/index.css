@@ -72,8 +72,48 @@
   @apply bg-dark inline-block text-white rounded-lg p-6 text-sm mb-4;
 }
 
+@utility header {
+  @apply mb-6 text-xl text-black font-jsans;
+}
+
+@utility paragraph {
+  @apply mb-6 text-gray-700 font-jsans;
+}
+
+@utility ordered-cont {
+  @apply mb-6;
+}
+
+@utility ordered {
+  @apply mb-1 text-gray-700 font-jsans flex-start gap-1;
+}
+
+@utility bullet-cont {
+  @apply mb-6;
+}
+
+@utility bullet-dot {
+  @apply h-[6px] w-[6px] bg-gray-700 rounded-full;
+}
+
+@utility bullet {
+  @apply mb-1 text-gray-700 font-jsans flex-start gap-2;
+}
+
+@utility checklist-cont {
+  @apply mb-6;
+}
+
+@utility checklist-box {
+  @apply h-3 w-3 rounded-sm border border-gray-500;
+}
+
+@utility checklist {
+  @apply flex-start gap-3;
+}
+
 @utility render {
-  @apply mb-4;
+  @apply mb-6;
 }
 
 @utility nav-text {
@@ -81,7 +121,7 @@
 };
 
 @utility home-tab {
-  @apply border-accentLight text-accentLight flex-center border-b-1 py-2 px-6 cursor-pointer font-open;
+  @apply border-accentLight text-accentLight flex-center border-b py-2 px-6 cursor-pointer font-open;
 };
 
 @utility home-tab-active {

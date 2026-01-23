@@ -219,7 +219,7 @@ const ArticlePage = () => {
       <hr className="text-muted mt-6 mb-4" />
 
       {/* Article Content */}
-      <div className="font-dm text-text">
+      <div className="mt-8">
         <BlockRenderer blocks={article?.content.blocks} />
       </div>
 
