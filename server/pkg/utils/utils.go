@@ -63,6 +63,18 @@ func SetCookies(c *gin.Context, token string) {
 	})
 }
 
+func RemoveCookies(c *gin.Context) {
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name: "auth_token",
+		Value: "",
+		Path: "/",
+		Domain: "",
+		MaxAge: -1,
+		Secure: false, // true for production
+		HttpOnly: true,
+	})
+}
+
 func GenerateRandomId() string {
 	b := make([]byte, 16)
 	_, err := crand.Read(b)
@@ -98,15 +110,6 @@ func GenerateUniqueUsername(base string, exists func(string) bool) string {
 
 	return username
 }
-
-// func GetArticleReadTime(content string) int {
-// 	words := strings.Fields(content)
-// 	wordCount := len(words)
-
-// 	minutes := float64(wordCount) / 200.00
-
-// 	return int(math.Ceil(minutes))
-// }
 
 func GetArticleReadTime(jsonContent string) int {
 	var content models.EditorJSContent

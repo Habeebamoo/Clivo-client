@@ -198,3 +198,8 @@ func (ahdl *AuthHandler) SignIn(c *gin.Context) {
 
 	utils.Success(c, 200, "", nil)
 }
+
+func (ahdl *AuthHandler) Logout(c *gin.Context) {
+	utils.RemoveCookies(c)
+	utils.Success(c, 200, "Logged out successfully", nil)
+}
