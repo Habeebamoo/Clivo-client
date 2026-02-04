@@ -3,7 +3,6 @@ import { shorten } from "../utils/utils"
 import type { Article, Post } from "../redux/reducers/article_reducer"
 import { MdVerified } from "react-icons/md"
 import { GoHeart } from "react-icons/go"
-import { HiOutlineDotsHorizontal } from "react-icons/hi"
 
 const ArticleDisplay = ({ article }: { article: Post | Article }) => {
   const toUser = () => {
@@ -20,7 +19,7 @@ const ArticleDisplay = ({ article }: { article: Post | Article }) => {
       {/* profile */}
       <div 
         onClick={toUser} 
-        className="cursor-pointer p-1 hover:bg-mutedLight active:bg-mutedLight"
+        className="cursor-pointer p-1 hover:bg-gray-50 active:bg-gray-50"
       >
         <div className="flex-start gap-2">
           {article.authorPicture ?
@@ -39,8 +38,8 @@ const ArticleDisplay = ({ article }: { article: Post | Article }) => {
       </div>
 
       {/* title & picture */}
-      <div onClick={toPost} className="py-3 my-2 grid grid-cols-6 gap-3 px-1 hover:bg-mutedLight active:bg-mutedLight cursor-pointer">
-        <div className="col-span-4 break-words">
+      <div onClick={toPost} className="py-3 my-2 grid grid-cols-6 gap-3 px-1 hover:bg-gray-50 active:bg-gray-50 cursor-pointer">
+        <div className="col-span-4 wrap-break-word">
           <H3 font="inter" text={shorten(article.title, 50)} />
         </div>
         <div className="h-20 w-full col-span-2">
