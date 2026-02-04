@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query"
 import { H2 } from "../../components/Typo"
 import { MdVerified } from "react-icons/md"
 import { BiLink } from "react-icons/bi"
@@ -9,70 +8,110 @@ import type { Post } from "../../redux/reducers/article_reducer"
 import Loading from "../../components/Loading"
 import ArticleDisplay from "../../components/ArticleDisplay"
 import NotFoundPage from "./NotFoundPage"
-
-const getUser = async (username: string) => {
-  try {
-    console.log(import.meta.env.SERVER_URL)
-    //get user
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/${username}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "X-API-KEY": import.meta.env.VITE_API_KEY 
-      }
-    })
-    const response = await res.json()
-
-    if (!response.success) {
-      throw new Error(response.message)
-    }
-
-    const user: User = response.data;
-    console.log("1")
-
-    //get user articles
-    const res2 = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/${username}/articles`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "X-API-KEY": import.meta.env.VITE_API_KEY 
-      }
-    })
-    const response2 = await res2.json()
-
-    if (!response2.success) {
-      throw new Error(response.message)
-    }
-
-    const userArticles: Post[] = response2.data;
-
-    console.log("en")
-    return { user, userArticles };
-    
-  } catch (error) {
-    throw new Error("")
-  }
-}
+import { useFetchProfile } from "../../hooks/useFetchProfile"
+import { useSelector } from "react-redux"
+import { toast, ToastContainer } from "react-toastify"
+import { useFetchUser } from "../../hooks/useFetchUser"
+import { useEffect, useState } from "react"
 
 const UserPage = () => {
   const { username } = useParams<{ username: string }>();
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => getUser(username!)
-  })
+  const { data, isLoading, isError } = useFetchUser(username!);
+
+  const {} = useFetchProfile();
+  const me = useSelector((state: any) => state.user.profile);
+
+  const [isFollowing, setIsFollowing] = useState<boolean>(true)
+  const [loading, setLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (!me.userId) {
+      return
+    }
+
+    const fetchFollowStatus = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/follow-status/${me.userId}/${username}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "X-API-KEY": import.meta.env.VITE_API_KEY 
+          }
+        })
+
+        const response = await res.json()
+
+        if (!response.success) {
+          console.error("failed to get follow status")
+          return
+        }
+
+        setIsFollowing(response.data.status)
+        console.log(response.data)
+        
+      } catch (error) {
+        console.error("failed to get follow status")
+      }
+    }
+
+    fetchFollowStatus();
+
+  }, [me.userId])
 
   const user: User | undefined = data?.user;
   const articles: Post[] | undefined = data?.userArticles;
 
-  console.log(data)
+  const myProfile = useSelector((state: any) => state.user.profile);
+
+  const isProfileOwner = myProfile.username === user?.username;
 
   if (isLoading) return <Loading />;
   
-  if (isError) return <NotFoundPage />
+  if (isError) return <NotFoundPage />;
+
+  const toggleFollow = async () => {
+    setIsFollowing(!isFollowing)
+
+    if (isProfileOwner) {
+      toast.error("You can't follow yourself")
+      setLoading(false)
+      return
+    }
+
+    const path = isFollowing ? "unfollow" : "follow";
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/${path}/${user?.username}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-KEY": import.meta.env.VITE_API_KEY
+        },
+        credentials: "include"
+      })
+
+      const response = await res.json()
+
+      if (!res.ok) {
+        toast.error(response.message)
+        return
+      }
+
+      toast.success(response.message)
+
+    } catch (error) {
+      toast.error("Something went wrong")
+    }
+  }
+
+  const followBtnText = isFollowing ? "Unfollow" : "Follow";
 
   return (
     <>
-      <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:mt-10 lg:w-[900px] mx-auto items-start">
+      {loading && <Loading />}
+      <ToastContainer />
+      
+      <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:mt-10 lg:w-225 mx-auto items-start">
         <section>
           {/* Profile Picture */}
           <div>
@@ -81,8 +120,8 @@ const UserPage = () => {
               <p className="text-[12px] text-accentLight mt-1">Where Simple Stories Find Thier Voices</p>
 
               {/* profile pic */}
-              <div className="bg-white p-1 h-26 w-26 rounded-full flex-center absolute left-7 bottom-[-70px]">
-                <div className="h-24 w-24 rounded-full overflow-hidden border-1 border-accentLight">
+              <div className="bg-white p-1 h-26 w-26 rounded-full flex-center absolute left-7 -bottom-17.5">
+                <div className="h-24 w-24 rounded-full overflow-hidden border border-accentLight">
                   {user!.picture ? (
                     <img src={user!.picture} className="h-full w-full object-cover" />
                   ) : (
@@ -121,9 +160,14 @@ const UserPage = () => {
               <p>{user!.followers} Followers</p>
             </div>
 
-            <button className="btn-primary px-6 py-3 mt-4 text-sm rounded-full">
-              Follow
-            </button>
+            {!isProfileOwner && 
+              <button 
+                onClick={toggleFollow} 
+                className="btn-primary px-6 py-3 mt-4 text-sm rounded-full"
+              >
+                {followBtnText}
+              </button>
+            }
           </div>
 
         </section>
@@ -141,7 +185,7 @@ const UserPage = () => {
           {articles!.length != 0 && 
             <div>
               {articles!.map((article: Post) => {
-                return <ArticleDisplay article={article} />
+                return <ArticleDisplay key={article.articleId} article={article} />
               })}
             </div>
           }

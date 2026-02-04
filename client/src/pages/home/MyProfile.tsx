@@ -5,8 +5,10 @@ import { MdDateRange, MdVerified } from "react-icons/md"
 import { useNavigate } from "react-router"
 import type { User } from "../../redux/reducers/user_reducer"
 import MyArticles from "../../components/MyArticles"
+import { useFetchProfile } from "../../hooks/useFetchProfile"
 
 const MyProfile = () => {
+  const {} = useFetchProfile()
   const user: User = useSelector((state: any) => state.user.profile);
   const navigate = useNavigate()
 
@@ -18,9 +20,7 @@ const MyProfile = () => {
     navigate("/home/create")
   }
 
-  const toWebsite = () => {
-    window.open(user.website, '_blank', 'noopener,noreferrer')
-  }
+  console.log(user)
 
   return (
     <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:w-225 mx-auto items-start">
@@ -32,7 +32,7 @@ const MyProfile = () => {
             <p className="text-[12px] text-accentLight mt-1 font-exo">Where Simple Stories Find Thier Voices</p>
 
             {/* profile pic */}
-            <div className="bg-white p-1 h-26 w-26 rounded-full flex-center absolute left-7 bottom-[-70px]">
+            <div className="bg-white p-1 h-26 w-26 rounded-full flex-center absolute left-7 -bottom-17.5">
               <div className="h-24 w-24 rounded-full overflow-hidden border border-accentLight">
                 {user.picture ? (
                   <img src={user.picture} className="h-full w-full object-cover" />
@@ -67,7 +67,14 @@ const MyProfile = () => {
           {user.website && 
             <div className="flex-start gap-1 mt-2">
               <BiLink />
-              <p onClick={toWebsite} className="text-blue-500 text-[12px] underline cursor-pointer">{user.website}</p>
+              <a 
+                href={user.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 text-[12px] underline cursor-pointer"
+              >
+                {user.website}
+              </a>
             </div>
           }
           

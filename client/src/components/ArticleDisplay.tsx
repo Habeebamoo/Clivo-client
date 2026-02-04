@@ -16,25 +16,22 @@ const ArticleDisplay = ({ article }: { article: Post | Article }) => {
 
   return (
     <div className="py-4 border-b border-b-muted">
+
       {/* profile */}
-      <div className="cursor-pointer p-1">
-
-        <div className="flex-between">
-          <div onClick={toUser} className="flex-start gap-2 hover:bg-mutedLight active:bg-mutedLight">
-            {article.authorPicture ?
-              <div className="h-6 w-6 rounded-full overflow-hidden">
-                <img src={article.authorPicture} className="h-full w-full object-cover" />
-              </div> :
-              <div className="w-5 h-5 rounded-full bg-muted border border-accentLight"></div>
-            }
-            <div className="flex-start gap-1">
-              <p className="font-exo text-sm">{article.authorFullname}</p>
-              {article.authorVerified && <MdVerified color="rgba(93, 110, 189, 1)" />}
-            </div>
-          </div>
-
-          <div className="cursor-pointer hover:bg-gray-100">
-            <HiOutlineDotsHorizontal className="text-gray-500 hover:text-gray-800" />
+      <div 
+        onClick={toUser} 
+        className="cursor-pointer p-1 hover:bg-mutedLight active:bg-mutedLight"
+      >
+        <div className="flex-start gap-2">
+          {article.authorPicture ?
+            <div className="h-6 w-6 rounded-full overflow-hidden">
+              <img src={article.authorPicture} className="h-full w-full object-cover" />
+            </div> :
+            <div className="w-5 h-5 rounded-full bg-muted border border-accentLight"></div>
+          }
+          <div className="flex-start gap-1">
+            <p className="font-exo text-sm">{article.authorFullname}</p>
+            {article.authorVerified && <MdVerified color="rgba(93, 110, 189, 1)" />}
           </div>
         </div>
 

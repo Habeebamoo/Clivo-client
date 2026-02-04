@@ -5,7 +5,6 @@ import { setProfile, type User } from "../redux/reducers/user_reducer";
 
 const getProfile = async () => {
   try {
-    console.log("fetching user....")
     const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/me`, {
       method: "GET",
       headers: {
@@ -38,7 +37,6 @@ export const useFetchProfile = () => {
 
   useEffect(() => {
     if (isSuccess && data) {
-      console.log("success...")
       dispatch(setProfile(data))
     }
   }, [isSuccess, data, dispatch])

@@ -11,6 +11,7 @@ type UserRepository interface {
 	GetUserById(string) (models.UserResponse, int, error)
 	UpdateUserProfile(string, models.ProfileUpdateRequest) (int, error)
 	UpdateUserProfileWithPicture(string, models.ProfileUpdateRequest, string) (int, error)
+	IsFollowing(models.Follow) (bool, error)
 	CreateFollow(models.Follow) (int, error)
 	RemoveFollow(models.Follow) (int, error)
 	IncrementFollows(string, string) error
@@ -18,6 +19,7 @@ type UserRepository interface {
 	GetUserFollowersId(string) ([]string, int, error)
 	GetUsersFollowingId(string) ([]string, int, error)
 	GetUserByUsername(string) (models.SafeUserResponse, int, error)
+	GetUserIdByUsername(string) (models.UserResponse, int, error)
 	GetArticlesByUsername(string) ([]models.Article, int, error)
 	GetArticleById(string) (models.Article, int, error)
 	GetArticleBySlug(string, string) (models.Article, int, error)
@@ -106,6 +108,25 @@ func (ur *UserRepo) UpdateUserProfileWithPicture(userId string, profileReq model
 	}
 
 	return 201, nil
+}
+
+func (ur *UserRepo) IsFollowing(followReq models.Follow) (bool, error) {
+	var exists bool
+
+	res := ur.db.Raw(`
+		SELECT EXISTS (
+			SELECT 1 
+			FROM follows 
+			WHERE follower_id = ? AND following_id = ?
+		)
+	`, followReq.FollowerId, followReq.FollowingId).
+	Scan(&exists)	
+
+	if res.Error != nil {
+		return false, res.Error
+	}
+
+	return exists, nil
 }
 
 func (ur *UserRepo) CreateFollow(followReq models.Follow) (int, error) {
@@ -210,6 +231,25 @@ func (ur *UserRepo) GetUserByUsername(username string) (models.SafeUserResponse,
 			return models.SafeUserResponse{}, 404, fmt.Errorf("user does not exists")
 		}
 		return models.SafeUserResponse{}, 500, fmt.Errorf("internal server error")
+	}
+
+	return user, 200, nil
+}
+
+
+func (ur *UserRepo) GetUserIdByUsername(username string) (models.UserResponse, int, error) {
+	var user models.UserResponse
+	res := ur.db.Table("users u").
+				Select("u.user_id, u.name, u.email, u.role, u.verified, u.is_banned, p.username, p.bio, p.picture, p.profile_url, p.website, p.following, p.followers").
+				Joins("JOIN profiles p ON u.user_id = p.user_id").
+				Where("p.username = ?", username).
+				Scan(&user)
+
+	if res.Error != nil {
+		if res.Error == gorm.ErrRecordNotFound {
+			return models.UserResponse{}, 404, fmt.Errorf("user does not exists")
+		}
+		return models.UserResponse{}, 500, fmt.Errorf("internal server error")
 	}
 
 	return user, 200, nil

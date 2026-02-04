@@ -26,6 +26,7 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 	api.GET("/user/:username/articles", userHandler.GetUserArticles)
 	api.GET("/user/:username/:title", userHandler.GetUserArticle)
 	api.GET("/user/:username/:title/comments", userHandler.GetArticleComments)
+	api.GET("/user/follow-status/:userId/:username", userHandler.GetFollowStatus)
 	api.GET("/comments/:id/replys", userHandler.GetCommentReplys)
 
 	//authentication routes
@@ -41,8 +42,8 @@ func SetupRoutes(authHandler handlers.AuthHandler, articleHandler handlers.Artic
 	user := api.Group("/user", middlewares.RequireAPIKey(), middlewares.AuthenticateUser())
 	{
 		user.GET("/me", userHandler.GetProfile)
-		user.POST("/follow/:id", userHandler.FollowUser)
-		user.POST("/unfollow/:id", userHandler.UnFollowUser)
+		user.POST("/follow/:username", userHandler.FollowUser)
+		user.POST("/unfollow/:username", userHandler.UnFollowUser)
 		user.GET("/followers", userHandler.GetUserFollowers)
 		user.GET("/following", userHandler.GetUsersFollowing)
 		user.PATCH("/profile", userHandler.UpdateProfile)

@@ -13,6 +13,7 @@ import (
 type UserService interface {
 	GetUserProfile(string) (models.UserProfileResponse, int, error)
 	UpdateUserProfile(string, models.ProfileUpdateRequest) (int, error)
+	GetFollowStatus(string, string) (bool, error)
 	FollowUser(string, string) (int, error)
 	UnFollowUser(string, string) (int, error)
 	GetUser(string) (models.SafeUserResponse, int, error)
@@ -51,6 +52,7 @@ func (us *UserSvc) GetUserProfile(userId string) (models.UserProfileResponse, in
 		Email: user.Email,
 		Role: user.Role,
 		Verified: user.Verified,
+		Username: user.Username,
 		IsBanned: user.IsBanned,
 		Bio: user.Bio,
 		Picture: user.Picture,
@@ -58,7 +60,7 @@ func (us *UserSvc) GetUserProfile(userId string) (models.UserProfileResponse, in
 		ProfileUrl: user.ProfileUrl,
 		Website: user.Website,
 		Following: user.Following,
-		Followers: user.Following,
+		Followers: user.Followers,
 		CreatedAt: createdAt,
 	}
 
@@ -80,10 +82,34 @@ func (us *UserSvc) UpdateUserProfile(userId string, profileReq models.ProfileUpd
 	return us.repo.UpdateUserProfileWithPicture(userId, profileReq, imageUrl)
 }
 
-func (us *UserSvc) FollowUser(followerId string, followingId string) (int, error) {
+func (us *UserSvc) GetFollowStatus(followerId string, followingUsername string) (bool, error) {
+	user, _, err := us.repo.GetUserIdByUsername(followingUsername)
+	if err != nil {
+		return false, fmt.Errorf("failed to get userId")
+	}
+
 	follow := models.Follow{
 		FollowerId: followerId,
-		FollowingId: followingId,
+		FollowingId: user.UserId,
+	}
+
+	exists, err := us.repo.IsFollowing(follow)
+	if err != nil {
+		return exists, err
+	}
+
+	return exists, nil
+}
+
+func (us *UserSvc) FollowUser(followerId string, followingUsername string) (int, error) {
+	user, _, err := us.repo.GetUserIdByUsername(followingUsername)
+	if err != nil {
+		return 500, fmt.Errorf("failed to get userId")
+	}
+
+	follow := models.Follow{
+		FollowerId: followerId,
+		FollowingId: user.UserId,
 	}
 
 	//create follow
@@ -109,10 +135,15 @@ func (us *UserSvc) FollowUser(followerId string, followingId string) (int, error
 	//notify user following
 }
 
-func (us *UserSvc) UnFollowUser(followerId string, followingId string) (int, error) {
+func (us *UserSvc) UnFollowUser(followerId string, followingUsername string) (int, error) {
+	user, _, err := us.repo.GetUserIdByUsername(followingUsername)
+	if err != nil {
+		return 500, fmt.Errorf("failed to get userId")
+	}
+
 	follow := models.Follow{
 		FollowerId: followerId,
-		FollowingId: followingId,
+		FollowingId: user.UserId,
 	}
 
 	code, err := us.repo.RemoveFollow(follow)

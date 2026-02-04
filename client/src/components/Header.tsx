@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router"
-import logo from "../assets/logo.jpg"
-import { useState } from "react"
+import { useNavigate } from "react-router";
+import logo from "../assets/logo.jpg";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import type { User } from "../redux/reducers/user_reducer";
 import { useFetchProfile } from "../hooks/useFetchProfile";

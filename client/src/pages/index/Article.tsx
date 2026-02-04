@@ -33,6 +33,7 @@ export interface Comment {
 const ArticlePage = () => {
   const { username, title } = useParams<{ username: string, title: string }>();
   const { data, isLoading, isError } = useFetchUserArticle(username!, title!);
+
   const {} = useFetchProfile();
   const user: User = useSelector((state: any) => state.user.profile);
 
@@ -42,39 +43,52 @@ const ArticlePage = () => {
   const [commentAction, setCommentAction] = useState<"add" | "send">("add");
   const [commentBarActive, setCommentBarActive] = useState<boolean>(false)
   const [commentValue, setCommentValue] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
 
-  // const [hasUserLiked, setHasUserLiked] = useState<boolean>(false)
-  // const [isArticleLiked, setIsArticleLiked] = useState<boolean>(false)
-
-  // useEffect(() => {
-  //   const fetchHasUserLiked = async () => {
-  //     const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/article/${article?.articleId}/liked/${user.userId}`, {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "X-API-KEY": import.meta.env.VITE_API_KEY
-  //       },
-  //       credentials: "include"
-  //     })
-
-  //     const response = await res.json()
-  //     console.log(response)
-
-  //     if (response.data.liked) {
-  //       setHasUserLiked(true)
-  //     } else {
-  //       setHasUserLiked(false)
-  //     }
-  //   }
-
-  //   fetchHasUserLiked()
-  // }, [])
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const isProfileOwner = user.username === username;
 
   const navigate = useNavigate();
   if (!username || !title) {
     navigate("/")
   }
+
+  console.log(username)
+
+  useEffect(() => {
+    if (!user.userId) {
+      return
+    }
+
+    const fetchFollowStatus = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/follow-status/${user.userId}/${username}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "X-API-KEY": import.meta.env.VITE_API_KEY 
+          }
+        })
+
+        const response = await res.json()
+
+        if (!response.success) {
+          console.error("failed to get follow status")
+          return
+        }
+
+        setIsFollowing(response.data.status)
+        console.log(response.data)
+        
+      } catch (error) {
+        console.error("failed to get follow status")
+      }
+    }
+
+    fetchFollowStatus();
+
+  }, [user.userId])
+  
 
   useEffect(() => {
     if (commentValue) {
@@ -82,6 +96,7 @@ const ArticlePage = () => {
     }
   }, [commentValue])
 
+  // actions
   const handleCommentAction = async () => {
     if (commentAction === "add") {
       setCommentBarActive(true)
@@ -155,6 +170,43 @@ const ArticlePage = () => {
     }
   }
 
+  const toggleFollow = async () => {
+    setIsFollowing(!isFollowing)
+
+    if (isProfileOwner) {
+      toast.error("You can't follow yourself")
+      setLoading(false)
+      return
+    }
+
+    const path = isFollowing ? "unfollow" : "follow";
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/user/${path}/${username}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-KEY": import.meta.env.VITE_API_KEY
+        },
+        credentials: "include"
+      })
+
+      const response = await res.json()
+
+      if (!res.ok) {
+        toast.error(response.message)
+        return
+      }
+
+      toast.success(response.message)
+
+    } catch (error) {
+      toast.error("Something went wrong")
+    }
+  }
+
+  const followBtnText = isFollowing ? "Unfollow" : "Follow";
+
   const toUser = () => {
     window.location.href = `${article?.authorProfileUrl!}`
   }
@@ -196,17 +248,26 @@ const ArticlePage = () => {
           {article!.authorPicture ? (
             <img src={article!.authorPicture} className="h-full w-full object-cover" />
           ) : (
-            <div className="w-full h-full rounded-full bg-muted border-1 border-accentLight"></div>
+            <div className="w-full h-full rounded-full bg-muted border border-accentLight"></div>
           )}
         </div>
+
         <div onClick={toUser} className="flex-start gap-1 cursor-pointer">
           <p>{article!.authorFullname}</p>
           {article!.authorVerified && 
             <MdVerified color="rgba(93, 110, 189, 1)" />
           }
         </div>
+
         <div className="flex-start gap-1 ml-4">
-          <button className="btn-primary text-[12px] rounded-full font-inter">Follow</button>
+          {!isProfileOwner && 
+            <button
+              onClick={toggleFollow} 
+              className="btn-primary text-[12px] rounded-full font-inter"
+            >
+              {followBtnText}
+            </button>
+          }
 
           <button 
             onClick={copyArticleSlug}
@@ -269,7 +330,14 @@ const ArticlePage = () => {
           <p className="text-accent font-inter mt-2 text-sm">{article?.authorBio}</p>
         </div>
 
-        <button className="btn-primary rounded-full px-4 py-2 mt-4">Follow</button>
+        {!isProfileOwner && 
+          <button
+            onClick={toggleFollow} 
+            className="btn-primary rounded-full px-4 py-2 mt-4"
+          >
+            {followBtnText}
+          </button>
+        }
       </div>
 
       {/* Comments */}
