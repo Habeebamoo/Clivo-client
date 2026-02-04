@@ -21,6 +21,7 @@ import ErrorPage from "./pages/index/ErrorPage"
 import CreateArticle from "./pages/home/CreateArticle"
 import { ToastContainer } from "react-toastify"
 import ErrorElement from "./components/ErrorElement"
+import AdminLogin from "./pages/admin/AdminLogin"
 
 const App = () => {
   const router = createBrowserRouter( 
@@ -41,7 +42,8 @@ const App = () => {
 
         {/* Admin (Protected) */}
         <Route path="/admin" element={<AdminLayout />} errorElement={<ErrorElement to="/admin" />}>
-          <Route path="" element={<Admin />} />
+          <Route path="" element={<AdminLogin />} />
+          <Route path="dashboard" element={<Admin />} />
         </Route>
 
         <Route path="/:username" element={<UserPage />} />

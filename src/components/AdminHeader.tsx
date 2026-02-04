@@ -4,10 +4,10 @@ import logo from "../assets/logo.jpg"
 import { useState } from "react"
 
 const AdminHeader = () => {
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading] = useState<boolean>(false)
 
   return (
-    <header className="py-4 px-6 sm:px-8 flex-start bg-white fixed top-0 left-0 right-0 z-20 shadow">
+    <header className="py-4 px-6 sm:px-8 flex-start bg-white fixed top-0 left-0 right-0 z-20">
       <ToastContainer />
       {loading && <Loading />}
 

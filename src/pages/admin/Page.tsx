@@ -31,7 +31,7 @@ const AdminPage = () => {
       {/* stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
         {/* total users */}
-        <div className="bg-mutedLight border-1 border-muted p-6 rounded-lg">
+        <div className="bg-mutedLight border border-muted p-6 rounded-lg">
           <div className="flex-between">
             <p className="font-inter text-[17px]">Total Users</p>
             <FiUsers size={20} />
@@ -40,7 +40,7 @@ const AdminPage = () => {
         </div>
 
         {/* verified users */}
-        <div className="bg-mutedLight border-1 border-muted p-6 rounded-lg">
+        <div className="bg-mutedLight border border-muted p-6 rounded-lg">
           <div className="flex-between">
             <p className="font-inter text-[17px]">Verified Users</p>
             <FiUserCheck size={20} />
@@ -49,7 +49,7 @@ const AdminPage = () => {
         </div>
 
         {/* Banned users */}
-        <div className="bg-mutedLight border-1 border-muted p-6 rounded-lg">
+        <div className="bg-mutedLight border border-muted p-6 rounded-lg">
           <div className="flex-between">
             <p className="font-inter text-[17px]">Banned Users</p>
             <FiUserX size={20} />
@@ -58,7 +58,7 @@ const AdminPage = () => {
         </div>
 
         {/* Pending appeals */}
-        <div className="bg-mutedLight border-1 border-muted p-6 rounded-lg">
+        <div className="bg-mutedLight border border-muted p-6 rounded-lg">
           <div className="flex-between">
             <p className="font-inter text-[17px]">Pending Appeals</p>
             <PiWarningCircle size={20} />
@@ -68,7 +68,7 @@ const AdminPage = () => {
       </div>
 
       {/* Tabs */}
-      <div className="grid grid-cols-2 p-1 bg-mutedLight rounded-lg mt-8 md:w-[600px] mx-auto">
+      <div className="grid grid-cols-2 p-1 bg-mutedLight rounded-lg mt-8 md:w-150 mx-auto">
         <div 
           onClick={() => setTab("users")} 
           className={`${tab === "users" && "bg-white"} flex-center gap-2 p-2 rounded-md cursor-pointer`}
