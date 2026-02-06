@@ -7,14 +7,30 @@ import UsersTab from "../../components/UsersTab"
 import AppealsTab from "../../components/AppealsTab"
 import UserModal from "../../components/UserModal"
 import AppealModal from "../../components/AppealModal"
+import AdminHeader from "../../components/AdminHeader"
+import { useFetchAdminStats } from "../../hooks/useFetchAdminStats"
+import { useSelector } from "react-redux"
+import type { User } from "../../redux/reducers/user_reducer"
+import type { Appeal } from "../../redux/reducers/admin_reducer"
 
 const AdminPage = () => {
+  const {} = useFetchAdminStats();
+
+  const users: User[] = useSelector((state: any) => state.admin.users);
+  const appeals: Appeal[] = useSelector((state: any) => state.admin.appeals);
+
   const [tab, setTab] = useState<"users" | "appeals">("users")
   const [userModalActive, setUserModalActive] = useState<boolean>(false)
-  const [appealModalActive, setAppealModalActive] = useState<boolean>(false)
+  const [appealModalActive, setAppealModalActive] = useState<boolean>(false);
+
+  const totalUsers = users.length;
+  const verifiedUsers = users.filter(user => user.verified === true).length;
+  const bannedUsers = users.filter(user => user.isBanned ===  true).length;
+  const pendingAppeals = appeals.length;
 
   return (
     <main className="px-4">
+      <AdminHeader />
       {/* modals */}
       {userModalActive && <UserModal setModalActive={setUserModalActive} />}
       {appealModalActive && <AppealModal setModalActive={setAppealModalActive} />}
@@ -36,7 +52,7 @@ const AdminPage = () => {
             <p className="font-inter text-[17px]">Total Users</p>
             <FiUsers size={20} />
           </div>
-          <H2 font="inter" text="1,248" others="mt-4" />
+          <H2 font="inter" text={totalUsers} others="mt-4" />
         </div>
 
         {/* verified users */}
@@ -45,7 +61,7 @@ const AdminPage = () => {
             <p className="font-inter text-[17px]">Verified Users</p>
             <FiUserCheck size={20} />
           </div>
-          <H2 font="inter" text="345" others="mt-4" />
+          <H2 font="inter" text={verifiedUsers} others="mt-4" />
         </div>
 
         {/* Banned users */}
@@ -54,7 +70,7 @@ const AdminPage = () => {
             <p className="font-inter text-[17px]">Banned Users</p>
             <FiUserX size={20} />
           </div>
-          <H2 font="inter" text="16" others="mt-4" />
+          <H2 font="inter" text={bannedUsers} others="mt-4" />
         </div>
 
         {/* Pending appeals */}
@@ -63,7 +79,7 @@ const AdminPage = () => {
             <p className="font-inter text-[17px]">Pending Appeals</p>
             <PiWarningCircle size={20} />
           </div>
-          <H2 font="inter" text="5" others="mt-4" />
+          <H2 font="inter" text={pendingAppeals} others="mt-4" />
         </div>
       </div>
 

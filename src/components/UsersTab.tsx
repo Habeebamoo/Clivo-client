@@ -25,16 +25,16 @@ const UsersTab = ({ setModalActive }: PropsType) => {
   }
 
   return (
-    <section className="bg-mutedLight border-1 border-muted rounded-lg mt-6 mb-10 p-4">
+    <section className="bg-mutedLight border border-muted rounded-lg mt-6 mb-10 p-4">
       <h1 className="font-inter">User Management</h1>
       <p className="font-exo text-sm text-accent">View and manage all platform users</p>
 
       {/* Search Box */}
       <div className="text-accent relative mt-4">
-        <div className="absolute top-[11px] left-3"><FaSearch /></div>
+        <div className="absolute top-2.75 left-3"><FaSearch /></div>
         <input 
           type="search" 
-          className="border-1 border-muted p-2 w-full sm:w-[350px] rounded-md focus:outline-none pl-9 text-sm" 
+          className="border border-muted p-2 w-full sm:w-87.5 rounded-md focus:outline-none pl-9 text-sm" 
           placeholder="Search users by name or username..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -43,15 +43,15 @@ const UsersTab = ({ setModalActive }: PropsType) => {
 
       {/* users */}
       <div className="w-full overflow-x-auto mt-4">
-        <table className="min-w-[900px] mx-auto w-full border-collapse table-fixed">
+        <table className="min-w-225 mx-auto w-full border-collapse table-fixed">
           <thead>
             <tr className="text-left">
-              <th className="w-[100px] font-exo text-sm py-2">Picture</th>
-              <th className="w-[150px] font-exo text-sm py-2">Name</th>
-              <th className="w-[200px] font-exo text-sm py-2">Email</th>
-              <th className="w-[100px] font-exo text-sm py-2">Status</th>
-              <th className="w-[120px] font-exo text-sm py-2">Joined</th>
-              <th className="w-[100px] font-exo text-sm py-2">Action</th>
+              <th className="w-25 font-exo text-sm py-2">Picture</th>
+              <th className="w-37.5 font-exo text-sm py-2">Name</th>
+              <th className="w-50 font-exo text-sm py-2">Email</th>
+              <th className="w-25 font-exo text-sm py-2">Status</th>
+              <th className="w-30 font-exo text-sm py-2">Joined</th>
+              <th className="w-25 font-exo text-sm py-2">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -72,7 +72,7 @@ const UserDisplay = ({ user, action }: { user: User, action: (user: User) => voi
     <tr className="hover:bg-gray-50 cursor-pointer">
       {/* picture */}
       <td className="py-2">
-        <div className="h-7 w-7 bg-muted rounded-full border-1 border-accentLight">
+        <div className="h-7 w-7 bg-muted rounded-full border border-accentLight">
 
         </div>
       </td>

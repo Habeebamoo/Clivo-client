@@ -16,7 +16,7 @@ const UserModal = ({ setModalActive }: PropsType) => {
 
   return (
     <section className="bg-black/50 z-30 fixed top-0 bottom-0 left-0 right-0 flex-center">
-      <div className="bg-white w-[90%] sm:w-[400px] p-4 border-1 border-muted">
+      <div className="bg-white w-[90%] sm:w-200 p-4 border border-muted">
         <div onClick={closeModal} className="flex-end mb-2 cursor-pointer">
           <FaX color="red" size={15} />
         </div>
@@ -24,7 +24,7 @@ const UserModal = ({ setModalActive }: PropsType) => {
         {/* user info */}
         <div className="flex-start gap-3">
           {/* Picture */}
-          <div className="h-10 w-10 bg-muted border-1 border-accentLight rounded-full"></div>
+          <div className="h-10 w-10 bg-muted border border-accentLight rounded-full"></div>
 
           <div>
             <div className="flex-start gap-1">
@@ -37,7 +37,7 @@ const UserModal = ({ setModalActive }: PropsType) => {
 
         {/* actions */}
         <div className="mt-6">
-          <button className="bg-blue-600 border-1 border-blue-600 cursor-pointer hover:bg-transparent hover:text-blue-600 py-2 px-3 text-sm font-inter text-white rounded-md block mb-2">
+          <button className="bg-blue-600 border border-blue-600 cursor-pointer hover:bg-transparent hover:text-blue-600 py-2 px-3 text-sm font-inter text-white rounded-md block mb-2">
             {user.verified ? "Un-verify User" : "Verify User"}
           </button>
 

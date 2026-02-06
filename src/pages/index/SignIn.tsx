@@ -9,10 +9,10 @@ const SignInPage = () => {
 
   const login = () => {
     //prod
-    //window.location.href = `${import.meta.env.VITE_SERVER_URL}/api/auth/google`
+    window.location.href = `${import.meta.env.VITE_SERVER_URL}/api/auth/google`
 
     //dev
-    navigate("/home")
+    //navigate("/home")
   }
 
   return (

@@ -8,7 +8,7 @@ const H1 = (
 }
 
 const H2 = (
-  { font, color="black", text, others }: { font: string, color?: string, text: string, others?: string }
+  { font, color="black", text, others }: { font: string, color?: string, text: string | number, others?: string }
 ) => {
   return (
     <p className={`text-2xl font-${font} text-${color} ${others}`}>{text}</p>
