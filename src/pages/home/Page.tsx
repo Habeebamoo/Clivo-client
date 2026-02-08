@@ -11,9 +11,9 @@ const HomePage = () => {
 
   return (
     <main>
-      <section className="w-[90%] sm:w-[400px] md:w-[500px] mx-auto">
+      <section className="w-[90%] sm:w-100 md:w-125 mx-auto">
         {/* Tabs */}
-        <div className="flex-start text-[12px] my-4">
+        <div className="flex-start text-[12px] mt-20">
           <div 
             onClick={() => toggleTab("fyp")} 
             className={`${activeTab == "fyp" ? "home-tab-active" : "home-tab"}`}
