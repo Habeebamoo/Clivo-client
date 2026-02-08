@@ -3,21 +3,22 @@ import { FaSearch } from "react-icons/fa"
 import type { User } from "../redux/reducers/user_reducer";
 import { MdVerified } from "react-icons/md";
 import { SlArrowRight } from "react-icons/sl";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../redux/reducers/admin_reducer";
+import { useFetchAdminStats } from "../hooks/useFetchAdminStats";
 
 interface PropsType {
   setModalActive: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const UsersTab = ({ setModalActive }: PropsType) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const {} = useFetchAdminStats();
+
+  const users: User[] = useSelector((state: any) => state.admin.users);
   const [query, setQuery] = useState<string>("");
 
-  const users: User[] = [
-    {userId: "jdd", name: "Sarah", email: "sarah@gmail.com", role: "user", verified: true, isBanned: false, username: "@sarah", bio: "Accountant", picture: "", interests: ["Tech"], profileUrl: "", website: "", followers: 2, following: 3, createdAt: "3 months ago"},
-    {userId: "jdd", name: "Micheal", email: "micheal09@gmail.com", role: "user", verified: false, isBanned: true, username: "@michela09", bio: "Software", picture: "", interests: ["Tech"], profileUrl: "", website: "", followers: 2, following: 3, createdAt: "1 year ago"}
-  ];
+  console.log(users)
 
   const handleAction = (user: User) => {
     dispatch(setUser(user))
@@ -25,7 +26,7 @@ const UsersTab = ({ setModalActive }: PropsType) => {
   }
 
   return (
-    <section className="bg-mutedLight border border-muted rounded-lg mt-6 mb-10 p-4">
+    <section className="bg-mutedLight border border-muted rounded-lg md:w-150 lg:w-200 mx-auto mt-10 mb-10 p-4">
       <h1 className="font-inter">User Management</h1>
       <p className="font-exo text-sm text-accent">View and manage all platform users</p>
 
@@ -42,7 +43,7 @@ const UsersTab = ({ setModalActive }: PropsType) => {
       </div>
 
       {/* users */}
-      <div className="w-full overflow-x-auto mt-4">
+      <div className="w-full overflow-x-auto py-4">
         <table className="min-w-225 mx-auto w-full border-collapse table-fixed">
           <thead>
             <tr className="text-left">
@@ -54,9 +55,11 @@ const UsersTab = ({ setModalActive }: PropsType) => {
               <th className="w-25 font-exo text-sm py-2">Action</th>
             </tr>
           </thead>
-          <tbody>
-            {users.map(user => <UserDisplay key={user.userId} user={user} action={handleAction} />)}
-          </tbody>
+          {users.length >= 1 &&
+             <tbody>
+              {users.map(user => <UserDisplay key={user.userId} user={user} action={handleAction} />)}
+            </tbody>
+          }
         </table>
       </div>
     </section>
@@ -72,8 +75,8 @@ const UserDisplay = ({ user, action }: { user: User, action: (user: User) => voi
     <tr className="hover:bg-gray-50 cursor-pointer">
       {/* picture */}
       <td className="py-2">
-        <div className="h-7 w-7 bg-muted rounded-full border border-accentLight">
-
+        <div className="h-7 w-7 rounded-full overflow-hidden">
+          <img src={user.picture} className="h-full w-full" />
         </div>
       </td>
 

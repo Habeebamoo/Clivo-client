@@ -12,12 +12,21 @@ import { useFetchAdminStats } from "../../hooks/useFetchAdminStats"
 import { useSelector } from "react-redux"
 import type { User } from "../../redux/reducers/user_reducer"
 import type { Appeal } from "../../redux/reducers/admin_reducer"
+import { ToastContainer } from "react-toastify"
 
 const AdminPage = () => {
   const {} = useFetchAdminStats();
 
   const users: User[] = useSelector((state: any) => state.admin.users);
   const appeals: Appeal[] = useSelector((state: any) => state.admin.appeals);
+
+  // useEffect(() => {
+  //   if (!isLoading && users.length == 0) {
+  //     <Navigate to={"/signin"} />
+  //   }
+  // }, [users, appeals, isLoading])
+
+  // if (isLoading) return <Loading />
 
   const [tab, setTab] = useState<"users" | "appeals">("users")
   const [userModalActive, setUserModalActive] = useState<boolean>(false)
@@ -31,6 +40,7 @@ const AdminPage = () => {
   return (
     <main className="px-4">
       <AdminHeader />
+      <ToastContainer />
       {/* modals */}
       {userModalActive && <UserModal setModalActive={setUserModalActive} />}
       {appealModalActive && <AppealModal setModalActive={setAppealModalActive} />}

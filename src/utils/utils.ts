@@ -1,4 +1,6 @@
 export const shorten = (text: string, max: number): string => {
+  if (!text) return text
+  
   const words = text.split("");
   if (words.length <= max) {
     return text
