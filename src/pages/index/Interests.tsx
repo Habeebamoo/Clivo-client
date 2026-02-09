@@ -89,7 +89,7 @@ const InterestsPage = () => {
 
   const signUpUser = async () => {
     setLoading(true)
-    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/auth/signin?token=${token}`, {
+    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/auth/signup?token=${token}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

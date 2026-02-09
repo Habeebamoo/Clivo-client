@@ -132,6 +132,10 @@
   @apply border-accent flex-center border-b-2 py-2 px-6 cursor-pointer font-open;
 };
 
+@utility appeal-radio {
+  @apply font-inter flex-start gap-4 bg-gray-100 py-6 px-4 w-75 border border-gray-200 mx-auto cursor-pointer;
+};
+
 .ProseMirror:focus {
 	outline: none;
 }

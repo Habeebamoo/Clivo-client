@@ -22,6 +22,7 @@ import CreateArticle from "./pages/home/CreateArticle"
 import { ToastContainer } from "react-toastify"
 import ErrorElement from "./components/ErrorElement"
 import AdminLogin from "./pages/admin/AdminLogin"
+import Appeal from "./pages/index/Appeal"
 
 const App = () => {
   const router = createBrowserRouter( 
@@ -30,6 +31,7 @@ const App = () => {
         <Route path="/" element={<WelcomePage />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/interests" element={<InterestsPage />} />
+        <Route path="/appeal/:userId" element={<Appeal />} />
         <Route path="/auth/error" element={<ErrorPage />} />
 
         {/* Home (Protected) */}

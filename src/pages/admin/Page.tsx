@@ -41,6 +41,7 @@ const AdminPage = () => {
     <main className="px-4">
       <AdminHeader />
       <ToastContainer />
+      
       {/* modals */}
       {userModalActive && <UserModal setModalActive={setUserModalActive} />}
       {appealModalActive && <AppealModal setModalActive={setAppealModalActive} />}

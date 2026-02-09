@@ -23,7 +23,9 @@ const AppealModal = ({ setModalActive }: PropsType) => {
         {/* user info */}
         <div className="flex-start gap-3">
           {/* Picture */}
-          <div className="h-10 w-10 bg-muted border border-accentLight rounded-full"></div>
+          <div className="h-10 w-10 overflow-hidden rounded-full">
+            <img src={userAppeal.picture} className="h-full w-full" />
+          </div>
 
           <div>
             <p className="font-inter">{userAppeal.name}</p>

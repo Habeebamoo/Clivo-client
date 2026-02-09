@@ -15,6 +15,37 @@ const UserModal = ({ setModalActive }: PropsType) => {
     setModalActive(false)
   }
 
+  const toggleUserRestriction = async () => {
+    const path = user.isBanned ? "unrestrict" : "restrict";
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/admin/${path}/${user.userId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-KEY": import.meta.env.VITE_API_KEY
+        },
+        credentials: "include"
+      })
+
+      const response = await res.json();
+
+      if (!res.ok) {
+        toast.error(response.message)
+        return
+      }
+
+      toast.success(response.message)
+      setTimeout(() => {
+        setModalActive(false)
+        window.location.reload();
+        
+      }, 2500)      
+    } catch (error) {
+      toast.error("Something went wrong.")
+    }
+  }
+
   const toggleVerififiedUser = async () => {
     const path = user.verified ? "unverify" : "verify";
 
@@ -78,8 +109,11 @@ const UserModal = ({ setModalActive }: PropsType) => {
             {user.verified ? "Un-verify User" : "Verify User"}
           </button>
 
-          <button className="btn-primary font-inter py-2 text-sm rounded-md block">
-            Ban User
+          <button
+            onClick={toggleUserRestriction} 
+            className="btn-primary font-inter py-2 text-sm rounded-md block"
+          >
+            {user.isBanned ? "Un-restrict" : "Restrict"}
           </button>
         </div>
       </div>

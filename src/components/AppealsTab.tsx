@@ -46,8 +46,8 @@ const AppealDisplay = ({ appeal, action }: { appeal: any, action: (appeal: Appea
       <div className="sm:flex-between gap-1">
         <div className="flex-start gap-2">
           {/* picture */}
-          <div className="h-9 w-9 bg-muted border border-accentLight rounded-full">
-            
+          <div className="h-9 w-9 overflow-hidden rounded-full">
+            <img src={appeal.picture} className="h-full w-full" />
           </div>
 
           {/* name & email */}
@@ -63,8 +63,8 @@ const AppealDisplay = ({ appeal, action }: { appeal: any, action: (appeal: Appea
         </button>
       </div>
 
-      <div className="mt-4">
-        <p className="font-inter">Appeal Message</p>
+      <div className="mt-6">
+        <p className="font-exo text-sm">{appeal.message}</p>
         <p className="text-sm text-accent font-exo mt-2">{shorten(appeal.appealMessage, 90)}</p>
       </div>
 
