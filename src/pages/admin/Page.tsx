@@ -47,7 +47,7 @@ const AdminPage = () => {
       {appealModalActive && <AppealModal setModalActive={setAppealModalActive} />}
 
       {/* page title */}
-      <div className="flex-start gap-2 mt-19">
+      <div className="flex-start gap-2 mt-19 lg:px-10 xl:px-20">
         <BiShield size={33} />
         <div className="mt-4">
           <H1 font="inter" text="Admin Panel" />
@@ -56,7 +56,7 @@ const AdminPage = () => {
       </div>
 
       {/* stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8 lg:px-10 xl:px-20">
         {/* total users */}
         <div className="bg-mutedLight border border-muted p-6 rounded-lg">
           <div className="flex-between">
@@ -95,7 +95,7 @@ const AdminPage = () => {
       </div>
 
       {/* Tabs */}
-      <div className="grid grid-cols-2 p-1 bg-mutedLight rounded-lg mt-8 md:w-150 mx-auto">
+      <div className="grid grid-cols-2 p-1 bg-mutedLight rounded-lg mt-12 md:w-100 mx-auto">
         <div 
           onClick={() => setTab("users")} 
           className={`${tab === "users" && "bg-white"} flex-center gap-2 p-2 rounded-md cursor-pointer`}
