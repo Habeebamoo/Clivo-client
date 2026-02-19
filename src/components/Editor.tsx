@@ -89,7 +89,7 @@ const Editor = ({ saveContent }: Props) => {
         </button> 
       }
 
-      <div id="editor" className="font-jsans" />
+      <div id="editor" className="font-jsl" />
     </>
   )
 }

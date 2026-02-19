@@ -12,7 +12,7 @@ import Loading from "../../components/Loading"
 import { toast } from "react-toastify"
 import Spinner from "../../components/Spinner"
 
-const Appeal = () => {
+const AppealPage = () => {
   const { userId } = useParams<{ userId: string }>();
   const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -212,7 +212,7 @@ const Appeal = () => {
             <p className="text-gray-700">Review Period</p>
 
             <p className="text-gray-500 font-outfit">
-              Appeal reviews takes 3-5 business days.
+              Appeals reviews takes 3-5 business days.
             </p>
           </div>
         </div>
@@ -221,4 +221,4 @@ const Appeal = () => {
   )
 }
 
-export default Appeal
+export default AppealPage

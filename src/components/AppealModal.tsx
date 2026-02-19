@@ -1,6 +1,7 @@
 import { FaX } from "react-icons/fa6"
 import type { Appeal } from "../redux/reducers/admin_reducer"
 import { useSelector } from "react-redux"
+import { toast } from "react-toastify"
 
 interface PropsType {
   setModalActive: React.Dispatch<React.SetStateAction<boolean>>
@@ -11,6 +12,32 @@ const AppealModal = ({ setModalActive }: PropsType) => {
 
   const closeModal = () => {
     setModalActive(false)
+  }
+
+  const acceptAppeal = async () => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/admin/unrestrict/${userAppeal.userId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-KEY": import.meta.env.VITE_API_KEY
+        },
+        credentials: "include"
+      })
+
+      const response = await res.json()
+
+      if (!res.ok) {
+        toast.error(response.message)
+        return
+      }
+
+      toast.success(response.message)
+      setTimeout(() => window.location.reload(), 2500)
+    } catch (error) {
+      toast.error("Something went wrong.")
+      return
+    }
   }
 
   return (
@@ -41,7 +68,10 @@ const AppealModal = ({ setModalActive }: PropsType) => {
 
         {/* actions */}
         <div className="mt-6 flex-start gap-2">
-          <button className="bg-green-600 border border-green-600 cursor-pointer hover:bg-transparent hover:text-green-600 py-2 px-3 text-sm font-inter text-white rounded-md">
+          <button
+            onClick={acceptAppeal} 
+            className="bg-green-600 border border-green-600 cursor-pointer hover:bg-transparent hover:text-green-600 py-2 px-3 text-sm font-inter text-white rounded-md"
+          >
             Accept
           </button>
 
