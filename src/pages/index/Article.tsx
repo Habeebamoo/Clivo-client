@@ -309,7 +309,8 @@ const ArticlePage = () => {
           <GoHeartFill color="rgb(165, 163, 161)" size={19} />
           <p className="text-sm">{article?.likes}</p>
         </div>
-        <div>
+
+        <div onClick={copyArticleSlug} className="cursor-pointer">
           <CgShare color="rgb(165, 163, 161)" size={19} />
         </div>
       </div>
