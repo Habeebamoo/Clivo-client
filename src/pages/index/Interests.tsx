@@ -66,7 +66,6 @@ const InterestsPage = () => {
     {text: "Sports", icon: <FaBasketball color="#ff9800" />},
     {text: "Movies", icon: <FaFilm color="#2196f3" />},
     {text: "Anime", icon: <FaTheaterMasks color="#e91e63" />}
-
   ];
 
   const selected = (interest: string): boolean => {
@@ -130,7 +129,11 @@ const InterestsPage = () => {
         })}
       </div>
 
-      <button onClick={signUpUser} className="btn-primary block font-outfit mx-auto mt-20">Submit</button>
+      <button 
+        onClick={signUpUser} 
+        className="btn-primary block px-5 py-2 font-outfit mx-auto mt-20"
+      >
+        Submit</button>
       <div className="mb-15"></div>
     </section>
   )
@@ -152,7 +155,8 @@ const InterestBadge = ({ icon, text, selected, interests, addInterest, removeInt
   return (
     <div
       onClick={interestExists ? () => removeInterest(text) : () => addInterest(text)} 
-      className={`${selected && "bg-black text-white"} py-2 px-4 rounded-full flex-center gap-2 hover:bg-accentLight active:bg-black active:text-white cursor-pointer text-sm`}>
+      className={`${selected && "bg-black text-white"} py-2 px-4 rounded-full flex-center gap-2 hover:bg-accentLight active:bg-black active:text-white cursor-pointer text-sm`}
+    >
       {icon}
       <span>{text}</span>
     </div>

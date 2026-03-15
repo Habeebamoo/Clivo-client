@@ -8,7 +8,7 @@ const ErrorPage = () => {
   const reason = searchParams.get("reason")
 
   const backtoLogin = () => {
-    navigate(-1)
+    navigate("/signin")
   }
 
   return (

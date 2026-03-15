@@ -8,7 +8,7 @@ import { memo } from "react"
 
 const PhotoGrid = () => {
   return (
-    <div className="w-[90%] sm:w-[400px] mx-auto">
+    <div className="w-[90%] sm:w-100 mx-auto">
       <div className="grid grid-cols-3 gap-2">
 
         <div className="flex flex-col gap-2 justify-center">

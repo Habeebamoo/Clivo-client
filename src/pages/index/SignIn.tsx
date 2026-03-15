@@ -1,4 +1,4 @@
-import { H2 } from "../../components/Typo"
+import { H1 } from "../../components/Typo"
 import googleImg from "../../assets/google.png"
 import logo from "../../assets/logo2.png"
 import Button from "../../components/Button"
@@ -19,10 +19,10 @@ const SignInPage = () => {
     <main className="flex-center flex-col h-screen">
       <img src={logo} className="h-20 mb-6" />
 
-      <H2 font="inter" text="Welcome To Clivo" />
+      <H1 font="outfit-rich" text="Welcome To Clivo" />
 
       <p 
-        className="text-gray-700 text-center font-jsans text-sm mb-6 mt-4 w-[90%]"
+        className="text-gray-700 text-center font-inter text-sm mb-6 mt-4 w-[90%]"
       >
         Sign in with your Google account to continue with Clivo.
       </p>
