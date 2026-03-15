@@ -46,7 +46,7 @@ const ReplyBox = ({ commentId, repliedTo, setReplysBox }: Props) => {
 
   return (
     <section className="fixed top-0 bottom-0 right-0 left-0 bg-black/80 z-20 md:flex-center">
-      <div className="bg-white md:rounded-xl w-[500px] p-6 max-md:fixed max-md:bottom-0 max-md:left-0 max-md:right-0 max-md:w-[95%] max-md:rounded-t-xl mx-auto">
+      <div className="bg-white md:rounded-xl w-125 p-6 max-md:fixed max-md:bottom-0 max-md:left-0 max-md:right-0 max-md:w-[95%] max-md:rounded-t-xl mx-auto">
         {/* cacel button */}
         <div 
           onClick={() => setReplysBox(false)} 
