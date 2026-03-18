@@ -10,12 +10,6 @@ const ArticleDisplay = ({ article }: { article: Post | Article }) => {
     window.location.href = article.authorProfileUrl;
   }
 
-  const toPost = () => {
-    window.location.href = `${import.meta.env.VITE_BASE_URL}/${article.slug}`;
-  }
-
-  console.log(`${import.meta.env.VITE_BASE_URL}/${article.slug}`)
-
   return (
     <div className="py-4 border-b border-b-muted">
 
@@ -46,18 +40,22 @@ const ArticleDisplay = ({ article }: { article: Post | Article }) => {
       </div>
 
       {/* title & picture */}
-      <div onClick={toPost} className="py-3 my-2 grid grid-cols-6 gap-3 px-1 hover:bg-gray-50 active:bg-gray-50 cursor-pointer">
-        <div className="col-span-4 wrap-break-word">
-          <H3 font="inter" text={shorten(article.title, 50)} />
+      <a href={`${import.meta.env.VITE_BASE_URL}/${article.slug}`}>
+        <div
+          className="py-3 my-2 grid grid-cols-6 gap-3 px-1 hover:bg-gray-50 active:bg-gray-50 cursor-pointer"
+        >
+          <div className="col-span-4 wrap-break-word">
+            <H3 font="inter" text={shorten(article.title, 50)} />
+          </div>
+          <div className="h-20 w-full col-span-2">
+            {article.picture ? (
+              <img src={article.picture} className="h-full w-full object-cover" />
+            ): (
+              <div className="w-full h-full bg-muted object-cover"></div>
+            )}
+          </div>
         </div>
-        <div className="h-20 w-full col-span-2">
-          {article.picture ? (
-            <img src={article.picture} className="h-full w-full object-cover" />
-          ): (
-            <div className="w-full h-full bg-muted object-cover"></div>
-          )}
-        </div>
-      </div>
+      </a>
 
       {/* tags */}
       <div className="px-1 flex-start flex-wrap gap-1 w-[80%]">
