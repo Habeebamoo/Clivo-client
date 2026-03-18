@@ -13,7 +13,7 @@ const Home = () => {
 
   useEffect(() => {
     const checkAPIHealth = async () => {
-      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/health`, {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/health`, {
         method: "GET",
       })
 
