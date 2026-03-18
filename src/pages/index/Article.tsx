@@ -325,7 +325,7 @@ const ArticlePage = () => {
               <MdVerified size={22} color="rgba(93, 110, 189, 1)" />
             }
           </div>
-          <p className="text-accent font-inter mt-2 text-sm">{article?.authorBio}</p>
+          <p className="text-accent font-outfit mt-2 text-sm">{article?.authorBio}</p>
         </div>
 
         {!isProfileOwner && 

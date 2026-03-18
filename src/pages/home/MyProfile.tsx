@@ -61,9 +61,10 @@ const MyProfile = () => {
           <p className="text-[12px] text-accentLight underline font-inter">{user.username}</p>
 
           {/* Bio */}
-          <p className="font-exo text-sm text-accent mt-4">{user.bio}</p>
+          <p className="font-outfit text-sm text-accent mt-4">{user.bio}</p>
+
           {user.website && 
-            <div className="flex-start gap-1 mt-2">
+            <div className="flex-start gap-1 mt-4">
               <BiLink />
               <a 
                 href={user.website}
