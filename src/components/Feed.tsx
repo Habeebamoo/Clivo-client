@@ -10,7 +10,7 @@ const FeedSection = () => {
   const articles: Post[] = useSelector((state: any) => state.articles.posts)
 
   if (isLoading) return (
-    <div className="flex-center h-[200px]">
+    <div className="flex-center h-50">
       <Spinner color="accentLight" size={20} />
     </div>
   )
@@ -33,13 +33,13 @@ const FeedSection = () => {
   }
 
   return (
-    <>
+    <section className="mb-10">
       {articles.map((article: any, i: any) => {
         return (
           <ArticleDisplay key={i} article={article} />
         )
       })}
-    </>
+    </section>
   )
 }
 
