@@ -2,7 +2,7 @@ import { H3 } from "./Typo"
 import { shorten } from "../utils/utils"
 import type { Article, Post } from "../redux/reducers/article_reducer"
 import { MdVerified } from "react-icons/md"
-import { GoHeart } from "react-icons/go"
+import { GoHeart, GoHeartFill } from "react-icons/go"
 import { Link } from "react-router"
 
 const ArticleDisplay = ({ article }: { article: Post | Article }) => {
@@ -36,7 +36,7 @@ const ArticleDisplay = ({ article }: { article: Post | Article }) => {
           </div>
         </div>
 
-        <p className="text-[12px] text-accent font-outfit pl-7">{article.createdAt}</p>
+        <p className="text-[12px] text-accent font-outfit pl-9">{article.createdAt}</p>
       </div>
 
       {/* title & picture */}
@@ -67,7 +67,11 @@ const ArticleDisplay = ({ article }: { article: Post | Article }) => {
       {/* others */}
       <div className="mt-3 px-2 flex-between">
         <div className="flex-start gap-1">
-          <GoHeart color="rgb(165, 163, 161)" />
+          {article.likes > 0 ?
+            <GoHeartFill color="rgb(165, 163, 161)" size={19} /> 
+          :   
+            <GoHeart color="rgb(165, 163, 161)" size={19} />
+          }
           <p className="text-[12px] font-outfit">{article.likes}</p>
         </div>
 

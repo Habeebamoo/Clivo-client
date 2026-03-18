@@ -5,7 +5,7 @@ import { type Post } from "../../redux/reducers/article_reducer";
 import { shorten } from "../../utils/utils";
 import { FaRegEye, FaUpload } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
-import { GoHeartFill } from "react-icons/go";
+import { GoHeart, GoHeartFill } from "react-icons/go";
 import { CgShare } from "react-icons/cg";
 import NotFound from "../../components/NotFound";
 import Loading from "../../components/Loading";
@@ -298,15 +298,12 @@ const ArticlePage = () => {
           onClick={likeArticle}  
           className="flex-start gap-1 cursor-pointer"
         >
-          {/* {hasUserLiked ? (
-            <GoHeartFill color="black" size={19} />
-          ) : isArticleLiked ? (
-            <GoHeartFill color="grey" size={19} /> // optional: show filled heart for others
-          ) : (
+          {article!.likes > 0 ? 
+            <GoHeartFill color="rgb(165, 163, 161)" size={19} /> 
+          : 
             <GoHeart color="rgb(165, 163, 161)" size={19} />
-          )} */}
-
-          <GoHeartFill color="rgb(165, 163, 161)" size={19} />
+          }
+          
           <p className="text-sm">{article?.likes}</p>
         </div>
 
@@ -316,7 +313,7 @@ const ArticlePage = () => {
       </div>
 
       {/* Profile */}
-      <div className="mt-10">
+      <div className="mt-15">
         <H3 font="exo" text="About The Author." />
         <div onClick={toUser} className="cursor-pointer mt-8">
           <div className="h-20 w-20 rounded-full overflow-hidden mb-4">
@@ -342,7 +339,7 @@ const ArticlePage = () => {
       </div>
 
       {/* Comments */}
-      <div className="my-15">
+      <div className="mt-20 mb-15">
         <div className="flex-between">
           <H3 font="exo" text="Comments" />
           {loading ?

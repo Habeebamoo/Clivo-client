@@ -47,7 +47,7 @@ const MyProfile = () => {
         <div className="mt-20 px-8">
           {/* Name */}
           <div className="flex-start gap-2">
-            <H2 font="exo" text={user.name} />
+            <H2 font="dm" text={user.name} />
             {user.verified ? 
               <MdVerified size={18} color="rgba(93, 110, 189, 1)" /> : 
               <p className="text-[12px] underline cursor-pointer">

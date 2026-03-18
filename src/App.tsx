@@ -30,12 +30,12 @@ const App = () => {
       <>
         <Route path="/" element={<WelcomePage />} />
         <Route path="/signin" element={<SignInPage />} />
-        <Route path="/interests" element={<InterestsPage />} />
+        <Route path="/interests" element={<InterestsPage />} errorElement={<ErrorElement to="/signin" />} />
         <Route path="/appeal/:userId" element={<Appeal />} />
         <Route path="/auth/error" element={<ErrorPage />} />
 
         {/* Home (Protected) */}
-        <Route path="/home" element={<HomeLayout />} errorElement={<ErrorElement to="/signin" />}>
+        <Route path="/home" element={<HomeLayout />} errorElement={<ErrorElement to="/signin" />} >
           <Route path="" element={<Home />} />
           <Route path="create" element={<CreateArticle />} />
           <Route path="profile" element={<MyProfile />} />
@@ -58,7 +58,7 @@ const App = () => {
   return (
     <>
       <RouterProvider router={router} />
-      <ToastContainer position="top-center" />
+      <ToastContainer position="top-center" className="font-outfit" />
     </>
   )
 }
