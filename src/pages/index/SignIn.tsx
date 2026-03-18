@@ -13,13 +13,13 @@ const SignInPage = () => {
   }
 
   return (
-    <main className="flex-center flex-col h-screen">
+    <main className="pt-50 flex-center flex-col">
       <img src={logo} className="h-20 mb-6" />
 
       <H1 font="outfit-rich" text="Welcome To Clivo" />
 
       <p 
-        className="text-gray-700 text-center font-inter text-sm mb-6 mt-4 w-[90%]"
+        className="text-gray-700 text-center font-open text-sm mb-6 mt-4 w-[90%]"
       >
         Sign in with your Google account to continue with Clivo.
       </p>

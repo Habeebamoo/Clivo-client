@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router"
+import { Navigate, Outlet } from "react-router"
 import Header from "../components/Header"
 import { useSelector } from "react-redux"
 import { useFetchProfile } from "../hooks/useFetchProfile"
@@ -8,11 +8,10 @@ import { useEffect } from "react"
 const Layout = () => {
   const { isLoading } = useFetchProfile()
   const user = useSelector((state: any) => state.user.profile)
-  const navigate = useNavigate()
 
   useEffect(() => {
     if (!isLoading && !user.email) {
-      navigate("/signin")
+      <Navigate to={"/signin"} />
     }
   }, [user, isLoading])
 
