@@ -36,7 +36,7 @@ const ArticleDisplay = ({ article }: { article: Post | Article }) => {
           </div>
         </div>
 
-        <p className="text-[12px] text-accent font-outfit pl-9">{article.createdAt}</p>
+        <p className="text-[12px] text-accent font-outfit pl-8">{article.createdAt}</p>
       </div>
 
       {/* title & picture */}
