@@ -339,7 +339,7 @@ const ArticlePage = () => {
       </div>
 
       {/* Comments */}
-      <div className="mt-20 mb-15">
+      <div className="mt-20 mb-25">
         <div className="flex-between">
           <H3 font="exo" text="Comments" />
           {loading ?
