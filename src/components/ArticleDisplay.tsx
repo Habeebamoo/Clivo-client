@@ -3,6 +3,7 @@ import { shorten } from "../utils/utils"
 import type { Article, Post } from "../redux/reducers/article_reducer"
 import { MdVerified } from "react-icons/md"
 import { GoHeart } from "react-icons/go"
+import { Link } from "react-router"
 
 const ArticleDisplay = ({ article }: { article: Post | Article }) => {
   const toUser = () => {
@@ -12,6 +13,8 @@ const ArticleDisplay = ({ article }: { article: Post | Article }) => {
   const toPost = () => {
     window.location.href = `${import.meta.env.VITE_BASE_URL}/${article.slug}`;
   }
+
+  console.log(`${import.meta.env.VITE_BASE_URL}/${article.slug}`)
 
   return (
     <div className="py-4 border-b border-b-muted">
@@ -29,7 +32,12 @@ const ArticleDisplay = ({ article }: { article: Post | Article }) => {
             <div className="w-5 h-5 rounded-full bg-muted border border-accentLight"></div>
           }
           <div className="flex-start gap-1">
-            <p className="font-exo text-sm">{article.authorFullname}</p>
+            <Link 
+              to={`${import.meta.env.VITE_BASE_URL}/${article.slug}`}
+              className="font-exo text-sm"
+            >
+              {article.authorFullname}
+            </Link>
             {article.authorVerified && <MdVerified color="rgba(93, 110, 189, 1)" />}
           </div>
         </div>

@@ -20,8 +20,6 @@ const MyProfile = () => {
     navigate("/home/create")
   }
 
-  console.log(user)
-
   return (
     <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:w-225 mx-auto items-start">
       <section>
