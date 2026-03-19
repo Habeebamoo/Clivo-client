@@ -12,9 +12,9 @@ const Header = ({ type="welcome" }: { type?: "welcome" | "home" }) => {
   const { isLoading } = useFetchProfile()
   const user: User = useSelector((state: any) => state.user.profile);
 
-  const [navActive, setNavActive] = useState<boolean>(false)
-  const [loggingOut, setLoggingOut] = useState<boolean>(false)
-  const navigate = useNavigate()
+  const [navActive, setNavActive] = useState<boolean>(false);
+  const [loggingOut, setLoggingOut] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   console.log(user)
 
@@ -75,7 +75,7 @@ const Header = ({ type="welcome" }: { type?: "welcome" | "home" }) => {
       <nav className="flex-between w-full">
         <div className="flex-start gap-2">
           <img src={logo} className="h-8 rounded-sm" />
-          <h1 className="text-2xl font-bold font-inter">Clivo</h1>
+          <Link to={""} className="text-2xl font-bold font-inter">Clivo</Link>
         </div>
 
         {isLoading && 
