@@ -2,9 +2,19 @@ import { useEffect, useState } from "react"
 import Header from "../../components/Header"
 import PhotoGrid from "../../components/PhotoGrid"
 import { toast } from "react-toastify"
+import SubscribeModal from "../../components/SubscribeModal"
 
 const Home = () => {
-  const [email, setEmail] = useState<string>("")
+  const [subscribeModal, setSubscribeModal] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>("");
+
+  useEffect(() => {
+    if (subscribeModal) {
+      setTimeout(() => {
+        setSubscribeModal(false)
+      }, 4000)
+    }
+  }, [subscribeModal])
 
   const subscribe = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -27,7 +37,7 @@ const Home = () => {
         return
       }
 
-      toast.success(data.message)
+      setSubscribeModal(true)
       setEmail("")
     } catch (error) {
       toast.error("Subscription failed.")
@@ -50,6 +60,7 @@ const Home = () => {
   return (
     <main className="bg-center bg-cover min-h-screen">
       <div className="bg-white/70 inset-0">
+        {subscribeModal && <SubscribeModal />}
         <Header />
 
         {/* Hero section */}
