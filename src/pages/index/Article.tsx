@@ -1,5 +1,5 @@
 import { H2, H3 } from "../../components/Typo"
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { type Post } from "../../redux/reducers/article_reducer";
 import { shorten } from "../../utils/utils";
@@ -18,6 +18,7 @@ import { useFetchProfile } from "../../hooks/useFetchProfile";
 import { PiArrowBendDoubleUpLeftBold } from "react-icons/pi";
 import ReplyBox from "../../components/ReplysBox";
 import BlockRenderer from "../../components/BlockRenderer";
+import RegisterModal from "../../components/RegisterModal";
 
 export interface Comment {
   commentId: string,
@@ -44,6 +45,7 @@ const ArticlePage = () => {
   const [commentBarActive, setCommentBarActive] = useState<boolean>(false)
   const [commentValue, setCommentValue] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [registerModal, setRegisterModal] = useState<boolean>(false);
 
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const isProfileOwner = user.username === username;
@@ -127,6 +129,11 @@ const ArticlePage = () => {
       const response = await res.json()
 
       if (!res.ok) {
+        if (res.status === 401) {
+          setRegisterModal(true)
+          return
+        }
+
         toast.error(response.message)
         return
       }
@@ -158,12 +165,15 @@ const ArticlePage = () => {
       })
 
       if (!res.ok) {
+        if (res.status === 401) {
+          setRegisterModal(true)
+          return
+        }
+
         toast.error("Failed to like post, Try again")
         return
       }
 
-      // setIsArticleLiked(true)
-      // setHasUserLiked(true)
       window.location.reload()
     } catch (error) {
       toast.error("Failed to like post, Try again")
@@ -224,6 +234,8 @@ const ArticlePage = () => {
 
   return (
     <main className="w-[90%] sm:w-100 md:w-125 mx-auto">
+      {registerModal && <RegisterModal />}
+
       {/* Heading section */}
       <div className="p-1 w-full mt-6">
         <div>
@@ -253,7 +265,10 @@ const ArticlePage = () => {
         </div>
 
         <div onClick={toUser} className="flex-start gap-1 cursor-pointer">
-          <p>{article!.authorFullname}</p>
+          <Link to={`${article?.authorProfileUrl!}`}>
+            {article!.authorFullname}
+          </Link>
+
           {article!.authorVerified && 
             <MdVerified color="rgba(93, 110, 189, 1)" />
           }
@@ -415,6 +430,11 @@ const CommentDisplay = ({ comment }: { comment: Comment}) => {
       const response = await res.json()
 
       if (!res.ok) {
+        if (res.status === 401) {
+          toast.error("You need to be logged in to reply")
+          return
+        }
+
         toast.error(response.message)
         return
       }

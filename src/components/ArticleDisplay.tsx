@@ -28,7 +28,7 @@ const ArticleDisplay = ({ article }: { article: Post | Article }) => {
           <div className="flex-start gap-1">
             <Link 
               to={`${import.meta.env.VITE_BASE_URL}/${article.slug}`}
-              className="font-exo text-sm"
+              className="font-inter text-sm"
             >
               {article.authorFullname}
             </Link>
