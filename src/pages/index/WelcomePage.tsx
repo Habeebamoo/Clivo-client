@@ -1,14 +1,37 @@
 import { useEffect, useState } from "react"
 import Header from "../../components/Header"
 import PhotoGrid from "../../components/PhotoGrid"
+import { toast } from "react-toastify"
 
 const Home = () => {
   const [email, setEmail] = useState<string>("")
 
-  const subscribe = (e: React.FormEvent) => {
+  const subscribe = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email) return
-    alert(email)
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/subscribe`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-KEY": import.meta.env.VITE_API_KEY
+        },
+        body: JSON.stringify({ email })
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        toast.error(data.message)
+        return
+      }
+
+      toast.success(data.message)
+      setEmail("")
+    } catch (error) {
+      toast.error("Subscription failed.")
+    }
   }
 
   useEffect(() => {
