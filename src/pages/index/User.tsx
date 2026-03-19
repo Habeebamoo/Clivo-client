@@ -137,7 +137,7 @@ const UserPage = () => {
           <div className="mt-20 px-8">
             {/* Name */}
             <div className="flex-start gap-2">
-              <H2 font="exo" text={user!.name} />
+              <H2 font="dm" text={user!.name} />
               {user!.verified && <MdVerified size={18} color="rgba(93, 110, 189, 1)" />}
             </div>
 
@@ -145,16 +145,25 @@ const UserPage = () => {
             <p className="text-[12px] text-accentLight underline font-inter">{user!.username}</p>
 
             {/* Bio */}
-            <p className="font-exo text-sm text-accent mt-4">{user!.bio}</p>
+            <p className="font-outfit text-sm text-accent mt-4">{user!.bio}</p>
+
+            {/* website */}
             {user!.website && 
-              <div className="flex-start gap-1 mt-2">
+              <div className="flex-start gap-1 mt-4">
                 <BiLink />
-                <p className="text-blue-500 text-[12px] underline cursor-pointer">{user!.website}</p>
+                <a 
+                  href={user!.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 text-[12px] underline cursor-pointer"
+                >
+                  {user!.website}
+                </a>
               </div>
             }
             
             {/* follows */}
-            <div className="text-sm text-accent font-inter flex-start mt-2 gap-2">
+            <div className="text-sm text-accent font-inter flex-start mt-3 gap-2">
               <p>{user!.following} Following</p>
               <div className="h-1 w-1 bg-accentLight rounded-full"></div>
               <p>{user!.followers} Followers</p>

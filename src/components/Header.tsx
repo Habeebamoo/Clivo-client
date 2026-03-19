@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import logo from "../assets/logo.jpg";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -99,19 +99,19 @@ const Header = ({ type="welcome" }: { type?: "welcome" | "home" }) => {
                     {navActive && 
                       <div className="fixed right-5.75 sm:right-8.25 bg-white border border-muted mt-1 text-accent w-50">
                         <div onClick={toHome} className="nav-text border-b border-b-muted ">
-                          <p>Home</p>
+                          <Link to="/home">Home</Link>
                         </div>
 
                         <div onClick={toProfile} className="nav-text border-b border-b-muted">
-                          <p>View Profile</p>
+                          <Link to="/home/profile">My Profile</Link>
                         </div>
 
                         <div onClick={toCreate} className="nav-text border-b border-b-muted">
-                          <p>Create Article</p>
+                          <Link to="/home/create">Create Article</Link>
                         </div>
 
                         <div onClick={signOut} className="nav-text">
-                          <p>Sign Out</p>
+                          <p>Sign out</p>
                         </div>
                       </div>
                     }

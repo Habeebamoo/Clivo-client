@@ -63,6 +63,7 @@ const MyProfile = () => {
           {/* Bio */}
           <p className="font-outfit text-sm text-accent mt-4">{user.bio}</p>
 
+          {/* website */}
           {user.website && 
             <div className="flex-start gap-1 mt-4">
               <BiLink />
@@ -78,7 +79,7 @@ const MyProfile = () => {
           }
           
           {/* follows */}
-          <div className="text-sm text-accent font-inter flex-start mt-2 gap-2">
+          <div className="text-sm text-accent font-inter flex-start mt-4 gap-2">
             <p>{user.following} Following</p>
             <div className="h-1 w-1 bg-accentLight rounded-full"></div>
             <p>{user.followers} Followers</p>
