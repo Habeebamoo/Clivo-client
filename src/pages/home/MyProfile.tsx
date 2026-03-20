@@ -52,10 +52,14 @@ const MyProfile = () => {
           <div className="flex-start gap-2">
             <H2 font="dm" text={user.name} />
             {user.verified ? 
-              <MdVerified size={18} color="rgba(93, 110, 189, 1)" /> : 
-              <p className="text-[12px] underline cursor-pointer">
+              <MdVerified size={18} color="rgba(93, 110, 189, 1)" /> 
+            : 
+              <a 
+                href="https://myclivo.com/@clivoinc/" 
+                className="text-[12px] underline cursor-pointer"
+              >
                 Get Verified
-              </p>
+              </a>
             }
 
           </div>
