@@ -6,9 +6,10 @@ import { useNavigate } from "react-router"
 import type { User } from "../../redux/reducers/user_reducer"
 import MyArticles from "../../components/MyArticles"
 import { useFetchProfile } from "../../hooks/useFetchProfile"
+import Loading from "../../components/Loading"
 
 const MyProfile = () => {
-  const {} = useFetchProfile()
+  const { isLoading } = useFetchProfile();
   const user: User = useSelector((state: any) => state.user.profile);
   const navigate = useNavigate()
 
@@ -19,6 +20,8 @@ const MyProfile = () => {
   const toCreateArticle = () => {
     navigate("/home/create")
   }
+
+  if (isLoading) return <Loading />
 
   return (
     <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:w-225 mx-auto items-start">
