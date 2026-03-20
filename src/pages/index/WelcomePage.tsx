@@ -78,7 +78,7 @@ const Home = () => {
         <div className="mt-20 pb-20 p-4">
           <h1 className="text-center font-dm text-3xl">Stay <span className="text-secondary">Inspired.</span></h1>
 
-          <p className="font-open text-sm text-center text-accent mt-2 lg:mx-auto md:text-center lg:w-[50%]">
+          <p className="font-jsl text-sm text-center text-gray-700 mt-2 lg:mx-auto md:text-center lg:w-[50%]">
             Join our community of discerning readers and receive carefully selected stories, writing insights, and exclusive content delivered to your inbox.
           </p>
 

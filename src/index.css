@@ -73,11 +73,11 @@
 }
 
 @utility header {
-  @apply mb-8 text-xl text-black font-jsans;
+  @apply mb-8 text-xl text-black font-inter;
 }
 
 @utility paragraph {
-  @apply mb-8 text-gray-700 font-jsans;
+  @apply mb-8 text-gray-600 font-inter;
 }
 
 @utility ordered-cont {
@@ -85,7 +85,7 @@
 }
 
 @utility ordered {
-  @apply mb-1 text-gray-700 font-jsans flex-start gap-1;
+  @apply mb-1 text-gray-600 font-inter flex-start gap-1;
 }
 
 @utility bullet-cont {
@@ -93,11 +93,11 @@
 }
 
 @utility bullet-dot {
-  @apply h-[6px] w-[6px] bg-gray-700 rounded-full;
+  @apply h-1.5 w-1.5 bg-gray-600 rounded-full;
 }
 
 @utility bullet {
-  @apply mb-1 text-gray-700 font-jsans flex-start gap-2;
+  @apply mb-1 text-gray-600 font-jsans flex-start gap-2;
 }
 
 @utility checklist-cont {
