@@ -328,18 +328,22 @@ const ArticlePage = () => {
       {/* Profile */}
       <div className="mt-15">
         <H3 font="exo" text="About The Author." />
-        <div onClick={toUser} className="cursor-pointer mt-8">
-          <div className="h-20 w-20 rounded-full overflow-hidden mb-4">
-            <img src={article?.authorPicture} className="w-full h-full object-cover object-center" />
+        
+        <a href={`${article?.authorProfileUrl!}`}>
+          <div onClick={toUser} className="cursor-pointer mt-8">
+            <div className="h-20 w-20 rounded-full overflow-hidden mb-4">
+              <img src={article?.authorPicture} className="w-full h-full object-cover object-center" />
+            </div>
+            
+            <div className="flex-start gap-2">
+              <H2 font="inter" text={`${article?.authorFullname}`} />
+              {article!.authorVerified && 
+                <MdVerified size={22} color="rgba(93, 110, 189, 1)" />
+              }
+            </div>
+            <p className="text-accent font-outfit mt-2 text-sm">{article?.authorBio}</p>
           </div>
-          <div className="flex-start gap-2">
-            <H2 font="inter" text={`${article?.authorFullname}`} />
-            {article!.authorVerified && 
-              <MdVerified size={22} color="rgba(93, 110, 189, 1)" />
-            }
-          </div>
-          <p className="text-accent font-outfit mt-2 text-sm">{article?.authorBio}</p>
-        </div>
+        </a>
 
         {!isProfileOwner && 
           <button
