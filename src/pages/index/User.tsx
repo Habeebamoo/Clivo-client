@@ -169,13 +169,15 @@ const UserPage = () => {
               <p>{user!.followers} Followers</p>
             </div>
 
-            {!isProfileOwner && 
+            {me.userId && !isProfileOwner ?
               <button 
                 onClick={toggleFollow} 
                 className="btn-primary px-6 py-3 mt-4 text-sm rounded-full"
               >
                 {followBtnText}
               </button>
+            :
+              null
             }
           </div>
 

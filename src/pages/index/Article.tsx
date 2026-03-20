@@ -55,8 +55,6 @@ const ArticlePage = () => {
     navigate("/")
   }
 
-  console.log(username)
-
   useEffect(() => {
     if (!user.userId) {
       return
