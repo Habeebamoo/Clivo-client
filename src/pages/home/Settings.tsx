@@ -79,7 +79,7 @@ const Modal = ({ setModal }: { setModal: React.Dispatch<React.SetStateAction<boo
 
   return (
     <section className="bg-black/80 fixed top-0 bottom-0 left-0 right-0 z-20 flex-center">
-      <form onSubmit={handleSubmit} className="bg-white p-6 border-1 border-gray-100 rounded-md w-[90%] sm:w-[400px] mx-auto">
+      <form onSubmit={handleSubmit} className="bg-white p-6 border border-gray-100 rounded-md w-[90%] sm:w-100 mx-auto">
         {/* cancel */}
         <div className="flex-end mb-4">
           <button onClick={closeModal} className="py-1 px-3 bg-red-600 text-white text-sm font-outfit rounded-md border border-red-600 hover:bg-transparent hover:text-red-600 active:bg-transparent active:text-red-600 cursor-pointer">Cancel</button>
@@ -150,7 +150,7 @@ const Modal = ({ setModal }: { setModal: React.Dispatch<React.SetStateAction<boo
             name="bio"
             value={form.bio}
             onChange={handleFormChange}
-            className="border-b-1 border-b-accentLight focus:outline-none w-full py-1 placeholder:text-accentLight resize-none"
+            className="border-b border-b-accentLight focus:outline-none w-full py-1 placeholder:text-accentLight resize-none"
           ></textarea>
         </div>
 
@@ -183,7 +183,7 @@ const SettingsPage = () => {
   }
 
   return (
-    <main className="w-[90%] sm:w-[400px] mx-auto">
+    <main className="w-[90%] sm:w-100 mx-auto">
       {modal && <Modal setModal={setModal} />}
       <H1 font="inter" text="Settings" others="mt-25" />
       <div className="my-10">
