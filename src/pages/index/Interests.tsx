@@ -74,7 +74,7 @@ const InterestsPage = () => {
   }
 
   const addInterest = (text: string) => {
-    if (interests.length < 5) {
+    if (interests.length < 10) {
       setInterests(prev => ([...prev, text]))
     }
   }
