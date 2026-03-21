@@ -32,18 +32,20 @@ const ProfileArticleDisplay = ({ article }: { article: Post | Article }) => {
             <div className="w-7 h-7 rounded-full bg-muted border border-accentLight"></div>
           }
 
-          <div className="flex-start gap-1">
-            <Link 
-              to={`${import.meta.env.VITE_BASE_URL}/${article.slug}`}
-              className="font-inter text-sm"
-            >
-              {article.authorFullname}
-            </Link>
-            {article.authorVerified && <MdVerified color="rgba(93, 110, 189, 1)" />}
+          <div className="pt-3">
+            <div className="flex-start gap-1">
+              <Link 
+                to={`${import.meta.env.VITE_BASE_URL}/${article.slug}`}
+                className="font-inter text-sm"
+              >
+                {article.authorFullname}
+              </Link>
+              {article.authorVerified && <MdVerified color="rgba(93, 110, 189, 1)" />}
+            </div>
+            <p className="text-[12px] text-accent font-outfit">{article.createdAt}</p>
           </div>
         </div>
 
-        <p className="text-[12px] text-accent font-outfit pl-11">{article.createdAt}</p>
       </div>
 
       {/* title & picture */}

@@ -34,7 +34,7 @@ const DeleteModal = ({ id }: { id: string }) => {
       }
 
       toast.success(response.message)
-      setTimeout(() => window.location.reload(), 5000)
+      setTimeout(() => window.location.reload(), 3000)
     } catch (error) {
       toast.error("Something went wrong.")
     } finally {
