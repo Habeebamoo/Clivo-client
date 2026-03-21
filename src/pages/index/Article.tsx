@@ -257,8 +257,8 @@ const ArticlePage = () => {
         </div>
 
         {/* name */}
-        <div onClick={toUser} className="flex-start gap-1 cursor-pointer">
-          <Link to={`${article?.authorProfileUrl!}`}>
+        <div onClick={toUser} className="flex-start gap-2 cursor-pointer">
+          <Link to={`${article?.authorProfileUrl!}`} className="font-inter">
             {article!.authorFullname}
           </Link>
 
