@@ -4,14 +4,20 @@ import type { Article, Post } from "../redux/reducers/article_reducer"
 import { MdVerified } from "react-icons/md"
 import { GoHeart, GoHeartFill } from "react-icons/go"
 import { Link } from "react-router"
+import { FaTrashCan } from "react-icons/fa6"
+import { useState } from "react"
+import DeleteModal from "./DeleteModal"
 
-const ArticleDisplay = ({ article }: { article: Post | Article }) => {
+const ProfileArticleDisplay = ({ article }: { article: Post | Article }) => {
+  const [deleteModal, setDeleteModal] = useState<boolean>(false)
+
   const toUser = () => {
     window.location.href = article.authorProfileUrl;
   }
 
   return (
     <div className="py-4 border-b border-b-muted">
+      {deleteModal && <DeleteModal id={article.articleId} />}
 
       {/* profile */}
       <div 
@@ -81,8 +87,16 @@ const ArticleDisplay = ({ article }: { article: Post | Article }) => {
         </p>
       </div>
 
+      {/* danger zone */}
+      <div className="mt-4 px-2 flex-end">
+       <FaTrashCan
+        onClick={() => setDeleteModal(true)} 
+        className="text-red-400 hover:text-red-200 active:text-red-200 cursor-pointer" 
+      /> 
+      </div>
+
     </div>
   )
 }
 
-export default ArticleDisplay
+export default ProfileArticleDisplay

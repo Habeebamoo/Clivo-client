@@ -2,10 +2,10 @@ import { useSelector } from "react-redux";
 import { useFetchArticles } from "../hooks/useFetchArticles";
 import type { Article } from "../redux/reducers/article_reducer";
 import avatar from "../assets/avatar.jpg"
-import ArticleDisplay from "./ArticleDisplay";
 import { H2 } from "./Typo";
 import Spinner from "./Spinner";
 import NotFound from "./NotFound";
+import ProfileArticleDisplay from "./ProfileArticleDisplay";
 
 const MyArticles = () => {
   const myArticles: Article[] = useSelector((state: any) => state.articles.articles);
@@ -36,7 +36,7 @@ const MyArticles = () => {
       ) : (
         <div>
           {myArticles.map((article: Article) => {
-            return <ArticleDisplay key={article.articleId} article={article} />
+            return <ProfileArticleDisplay key={article.articleId} article={article} />
           })}
         </div>
       )}
