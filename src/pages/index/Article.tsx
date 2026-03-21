@@ -179,6 +179,11 @@ const ArticlePage = () => {
   }
 
   const toggleFollow = async () => {
+    if (!user.userId) {
+      setRegisterModal(true)
+      return
+    }
+    
     setIsFollowing(!isFollowing)
 
     if (isProfileOwner) {
