@@ -55,7 +55,7 @@ const MyProfile = () => {
               <MdVerified size={18} color="rgba(93, 110, 189, 1)" /> 
             : 
               <a 
-                href="https://myclivo.com/@clivoinc/how-to-become-a-verified-user-727" 
+                href="https://myclivo.com/@clivoinc/how-to-become-a-verified-user-124" 
                 className="text-[12px] underline cursor-pointer"
               >
                 Get Verified
