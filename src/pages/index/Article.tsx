@@ -246,7 +246,8 @@ const ArticlePage = () => {
         <p>{article!.createdAt}</p>
       </div>
 
-      <div className="flex-start gap-3 mt-2">
+      <div className="flex-start gap-3 mt-4">
+        {/* picture */}
         <div onClick={toUser} className="h-7 w-7 rounded-full overflow-hidden cursor-pointer">
           {article!.authorPicture ? (
             <img src={article!.authorPicture} className="h-full w-full object-cover" />
@@ -255,6 +256,7 @@ const ArticlePage = () => {
           )}
         </div>
 
+        {/* name */}
         <div onClick={toUser} className="flex-start gap-1 cursor-pointer">
           <Link to={`${article?.authorProfileUrl!}`}>
             {article!.authorFullname}
@@ -264,26 +266,28 @@ const ArticlePage = () => {
             <MdVerified color="rgba(93, 110, 189, 1)" />
           }
         </div>
+      </div>
 
-        <div className="flex-start gap-1 ml-4">
-          {!isProfileOwner && 
-            <button
-              onClick={toggleFollow} 
-              className="btn-primary text-[12px] rounded-full font-inter"
-            >
-              {followBtnText}
-            </button>
-          }
+      {/* actions */}
+      <div className="flex-start gap-2 mt-6">
+        {!isProfileOwner && 
+          <button
+            onClick={toggleFollow} 
+            className="btn-primary text-[12px] rounded-full font-inter"
+          >
+            {followBtnText}
+          </button>
+        }
 
-          <button 
+        <button 
             onClick={copyArticleSlug}
             className="text-[12px] flex-center gap-1 border border-accent py-1 px-3 rounded-full cursor-pointer text-black hover:bg-muted active:bg-muted"
           >
           <FaUpload />
           <span>Share</span>
         </button>
-        </div>
       </div>
+
       <hr className="text-muted mt-6 mb-4" />
 
       {/* Article Content */}
