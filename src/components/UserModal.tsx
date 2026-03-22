@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux"
 import type { User } from "../redux/reducers/user_reducer";
-import { FaX } from "react-icons/fa6";
+import { FaX, FaArrowUpRightFromSquare } from "react-icons/fa6";
 import { MdVerified } from "react-icons/md";
 import { toast } from "react-toastify";
 
@@ -13,6 +13,10 @@ const UserModal = ({ setModalActive }: PropsType) => {
 
   const closeModal = () => {
     setModalActive(false)
+  }
+
+  const toUser = () => {
+    window.location.href = user.profileUrl
   }
 
   const toggleUserRestriction = async () => {
@@ -115,6 +119,15 @@ const UserModal = ({ setModalActive }: PropsType) => {
           >
             {user.isBanned ? "Un-restrict" : "Restrict"}
           </button>
+
+          <button
+            onClick={toUser} 
+            className="font-outfit py-2 px-3 border border-black rounded-lg flex-center gap-2 mt-2 hover:bg-black hover:text-white active:bg-black active:text-white cursor-pointer"
+          >
+            <span>Visit</span>
+            <FaArrowUpRightFromSquare size={11} />
+          </button>
+
         </div>
       </div>
     </section>
