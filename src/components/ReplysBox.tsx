@@ -1,7 +1,7 @@
 import { MdCancel, MdVerified } from "react-icons/md"
-import type { Comment } from "../pages/index/Article"
 import { useEffect, useState } from "react"
 import Spinner from "./Spinner"
+import type { Comment } from "./CommentDisplay"
 
 interface Props {
   commentId: string,
