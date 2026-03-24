@@ -13,6 +13,7 @@ import { useSelector } from "react-redux"
 import type { User } from "../../redux/reducers/user_reducer"
 import type { Appeal } from "../../redux/reducers/admin_reducer"
 import { ToastContainer } from "react-toastify"
+import EmailsTab from "../../components/EmailsTab"
 
 const AdminPage = () => {
   const {} = useFetchAdminStats();
@@ -28,7 +29,7 @@ const AdminPage = () => {
 
   // if (isLoading) return <Loading />
 
-  const [tab, setTab] = useState<"users" | "appeals">("users")
+  const [tab, setTab] = useState<"users" | "appeals" | "emails">("users")
   const [userModalActive, setUserModalActive] = useState<boolean>(false)
   const [appealModalActive, setAppealModalActive] = useState<boolean>(false);
 
@@ -95,28 +96,35 @@ const AdminPage = () => {
       </div>
 
       {/* Tabs */}
-      <div className="grid grid-cols-2 p-1 bg-mutedLight rounded-lg mt-12 md:w-100 mx-auto">
+      <div className="grid grid-cols-3 p-1 bg-mutedLight rounded-lg mt-12 md:w-100 mx-auto">
         <div 
           onClick={() => setTab("users")} 
           className={`${tab === "users" && "bg-white"} flex-center gap-2 p-2 rounded-md cursor-pointer`}
         >
           <FiUser />
-          <p>Users</p>
+          <p className="text-sm">Users</p>
         </div>
+        
         <div 
           onClick={() => setTab("appeals")} 
           className={`${tab === "appeals" && "bg-white"} flex-center gap-2 p-2 rounded-md cursor-pointer`}
         >
           <PiWarningCircle size={17} />
-          <p>Appeals</p>
+          <p className="text-sm">Appeals</p>
+        </div>
+
+        <div 
+          onClick={() => setTab("emails")} 
+          className={`${tab === "emails" && "bg-white"} flex-center gap-2 p-2 rounded-md cursor-pointer`}
+        >
+          <PiWarningCircle size={17} />
+          <p className="text-sm">Emails</p>
         </div>
       </div>
 
-      {tab === "users" ? 
-        <UsersTab setModalActive={setUserModalActive} /> 
-        : 
-        <AppealsTab setModalActive={setAppealModalActive} />
-      }
+      {tab === "users" && <UsersTab setModalActive={setUserModalActive} />}
+      {tab === "appeals" && <AppealsTab setModalActive={setAppealModalActive} />}
+      {tab === "emails" && <EmailsTab />}
     </main>
   )
 }
