@@ -30,7 +30,7 @@ const Loading = () => {
   }, [index, forward])
 
   return (
-    <div className="bg-white fixed top-0 bottom-0 left-0 right-0 flex-center z-20">
+    <div className="bg-white fixed top-0 bottom-0 left-0 right-0 flex-center z-30">
       <H1 font="inter" text={`${text}|`} others="text-[55px]" />
     </div>
   )

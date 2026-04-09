@@ -9,13 +9,16 @@ import { useEffect, useState } from "react"
 import { BiMessage } from "react-icons/bi"
 import { useNavigate, useParams } from "react-router"
 import Loading from "../../components/Loading"
-import { toast } from "react-toastify"
 import Spinner from "../../components/Spinner"
+import Alert from "../../components/Alert"
 
 const AppealPage = () => {
   const { userId } = useParams<{ userId: string }>();
   const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [alertModal, setAlertModal] = useState<boolean>(false);
+  const [alertStatus, setAlertStatus] = useState<"success" | "error">("success")
+  const [alertText, setAlertText] = useState<string>("")
   const [btnLoading, setBtnLoading] = useState<boolean>(false)
   const navigate = useNavigate()
 
@@ -53,6 +56,20 @@ const AppealPage = () => {
     fetchAppealStatus()
   }, [])
 
+  useEffect(() => {
+    if (alertModal) {
+      setTimeout(() => {
+        setAlertModal(false)
+      }, 3000)
+    }
+  }, [alertModal])
+
+  const setAlert = (status: "success" | "error", text: string) => {
+    setAlertModal(true)
+    setAlertStatus(status)
+    setAlertText(text)
+  }
+
   const submitAppeal = async () => {
     setBtnLoading(true)
 
@@ -72,13 +89,13 @@ const AppealPage = () => {
       const response = await res.json()
 
       if (!res.ok) {
-        toast.error(response.message)
+        setAlert("error", response.message)
         return
       }
 
-      toast.success(response.message)
+      setAlert("success", response.message)
     } catch (error) {
-      toast.error("Something went wrong.")
+      setAlert("error", "Something went wrong.")
     } finally {
       setBtnLoading(false)
     }
@@ -88,6 +105,7 @@ const AppealPage = () => {
     <main>
       <AdminHeader />
       {loading && <Loading />}
+      {alertModal && <Alert status={alertStatus} text={alertText} />}
 
       <section className="w-[90%] mt-30 sm:w-125 mx-auto relative border border-gray-200">
         <div className="flex-center py-10 bg-yellow-100">

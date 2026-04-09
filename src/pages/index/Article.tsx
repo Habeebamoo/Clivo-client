@@ -10,7 +10,6 @@ import { CgShare } from "react-icons/cg";
 import NotFound from "../../components/NotFound";
 import Loading from "../../components/Loading";
 import { useFetchUserArticle } from "../../hooks/useFetchUserArticle";
-import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import type { User } from "../../redux/reducers/user_reducer";
 import Spinner from "../../components/Spinner";
@@ -18,6 +17,7 @@ import { useFetchProfile } from "../../hooks/useFetchProfile";
 import BlockRenderer from "../../components/BlockRenderer";
 import RegisterModal from "../../components/RegisterModal";
 import CommentDisplay, { type Comment } from "../../components/CommentDisplay";
+import Alert from "../../components/Alert";
 
 const ArticlePage = () => {
   const { username, title } = useParams<{ username: string, title: string }>();
@@ -34,6 +34,9 @@ const ArticlePage = () => {
   const [commentValue, setCommentValue] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [registerModal, setRegisterModal] = useState<boolean>(false);
+  const [alertModal, setAlertModal] = useState<boolean>(false);
+  const [alertStatus, setAlertStatus] = useState<"success" | "error">("success")
+  const [alertText, setAlertText] = useState<string>("")
 
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const isProfileOwner = user.username === username;
@@ -76,7 +79,20 @@ const ArticlePage = () => {
     fetchFollowStatus();
 
   }, [user.userId])
-  
+
+  useEffect(() => {
+    if (alertModal) {
+      setTimeout(() => {
+        setAlertModal(false)
+      }, 3000)
+    }
+  }, [alertModal])
+
+  const setAlert = (status: "success" | "error", text: string) => {
+    setAlertModal(true)
+    setAlertStatus(status)
+    setAlertText(text)
+  }
 
   useEffect(() => {
     if (commentValue) {
@@ -120,14 +136,14 @@ const ArticlePage = () => {
           return
         }
 
-        toast.error(response.message)
+        setAlert("error", response.message)
         return
       }
 
-      toast.success(response.message)
+      setAlert("success", response.message)
       window.location.reload()
     } catch (error) {
-      toast.error("Something went wrong.")
+      setAlert("error", "Something went wrong.")
     } finally {
       setLoading(false)
     }
@@ -156,13 +172,13 @@ const ArticlePage = () => {
           return
         }
 
-        toast.error("Failed to like post, Try again")
+        setAlert("error", "Failed to like post, Try again")
         return
       }
 
       window.location.reload()
     } catch (error) {
-      toast.error("Failed to like post, Try again")
+      setAlert("error", "Failed to like post, Try again")
     }
   }
 
@@ -175,7 +191,7 @@ const ArticlePage = () => {
     setIsFollowing(!isFollowing)
 
     if (isProfileOwner) {
-      toast.error("You can't follow yourself")
+      setAlert("error", "You can't follow yourself")
       setLoading(false)
       return
     }
@@ -195,14 +211,14 @@ const ArticlePage = () => {
       const response = await res.json()
 
       if (!res.ok) {
-        toast.error(response.message)
+        setAlert("error", response.message)
         return
       }
 
-      toast.success(response.message)
+      setAlert("success", response.message)
 
     } catch (error) {
-      toast.error("Something went wrong")
+      setAlert("error", "Something went wrong.")
     }
   }
 
@@ -215,8 +231,8 @@ const ArticlePage = () => {
   const copyArticleSlug = () => {
     navigator.clipboard.
       writeText(`${import.meta.env.VITE_BASE_URL}/${article?.slug}`).
-      then(() => toast.success("URL Copied")).
-      catch(err => toast.error("Failed to copy " + err))
+      then(() => setAlert("success", "URL Copied")).
+      catch(err => setAlert("error", "Failed to copy " + err))
   }
 
   if (isLoading) return <Loading />
@@ -226,6 +242,7 @@ const ArticlePage = () => {
   return (
     <main className="w-[90%] sm:w-100 md:w-125 mx-auto">
       {registerModal && <RegisterModal />}
+      {alertModal && <Alert status={alertStatus} text={alertText} />}
 
       {/* Heading section */}
       <div className="p-1 w-full mt-6">

@@ -10,19 +10,22 @@ import ArticleDisplay from "../../components/ArticleDisplay"
 import NotFoundPage from "./NotFoundPage"
 import { useFetchProfile } from "../../hooks/useFetchProfile"
 import { useSelector } from "react-redux"
-import { toast, ToastContainer } from "react-toastify"
 import { useFetchUser } from "../../hooks/useFetchUser"
 import { useEffect, useState } from "react"
+import Alert from "../../components/Alert"
 
 const UserPage = () => {
   const { username } = useParams<{ username: string }>();
   const { data, isLoading, isError } = useFetchUser(username!);
-
+  
   const {} = useFetchProfile();
   const me = useSelector((state: any) => state.user.profile);
 
   const [isFollowing, setIsFollowing] = useState<boolean>(true)
   const [loading, setLoading] = useState<boolean>(false)
+  const [alertModal, setAlertModal] = useState<boolean>(false);
+  const [alertStatus, setAlertStatus] = useState<"success" | "error">("success")
+  const [alertText, setAlertText] = useState<string>("")
 
   useEffect(() => {
     if (!me.userId) {
@@ -58,6 +61,20 @@ const UserPage = () => {
 
   }, [me.userId])
 
+  useEffect(() => {
+    if (alertModal) {
+      setTimeout(() => {
+        setAlertModal(false)
+      }, 3000)
+    }
+  }, [alertModal])
+
+  const setAlert = (status: "success" | "error", text: string) => {
+    setAlertModal(true)
+    setAlertStatus(status)
+    setAlertText(text)
+  }
+
   const user: User | undefined = data?.user;
   const articles: Post[] | undefined = data?.userArticles;
 
@@ -73,7 +90,7 @@ const UserPage = () => {
     setIsFollowing(!isFollowing)
 
     if (isProfileOwner) {
-      toast.error("You can't follow yourself")
+      setAlert("error", "You can't follow yourself")
       setLoading(false)
       return
     }
@@ -93,14 +110,14 @@ const UserPage = () => {
       const response = await res.json()
 
       if (!res.ok) {
-        toast.error(response.message)
+        setAlert("error", response.message)
         return
       }
 
-      toast.success(response.message)
+      setAlert("success", response.message)
 
     } catch (error) {
-      toast.error("Something went wrong")
+      setAlert("error", "Something went wrong")
     }
   }
 
@@ -109,7 +126,7 @@ const UserPage = () => {
   return (
     <>
       {loading && <Loading />}
-      <ToastContainer />
+      {alertModal && <Alert status={alertStatus} text={alertText} />}
       
       <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:mt-10 lg:w-225 mx-auto items-start">
         <section>

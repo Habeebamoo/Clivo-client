@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react"
 import Header from "../../components/Header"
 import PhotoGrid from "../../components/PhotoGrid"
-import { toast } from "react-toastify"
+import Alert from "../../components/Alert"
 import SubscribeModal from "../../components/SubscribeModal"
 
 const Home = () => {
   const [subscribeModal, setSubscribeModal] = useState<boolean>(false);
+  const [alertModal, setAlertModal] = useState<boolean>(false);
+  const [alertStatus, setAlertStatus] = useState<"success" | "error">("success")
+  const [alertText, setAlertText] = useState<string>("")
   const [email, setEmail] = useState<string>("");
 
   useEffect(() => {
@@ -15,6 +18,20 @@ const Home = () => {
       }, 4000)
     }
   }, [subscribeModal])
+
+  useEffect(() => {
+    if (alertModal) {
+      setTimeout(() => {
+        setAlertModal(false)
+      }, 3000)
+    }
+  }, [alertModal])
+
+  const setAlert = (status: "success" | "error", text: string) => {
+    setAlertModal(true)
+    setAlertStatus(status)
+    setAlertText(text)
+  }
 
   const subscribe = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -33,14 +50,14 @@ const Home = () => {
       const data = await res.json()
 
       if (!res.ok) {
-        toast.error(data.message)
+        setAlert("error", data.message)
         return
       }
 
       setSubscribeModal(true)
       setEmail("")
     } catch (error) {
-      toast.error("Subscription failed.")
+      setAlert("error", "Subscription failed")
     }
   }
 
@@ -61,6 +78,7 @@ const Home = () => {
     <main className="bg-center bg-cover min-h-screen">
       <div className="bg-white/70 inset-0">
         {subscribeModal && <SubscribeModal />}
+        {alertModal && <Alert status={alertStatus} text={alertText} />}
         <Header />
 
         {/* Hero section */}

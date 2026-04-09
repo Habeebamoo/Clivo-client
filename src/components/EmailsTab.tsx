@@ -1,5 +1,5 @@
-import { useState } from "react"
-import Spinner from "./Spinner"
+import { useState } from "react";
+import Spinner from "./Spinner";
 import { toast } from "react-toastify";
 
 const EmailsTab = () => {
