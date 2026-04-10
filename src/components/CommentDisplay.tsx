@@ -28,6 +28,7 @@ interface Props {
 const CommentDisplay = ({ comment, setRegisterModal }: Props) => {
   const {} = useFetchProfile();
   const user: User = useSelector((state: any) => state.user.profile);
+
   const [replybarActive, setReplyBarActive] = useState<boolean>(false)
   const [replysBox, setReplysBox] = useState<boolean>(false)
   const [content, setContent] = useState<string>("")
@@ -91,6 +92,7 @@ const CommentDisplay = ({ comment, setRegisterModal }: Props) => {
           setReplysBox={setReplysBox}
         />
       }
+
       <div className="flex-start gap-3">
         <img src={comment.picture} className="h-7 w-7 rounded-full" />
         <div className="flex-start gap-1">
@@ -99,7 +101,7 @@ const CommentDisplay = ({ comment, setRegisterModal }: Props) => {
         </div>
       </div>
 
-      <div className="pl-10 text-sm font-open">
+      <div className="pl-10 text-sm font-open wrap-break-word mt-1">
         {comment.content}
       </div>
 
