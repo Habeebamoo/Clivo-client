@@ -1,4 +1,4 @@
-import { H1 } from "../../components/Typo"
+import { H1, H2 } from "../../components/Typo"
 import googleImg from "../../assets/google.png"
 import logo from "../../assets/logo2.png"
 import Button from "../../components/Button"
@@ -9,14 +9,14 @@ const SignInPage = () => {
   }
 
   return (
-    <main className="flex-center h-screen bg-gray-50">
-      <div className="bg-white max-sm:w-[90%] px-6 py-10 rounded-2xl border border-gray-100 flex-center flex-col">
+    <main className="flex-center h-screen bg-gray-100">
+      <div className="bg-white max-sm:w-[90%] px-4 py-10 rounded-2xl border border-gray-200 flex-center flex-col">
         <img src={logo} className="h-15 mb-6" />
 
-        <H1 font="outfit-rich" text="Welcome To Clivo" />
+        <H2 font="outfit-rich" text="Welcome To Clivo" />
 
         <p 
-          className="text-gray-700 text-center font-open text-sm mb-6 mt-4 w-[90%]"
+          className="text-gray-700 text-center font-outfit text-sm mb-6 mt-4 w-[90%]"
         >
           Sign in with your Google account to continue with Clivo.
         </p>
