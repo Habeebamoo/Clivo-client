@@ -83,6 +83,7 @@
 .paragraph a {
   color: blue;
   text-decoration: underline;
+  display: block;
 }
 
 .paragraph a:hover {
