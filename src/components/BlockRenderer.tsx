@@ -1,4 +1,5 @@
-import type { JSX } from "react"
+import type { JSX } from "react";
+import DOMPurify from "dompurify";
 
 type Block = {
   type: string,
@@ -13,9 +14,13 @@ const BlockRenderer = ({ blocks }: { blocks: Block[] }) => {
         switch (block.type) {
           case "header":
             const Tag = `h${block.data.level}` as keyof JSX.IntrinsicElements;
-            return <Tag key={i} className="header">
-              {block.data.text}
-            </Tag>;
+            return (
+              <Tag 
+                key={i} 
+                className="header" 
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(block.data.text) }} 
+              />
+            );
 
           case "code":
             return (
@@ -30,8 +35,11 @@ const BlockRenderer = ({ blocks }: { blocks: Block[] }) => {
 
           case "paragraph":
             return (
-              <p key={i} className="paragraph">
-                {block.data.text}
+              <p 
+                key={i} 
+                className="paragraph"
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(block.data.text) }}
+              >
               </p>
             )
 
@@ -52,26 +60,20 @@ const BlockRenderer = ({ blocks }: { blocks: Block[] }) => {
             return block.data.style === "ordered" ? (
               <ol key={i} className="ordered-cont">
                 {block.data.items.map((item: any, index: number) => (
-                  <div className="ordered">
+                  <li key={index} className="ordered">
                     <span>{index + 1}. </span>
-                  
-                    <li key={index}>
-                      {item.content}
-                    </li>
-                  </div>
+                    <span dangerouslySetInnerHTML={{ __html: item.content }} />
+                  </li>
                 ))}
               </ol>
             ) : (
               block.data.style === "unordered" ? (
-                <ul key={i} className="bullet-cont">
+                <ul key={i} className="ordered-cont">
                   {block.data.items.map((item: any, index: number) => (
-                    <div className="bullet">
+                    <li key={index} className="ordered gap-2">
                       <div className="bullet-dot"></div>
-
-                      <li key={index}>
-                        {item.content}
-                      </li>
-                    </div>
+                      <span dangerouslySetInnerHTML={{ __html: item.content }} />
+                    </li>
                   ))}
                 </ul>
               ) : (

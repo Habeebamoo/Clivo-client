@@ -212,7 +212,7 @@ const UserPage = () => {
           }
           {articles!.length != 0 && 
             <div>
-              {articles!.map((article: Post) => {
+              {articles!.reverse().map((article: Post) => {
                 return <ArticleDisplay key={article.articleId} article={article} />
               })}
             </div>

@@ -8,8 +8,10 @@ import NotFound from "./NotFound";
 import ProfileArticleDisplay from "./ProfileArticleDisplay";
 
 const MyArticles = () => {
-  const myArticles: Article[] = useSelector((state: any) => state.articles.articles);
+  const articles: Article[] = useSelector((state: any) => state.articles.articles);
   const { isLoading, isError } = useFetchArticles();
+
+  const myArticles = articles;
 
   if (isLoading) return (
     <div className="flex-center h-50">
