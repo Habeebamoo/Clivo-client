@@ -10,7 +10,7 @@ const SignInPage = () => {
 
   return (
     <main className="flex-center h-screen bg-gray-50">
-      <div className="bg-white px-6 py-10 rounded-2xl border border-gray-100 flex-center flex-col">
+      <div className="bg-white max-sm:w-[90%] px-6 py-10 rounded-2xl border border-gray-100 flex-center flex-col">
         <img src={logo} className="h-15 mb-6" />
 
         <H1 font="outfit-rich" text="Welcome To Clivo" />
