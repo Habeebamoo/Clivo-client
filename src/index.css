@@ -77,7 +77,7 @@
 }
 
 .paragraph {
-  @apply mb-8 text-gray-600 font-dm;
+  @apply mb-8 text-gray-600 font-jsl;
 }
 
 .paragraph a {
@@ -95,7 +95,7 @@
 }
 
 @utility ordered {
-  @apply mb-1 text-gray-600 font-dm flex-start gap-1;
+  @apply mb-1 text-gray-600 font-jsl flex-start gap-1;
 }
 
 @utility bullet-cont {
@@ -107,7 +107,7 @@
 }
 
 @utility bullet {
-  @apply mb-1 text-gray-600 font-dm flex-start gap-2;
+  @apply mb-1 text-gray-600 font-jsl flex-start gap-2;
 }
 
 @utility checklist-cont {
