@@ -3,14 +3,16 @@ import Header from "@editorjs/header"
 import List from "@editorjs/list"
 import Code from "@editorjs/code"
 import Image from "@editorjs/image"
+import LinkTool from "@editorjs/link"
 import { memo, useEffect, useRef, useState } from "react"
 import { BiCheckCircle } from "react-icons/bi"
 
 const tools: Record<string, ToolConstructable> = {
   header: Header as unknown as ToolConstructable,
   list: List as unknown as ToolConstructable,
+  linkTool: LinkTool as unknown as ToolConstructable,
   code: Code as unknown as ToolConstructable,
-  image: Image as unknown as ToolConstructable
+  image: Image as unknown as ToolConstructable,
 }
 
 interface Props {
@@ -26,8 +28,15 @@ const Editor = ({ saveContent }: Props) => {
      editorRef.current = new EditorJs({ 
       holder: "editor",
       placeholder: "Write your article here",
+      inlineToolbar: true,
       tools: {
         ...tools,
+        linkTool: {
+          class: LinkTool,
+          config: {
+            endpoint: `${import.meta.env.VITE_SERVER_URL}/api/article/link-preview`
+          }
+        },
         image: {
           class: Image as unknown as ToolConstructable,
           config: {
@@ -73,6 +82,7 @@ const Editor = ({ saveContent }: Props) => {
     setisSaved(true)
 
     const output = await editorRef.current.save();
+    console.log(output)
     saveContent(output)
   }
 

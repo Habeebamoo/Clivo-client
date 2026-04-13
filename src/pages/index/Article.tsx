@@ -235,6 +235,8 @@ const ArticlePage = () => {
       catch(err => setAlert("error", "Failed to copy " + err))
   }
 
+  console.log(article?.content)
+
   if (isLoading) return <Loading />
 
   if (isError) return <NotFound text="Couldn't Find Article" subText="This article has either been deleted or moved to a new URL" />
