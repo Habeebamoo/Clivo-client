@@ -1,4 +1,4 @@
-import { H1, H2 } from "../../components/Typo"
+import { H2 } from "../../components/Typo"
 import googleImg from "../../assets/google.png"
 import logo from "../../assets/logo2.png"
 import Button from "../../components/Button"
