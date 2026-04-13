@@ -76,8 +76,17 @@
   @apply mb-8 text-xl text-black font-dm;
 }
 
-@utility paragraph {
+.paragraph {
   @apply mb-8 text-gray-600 font-dm;
+}
+
+.paragraph a {
+  color: blue;
+  text-decoration: underline;
+}
+
+.paragraph a:hover {
+  color: darkblue;
 }
 
 @utility ordered-cont {
