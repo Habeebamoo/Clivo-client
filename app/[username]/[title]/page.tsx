@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     const response = await res.json();
     const article = response.data;
-    console.log("Article metadata:", article);
+    console.log("Article metadata:", article.picture);
 
     return {
       title: article.title,

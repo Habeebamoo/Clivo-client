@@ -20,7 +20,7 @@ const WelcomePage = () => {
     setLoading(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/newsletter/subscribe`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/subscribe`,
         {
           method: "POST",
           headers: {
@@ -36,6 +36,7 @@ const WelcomePage = () => {
         return;
       }
       setSubscribeModal(true);
+      setTimeout(() => setSubscribeModal(false), 5000);
     } catch {
       toast.error("Something went wrong");
     } finally {
