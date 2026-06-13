@@ -1,5 +1,10 @@
+import { Suspense } from "react";
 import InterestsPage from "@/src/components/interests-page";
 
 export default function Page() {
-  return <InterestsPage />;
+  return (
+    <Suspense>
+      <InterestsPage />
+    </Suspense>
+  );
 }
