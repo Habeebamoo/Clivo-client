@@ -28,7 +28,7 @@ const Header = ({ type }: Props) => {
   const signOut = async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/auth/signout`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/auth/logout`,
         {
           method: "POST",
           headers: {

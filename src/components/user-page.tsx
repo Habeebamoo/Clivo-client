@@ -15,6 +15,7 @@ import ArticleDisplay from "./article-display";
 import Spinner from "./spinner";
 import NotFound from "./not-found";
 import Header from "./header";
+import Loading from "./loading";
 
 interface UserPageProps {
   username: string;
@@ -113,9 +114,7 @@ const UserPage = ({ username }: UserPageProps) => {
 
   if (isLoading) {
     return (
-      <div className="flex-center h-screen w-full">
-        <Spinner size={32} color="accentLight" />
-      </div>
+      <Loading />
     );
   }
 

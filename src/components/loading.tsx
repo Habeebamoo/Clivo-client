@@ -1,39 +1,38 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { H1 } from "./typo";
 
 const Loading = () => {
   const word = "Clivo";
-  const [text, setText] = useState("");
-  const [index, setIndex] = useState(0);
-  const [forward, setForward] = useState(true);
+  const [displayed, setDisplayed] = useState("");
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (forward) {
-        if (index < word.length) {
-          setText(word.slice(0, index + 1));
-          setIndex(index + 1);
+    const timeout = setTimeout(() => {
+      if (!deleting) {
+        if (displayed.length < word.length) {
+          setDisplayed(word.slice(0, displayed.length + 1));
         } else {
-          setForward(false);
+          setTimeout(() => setDeleting(true), 800);
         }
       } else {
-        if (index > 0) {
-          setText(word.slice(0, index - 1));
-          setIndex(index - 1);
+        if (displayed.length > 0) {
+          setDisplayed(word.slice(0, displayed.length - 1));
         } else {
-          setForward(true);
+          setDeleting(false);
         }
       }
-    }, 150);
+    }, deleting ? 80 : 150);
 
-    return () => clearInterval(interval);
-  }, [index, forward]);
+    return () => clearTimeout(timeout);
+  }, [displayed, deleting]);
 
   return (
-    <div className="bg-white fixed top-0 bottom-0 left-0 right-0 flex-center z-30">
-      <H1 font="inter" text={`${text}|`} others="text-[55px]" />
+    <div className="fixed inset-0 bg-white z-50 flex-center">
+      <h1 className="font-inter font-bold text-5xl tracking-tight">
+        {displayed}
+        <span className="animate-pulse">|</span>
+      </h1>
     </div>
   );
 };
