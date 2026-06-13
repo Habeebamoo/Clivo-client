@@ -1,0 +1,200 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "inter";
+  src: url("../src/fonts/Inter_18pt-Medium.ttf");
+}
+
+@font-face {
+  font-family: "open";
+  src: url("../src/fonts/OpenSans-Regular.ttf");
+}
+
+@font-face {
+  font-family: "dmSans";
+  src: url("../src/fonts/DMSans-Medium.ttf");
+}
+
+@font-face {
+  font-family: "exo";
+  src: url("../src/fonts/Exo-Medium.ttf");
+}
+
+@font-face {
+  font-family: "outfit";
+  src: url("../src/fonts/Outfit-Regular.ttf");
+}
+
+@font-face {
+  font-family: "outfitRich";
+  src: url("../src/fonts/Outfit-Medium.ttf");
+}
+
+@font-face {
+  font-family: "jsl";
+  src: url("../src/fonts/PlusJakartaSans-Light.ttf");
+}
+
+@font-face {
+  font-family: "jsans";
+  src: url("../src/fonts/PlusJakartaSans-Medium.ttf");
+}
+
+@font-face {
+  font-family: "roboto";
+  src: url("../src/fonts/Roboto_Condensed-Regular.ttf");
+}
+
+@utility flex-start {
+  @apply flex items-center justify-start;
+}
+
+@utility flex-center {
+  @apply flex items-center justify-center;
+}
+
+@utility flex-end {
+  @apply flex items-center justify-end;
+}
+
+@utility flex-between {
+  @apply flex items-center justify-between;
+}
+
+@utility flex-around {
+  @apply flex items-center justify-around;
+}
+
+@utility btn-primary {
+  @apply bg-primary py-1 px-3 border border-primary text-white rounded-sm hover:text-primary active:text-primary hover:bg-transparent active:bg-transparent cursor-pointer font-outfit;
+}
+
+@utility btn-gray {
+  @apply bg-gray-200 hover:bg-gray-300 active:bg-gray-300 px-4 py-2 font-jsans cursor-pointer;
+}
+
+@utility code {
+  @apply bg-dark inline-block text-white rounded-lg p-6 text-sm mb-8;
+}
+
+@utility header {
+  @apply mb-8 text-xl text-black font-roboto;
+}
+
+.paragraph {
+  @apply mb-8 text-gray-600 font-roboto;
+}
+
+.paragraph a {
+  color: blue;
+  text-decoration: underline;
+  display: block;
+}
+
+.paragraph a:hover {
+  color: darkblue;
+}
+
+@utility ordered-cont {
+  @apply mb-8;
+}
+
+@utility ordered {
+  @apply mb-1 text-gray-600 font-roboto flex-start gap-1;
+}
+
+@utility bullet-cont {
+  @apply mb-8;
+}
+
+@utility bullet-dot {
+  @apply h-1.5 w-1.5 bg-gray-600 rounded-full;
+}
+
+@utility bullet {
+  @apply mb-1 text-gray-600 font-roboto flex-start gap-2;
+}
+
+@utility checklist-cont {
+  @apply mb-8;
+}
+
+@utility checklist-box {
+  @apply h-3 w-3 rounded-sm border border-gray-500;
+}
+
+@utility checklist {
+  @apply flex-start gap-3;
+}
+
+@utility image {
+  @apply mb-8;
+}
+
+@utility image-caption {
+  @apply text-sm font-roboto mt-2 text-center;
+}
+
+@utility nav-text {
+  @apply hover:bg-primary hover:text-white hover:border-b-white active:bg-primary active:text-white px-4 font-jsans py-4 text-[12px];
+}
+
+@utility home-tab {
+  @apply border-accentLight text-accentLight flex-center border-b py-2 px-6 cursor-pointer font-open;
+}
+
+@utility home-tab-active {
+  @apply border-accent flex-center border-b-2 py-2 px-6 cursor-pointer font-open;
+}
+
+@utility appeal-radio {
+  @apply font-inter flex-start gap-4 bg-gray-100 py-6 px-4 w-75 border border-gray-200 mx-auto cursor-pointer;
+}
+
+.ProseMirror:focus {
+  outline: none;
+}
+
+.ProseMirror {
+  color: rgb(97, 96, 95);
+}
+
+.Toastify__toast {
+  font-family: "outfit";
+}
+
+/* This forces the editor area to be visible and look like a text field */
+.editor-wrapper {
+  width: 100%;
+  min-height: 300px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  color: #000000;
+}
+
+/* This fixes a common bug where Editor.js hides its own placeholder */
+.codex-editor__redactor {
+  padding-bottom: 100px !important;
+}
+
+@theme {
+  --color-primary: rgb(20, 20, 20);
+  --color-dark: rgb(26, 25, 25);
+  --color-secondary: rgb(238, 150, 109);
+  --color-accent: rgb(97, 96, 95);
+  --color-accentLight: rgb(165, 163, 161);
+  --color-text: rgb(116, 114, 113);
+  --color-muted: rgb(223, 221, 218);
+  --color-mutedLight: rgb(240, 238, 236);
+  --font-inter: "inter";
+  --font-open: "open";
+  --font-exo: "exo";
+  --font-outfit: "outfit";
+  --font-jsans: "jsans";
+  --font-jsl: "jsl";
+  --font-outfit-rich: "outfitRich";
+  --font-dm: "dmSans";
+  --font-roboto: "roboto";
+}
