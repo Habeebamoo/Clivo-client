@@ -195,7 +195,7 @@ const SettingsPage = () => {
   };
 
   return (
-    <main className="w-[90%] sm:w-112.5 mx-auto pt-10 pb-20">
+    <main className="w-[90%] sm:w-112.5 mx-auto pt-0 pb-20">
       {modal && <EditProfileModal user={user} setModal={setModal} />}
       
       <H1 font="inter" text="Settings" others="mt-12 text-2xl font-bold" />

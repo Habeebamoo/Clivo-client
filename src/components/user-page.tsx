@@ -171,7 +171,7 @@ const UserPage = ({ username }: UserPageProps) => {
             </div>
 
             {/* Handle Username Reference */}
-            <p className="text-[13px] text-stone-400 font-mono mt-0.5">@{user.username}</p>
+            <p className="text-[13px] text-stone-400 font-mono mt-0.5">{user.username}</p>
 
             {/* Custom Description Text */}
             {user.bio && (
@@ -236,7 +236,7 @@ const UserPage = ({ username }: UserPageProps) => {
               />
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-4 px-4">
               {[...articles].reverse().map((article: Post) => (
                 <ArticleDisplay key={article.articleId} article={article} />
               ))}

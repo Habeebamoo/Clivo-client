@@ -72,7 +72,7 @@ const WelcomePage = () => {
               <span className="italic text-orange-300">Simple Stories</span>
               <br /> Find Their Voices.
             </h1>
-            <p className="font-jsl text-accent mt-6 text-lg sm:w-[70%] lg:w-full">
+            <p className="font-jsl text-accent mt-6 sm:text-lg sm:w-[70%] lg:w-full">
               Discover articles, insights, and stories from writers around the
               world. Join Clivo and share yours.
             </p>
@@ -147,8 +147,12 @@ const WelcomePage = () => {
         {/* Footer */}
         <footer className="py-10 px-4 border-t border-muted">
           <div className="max-w-5xl mx-auto flex-between flex-wrap gap-4">
-            <Image src={logoImg} alt="Clivo" className="h-6 w-auto" />
-            <p className="font-inter text-xs text-accentLight">
+            <div className="flex-start gap-1">
+              <Image src={logoImg} alt="Clivo" className="h-5 w-auto" />
+              <p className="font-inter text-lg">Clivo</p>
+            </div>
+
+            <p className="font-jsl text-xs text-accentLight">
               © {new Date().getFullYear()} Clivo. All rights reserved.
             </p>
           </div>
