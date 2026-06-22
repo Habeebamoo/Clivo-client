@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import errorImg from "@/public/error.jpg";
+import errorImg from "@/public/error.png";
 import { H1 } from "./typo";
 
 const ErrorPage = () => {

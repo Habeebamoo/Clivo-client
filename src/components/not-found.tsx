@@ -1,6 +1,6 @@
 import { H2 } from "./typo";
-import avatarImg from "@/public/avatar.jpg";
-import errorImg from "@/public/error.jpg";
+import avatarImg from "@/public/avatar.png";
+import errorImg from "@/public/error.png";
 import Image from "next/image";
 
 const NotFound = ({
@@ -19,8 +19,8 @@ const NotFound = ({
         alt={text}
         className={img === "a" ? "h-70 w-auto" : "h-60 w-auto"}
       />
-      <H2 font="inter" text={text} others="mt-6 text-center" />
-      <p className="w-[60%] text-sm text-center mt-2 text-accent font-inter">
+      <H2 font="inter" text={text} others="mt-6 text-center dark:text-stone-300" />
+      <p className="w-[60%] text-sm text-center mt-2 text-accent dark:text-stone-400 font-inter">
         {subText}
       </p>
     </div>

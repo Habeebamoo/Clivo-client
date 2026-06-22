@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "./Providers";
+import { ThemeProvider } from "@/src/context/ThemeContext";
 
 export const metadata: Metadata = {
   title: {
@@ -47,7 +48,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
-        <Providers>{children}</Providers>
+        <Providers>
+          <ThemeProvider>
+            {children}
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

@@ -47,7 +47,7 @@ const WelcomePage = () => {
   return (
     <>
       {subscribeModal && <SubscribeModal />}
-      <Header type="home" />
+      <Header type="landing" />
 
       <main className="mt-10">
         {/* Hero — diagonal line pattern */}

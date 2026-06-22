@@ -13,10 +13,10 @@ const ArticleDisplay = ({ article }: { article: Post | Article }) => {
   };
 
   return (
-    <div className="py-4 border-b border-b-muted">
+    <div className="py-6 border-b border-b-muted dark:border-stone-800">
       <div
         onClick={toUser}
-        className="cursor-pointer p-1 hover:bg-gray-50 active:bg-gray-50"
+        className="cursor-pointer p-1 hover:bg-gray-50 active:bg-gray-50 dark:hover:bg-stone-900/40 "
       >
         <div className="flex-start gap-3">
           {article.authorPicture ? (
@@ -34,7 +34,7 @@ const ArticleDisplay = ({ article }: { article: Post | Article }) => {
             <div className="flex-start gap-1">
               <Link
                 href={`${process.env.NEXT_PUBLIC_BASE_URL}/${article.slug}`}
-                className="font-inter text-sm"
+                className="font-inter text-sm dark:text-stone-200"
               >
                 {article.authorFullname}
               </Link>
@@ -42,7 +42,7 @@ const ArticleDisplay = ({ article }: { article: Post | Article }) => {
                 <MdVerified color="rgba(93, 110, 189, 1)" />
               )}
             </div>
-            <p className="text-[12px] text-accent font-outfit">
+            <p className="text-[12px] text-accent dark:text-stone-400 font-outfit">
               {article.createdAt}
             </p>
           </div>
@@ -50,9 +50,11 @@ const ArticleDisplay = ({ article }: { article: Post | Article }) => {
       </div>
 
       <a href={`${process.env.NEXT_PUBLIC_BASE_URL}/${article.slug}`}>
-        <div className="py-3 my-2 grid grid-cols-6 gap-3 px-1 hover:bg-gray-50 active:bg-gray-50 cursor-pointer">
-          <div className="col-span-4 break-words">
-            <H3 font="inter" text={shorten(article.title, 50)} />
+        <div className="py-3 my-2 grid grid-cols-6 gap-3 px-1 hover:bg-gray-50 active:bg-gray-50 dark:hover:bg-stone-900/40  cursor-pointer">
+          <div className="col-span-4 wrap-break-word">
+            <h3 className="font-inter text-xl dark:text-stone-300">
+              {shorten(article.title, 50)}
+            </h3>
           </div>
           <div className="h-20 w-full col-span-2">
             {article.picture ? (
@@ -72,7 +74,7 @@ const ArticleDisplay = ({ article }: { article: Post | Article }) => {
         {article.tags?.map((tag: string, i: number) => (
           <div
             key={i}
-            className="text-[12px] font-exo py-1 px-2 border border-accent rounded-sm"
+            className="text-[12px] font-exo py-1 px-2 border border-accent dark:border-stone-700 rounded-sm text-stone-800 dark:text-stone-300"
           >
             {tag}
           </div>
@@ -86,7 +88,7 @@ const ArticleDisplay = ({ article }: { article: Post | Article }) => {
           ) : (
             <GoHeart color="rgb(165, 163, 161)" size={19} />
           )}
-          <p className="text-[12px] font-outfit">{article.likes}</p>
+          <p className="text-[12px] font-outfit dark:text-stone-300">{article.likes}</p>
         </div>
         <p className="text-[12px] font-outfit text-accentLight">
           {article.readTime} read time

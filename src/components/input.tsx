@@ -12,7 +12,7 @@ const Input = ({ type, placeholder, name, color, value, onChange }: Props) => {
     <input
       type={type}
       name={name}
-      className={`${color ?? ""} border-b border-b-accentLight focus:outline-none w-full py-1 font-inter placeholder:text-accentLight`}
+      className={`${color ?? ""} border-b border-b-accentLight focus:outline-none w-full py-1 font-inter placeholder:text-accentLight dark:text-stone-400`}
       required
       placeholder={placeholder}
       value={value}

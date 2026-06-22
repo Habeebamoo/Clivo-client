@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @font-face {
   font-family: "inter";
   src: url("../src/fonts/Inter_18pt-Medium.ttf");
@@ -66,7 +68,7 @@
 }
 
 @utility btn-primary {
-  @apply bg-primary py-1 px-3 border border-primary text-white rounded-sm hover:text-primary active:text-primary hover:bg-transparent active:bg-transparent cursor-pointer font-outfit;
+  @apply bg-primary dark:bg-black py-1 px-3 border border-primary text-white rounded-sm hover:text-primary active:text-primary hover:bg-transparent dark:hover:text-white dark:active:text-white active:bg-transparent cursor-pointer font-outfit;
 }
 
 @utility btn-gray {
@@ -140,11 +142,11 @@
 }
 
 @utility home-tab {
-  @apply border-accentLight text-accentLight flex-center border-b py-2 px-6 cursor-pointer font-open;
+  @apply border-accentLight dark:text-stone-500 dark:border-stone-500 text-accentLight flex-center border-b py-2 px-6 cursor-pointer font-open;
 }
 
 @utility home-tab-active {
-  @apply border-accent flex-center border-b-2 py-2 px-6 cursor-pointer font-open;
+  @apply border-accent dark:border-stone-200 dark:text-stone-200 flex-center border-b-2 py-2 px-6 cursor-pointer font-open;
 }
 
 @utility appeal-radio {

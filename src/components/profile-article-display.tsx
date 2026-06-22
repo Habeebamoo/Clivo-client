@@ -18,12 +18,12 @@ const ProfileArticleDisplay = ({ article }: { article: Post | Article }) => {
   };
 
   return (
-    <div className="py-4 border-b border-b-muted">
+    <div className="py-4 border-b border-b-muted dark:border-b-stone-800">
       {deleteModal && <DeleteModal id={article.articleId} />}
 
       <div
         onClick={toUser}
-        className="cursor-pointer p-1 hover:bg-gray-50 active:bg-gray-50"
+        className="cursor-pointer p-1 hover:bg-gray-50 dark:hover:bg-stone-900/40 active:bg-gray-50 dark:active:bg-stone-900/40"
       >
         <div className="flex-start gap-3">
           {article.authorPicture ? (
@@ -35,13 +35,13 @@ const ProfileArticleDisplay = ({ article }: { article: Post | Article }) => {
               />
             </div>
           ) : (
-            <div className="w-7 h-7 rounded-full bg-muted border border-accentLight" />
+            <div className="w-7 h-7 rounded-full bg-muted dark:bg-stone-800 border border-accentLight dark:border-stone-700" />
           )}
           <div className="pt-3">
             <div className="flex-start gap-1">
               <Link
                 href={`${process.env.NEXT_PUBLIC_BASE_URL}/${article.slug}`}
-                className="font-inter text-sm"
+                className="font-inter text-sm text-stone-900 dark:text-stone-100"
               >
                 {article.authorFullname}
               </Link>
@@ -49,7 +49,7 @@ const ProfileArticleDisplay = ({ article }: { article: Post | Article }) => {
                 <MdVerified color="rgba(93, 110, 189, 1)" />
               )}
             </div>
-            <p className="text-[12px] text-accent font-outfit">
+            <p className="text-[12px] text-accent dark:text-stone-400 font-outfit">
               {article.createdAt}
             </p>
           </div>
@@ -57,19 +57,19 @@ const ProfileArticleDisplay = ({ article }: { article: Post | Article }) => {
       </div>
 
       <a href={`${process.env.NEXT_PUBLIC_BASE_URL}/${article.slug}`}>
-        <div className="py-3 my-2 grid grid-cols-6 gap-3 px-1 hover:bg-gray-50 active:bg-gray-50 cursor-pointer">
-          <div className="col-span-4 break-words">
-            <H3 font="inter" text={shorten(article.title, 50)} />
+        <div className="py-3 my-2 grid grid-cols-6 gap-3 px-1 hover:bg-gray-50 dark:hover:bg-stone-900/40 active:bg-gray-50 dark:active:bg-stone-900/40 cursor-pointer">
+          <div className="col-span-4 wrap-break-word text-stone-900 dark:text-stone-300">
+            <h3 className="font-inter text-xl">{shorten(article.title, 50)}</h3>
           </div>
           <div className="h-20 w-full col-span-2">
             {article.picture ? (
               <img
                 src={article.picture}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover rounded-sm"
                 alt={article.title}
               />
             ) : (
-              <div className="w-full h-full bg-muted" />
+              <div className="w-full h-full bg-muted dark:bg-stone-800 rounded-sm" />
             )}
           </div>
         </div>
@@ -79,7 +79,7 @@ const ProfileArticleDisplay = ({ article }: { article: Post | Article }) => {
         {article.tags?.map((tag: string, i: number) => (
           <div
             key={i}
-            className="text-[12px] font-exo py-1 px-2 border border-accent rounded-sm"
+            className="text-[12px] font-exo py-1 px-2 border border-accent dark:border-stone-700 rounded-sm text-stone-800 dark:text-stone-300"
           >
             {tag}
           </div>
@@ -87,7 +87,7 @@ const ProfileArticleDisplay = ({ article }: { article: Post | Article }) => {
       </div>
 
       <div className="mt-4 px-2 flex-between">
-        <div className="flex-start gap-1">
+        <div className="flex-start gap-1 text-stone-700 dark:text-stone-300">
           {article.likes > 0 ? (
             <GoHeartFill color="rgb(165, 163, 161)" size={19} />
           ) : (
@@ -95,7 +95,7 @@ const ProfileArticleDisplay = ({ article }: { article: Post | Article }) => {
           )}
           <p className="text-[12px] font-outfit">{article.likes}</p>
         </div>
-        <p className="text-[12px] font-outfit text-accentLight">
+        <p className="text-[12px] font-outfit text-accentLight dark:text-stone-300">
           {article.readTime} read time
         </p>
       </div>
@@ -103,7 +103,7 @@ const ProfileArticleDisplay = ({ article }: { article: Post | Article }) => {
       <div className="mt-4 px-2 flex-end">
         <FaTrashCan
           onClick={() => setDeleteModal(true)}
-          className="text-red-400 hover:text-red-200 active:text-red-200 cursor-pointer"
+          className="text-red-400 hover:text-red-200 dark:hover:text-red-300 active:text-red-200 cursor-pointer"
         />
       </div>
     </div>

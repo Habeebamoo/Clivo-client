@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import { useFetchArticles } from "@/src/hooks/useFetchArticles";
 import type { Article } from "@/src/types/article";
 import type { RootState } from "@/src/redux/store";
-import { H2 } from "./typo";
 import Spinner from "./spinner";
 import NotFound from "./not-found";
 import ProfileArticleDisplay from "./profile-article-display";
@@ -37,11 +36,10 @@ const MyArticles = () => {
     <>
       {articles.length === 0 ? (
         <div className="flex-center flex-col mb-20 lg:mt-10">
-          <H2
-            font="inter"
-            text="This user hasn't posted anything!"
-            others="mt-6 text-center"
-          />
+          <img src="/avatar.png" />
+          <h1 className="font-inter text-xl md:text-2xl mt-6 text-center text-stone-900 dark:text-stone-300">
+            This user hasn't posted anything!
+          </h1>
         </div>
       ) : (
         <div>
