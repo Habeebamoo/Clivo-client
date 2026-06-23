@@ -28,7 +28,7 @@ const AppealPage = ({ userId }: { userId: string }) => {
     setLoading(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/${userId}/appeal`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/appeals`,
         {
           method: "POST",
           headers: {
@@ -36,6 +36,7 @@ const AppealPage = ({ userId }: { userId: string }) => {
             "X-API-KEY": process.env.NEXT_PUBLIC_API_KEY!,
           },
           body: JSON.stringify({
+            userId: userId,
             message: `${selected}${message ? `: ${message}` : ""}`,
           }),
           credentials: "include",

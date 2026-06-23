@@ -11,15 +11,14 @@ import { H2, H3 } from "./typo";
 import Spinner from "./spinner";
 import Alert from "./alert";
 
-type Tab = "users" | "appeals";
+type Tab = "users" | "appeals" | "emails"; // <-- Added emails tab type
 
-const ITEMS_PER_PAGE = 8; // Adjust to set view length per page
+const ITEMS_PER_PAGE = 8; 
 
 const AdminDashboardPage = () => {
   const dispatch = useDispatch();
   const { isLoading } = useFetchAdminStats();
   
-  // Local state initialized from Redux to handle instant optimistic updates
   const reduxUsers = useSelector((state: RootState) => state.admin.users);
   const [users, setLocalUsers] = useState<User[]>(reduxUsers);
   
@@ -35,7 +34,6 @@ const AdminDashboardPage = () => {
     text: string;
   } | null>(null);
 
-  // Sync with redux if async fetch finishes later
   if (users.length === 0 && reduxUsers.length > 0) {
     setLocalUsers(reduxUsers);
   }
@@ -45,7 +43,6 @@ const AdminDashboardPage = () => {
     setTimeout(() => setAlert(null), 3000);
   };
 
-  // Pagination Math
   const totalPages = Math.ceil(users.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedUsers = users.slice(startIndex, startIndex + ITEMS_PER_PAGE);
@@ -58,13 +55,15 @@ const AdminDashboardPage = () => {
   const banUser = async (user: User) => {
     setActionLoading(true);
     const updatedStatus = !user.isBanned;
-    
-    // Optimistic state update
-    setLocalUsers(prev => prev.map(u => u.userId === user.userId ? { ...u, isBanned: updatedStatus } : u));
+    const endpoint = updatedStatus ? "restrict" : "unrestrict";
+
+    setLocalUsers(prev => 
+      prev.map(u => u.userId === user.userId ? { ...u, isBanned: updatedStatus } : u)
+    );
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/admin/restrict/${user.userId}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/admin/${endpoint}/${user.userId}`,
         {
           method: "POST",
           headers: {
@@ -76,14 +75,17 @@ const AdminDashboardPage = () => {
       );
       const response = await res.json();
       if (!res.ok) {
-        // Rollback state on failure
-        setLocalUsers(prev => prev.map(u => u.userId === user.userId ? { ...u, isBanned: !updatedStatus } : u));
+        setLocalUsers(prev => 
+          prev.map(u => u.userId === user.userId ? { ...u, isBanned: !updatedStatus } : u)
+        );
         showAlert("error", response.message);
         return;
       }
       showAlert("success", `${user.name} has been ${updatedStatus ? "banned" : "unbanned"}`);
     } catch {
-      setLocalUsers(prev => prev.map(u => u.userId === user.userId ? { ...u, isBanned: !updatedStatus } : u));
+      setLocalUsers(prev => 
+        prev.map(u => u.userId === user.userId ? { ...u, isBanned: !updatedStatus } : u)
+      );
       showAlert("error", "Something went wrong");
     } finally {
       setActionLoading(false);
@@ -93,18 +95,15 @@ const AdminDashboardPage = () => {
   const verifyUser = async (user: User) => {
     setActionLoading(true);
     const updatedStatus = !user.verified;
-
-    // Determine the correct endpoint dynamically based on the action
     const endpoint = updatedStatus ? "verify" : "unverify";
 
-    // Optimistic state update
     setLocalUsers(prev => 
       prev.map(u => u.userId === user.userId ? { ...u, verified: updatedStatus } : u)
     );
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/admin/${endpoint}/${user.userId}`, // <-- Updated here
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/admin/${endpoint}/${user.userId}`,
         {
           method: "POST",
           headers: {
@@ -116,7 +115,6 @@ const AdminDashboardPage = () => {
       );
       const response = await res.json();
       if (!res.ok) {
-        // Rollback state on failure
         setLocalUsers(prev => 
           prev.map(u => u.userId === user.userId ? { ...u, verified: !updatedStatus } : u)
         );
@@ -125,7 +123,6 @@ const AdminDashboardPage = () => {
       }
       showAlert("success", `${user.name} has been ${updatedStatus ? "verified" : "unverified"}`);
     } catch {
-      // Rollback state on network error
       setLocalUsers(prev => 
         prev.map(u => u.userId === user.userId ? { ...u, verified: !updatedStatus } : u)
       );
@@ -157,6 +154,34 @@ const AdminDashboardPage = () => {
       showAlert("success", response.message);
     } catch {
       showAlert("error", "Something went wrong");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  // Trigger system email dispatch endpoint
+  const handleSendEmail = async () => {
+    setActionLoading(true);
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/admin/sendmail`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-API-KEY": process.env.NEXT_PUBLIC_API_KEY!,
+          },
+          credentials: "include",
+        }
+      );
+      const response = await res.json();
+      if (!res.ok) {
+        showAlert("error", response.message || "Failed to broadcast email");
+        return;
+      }
+      showAlert("success", response.message || "System email broadcast sent successfully!");
+    } catch {
+      showAlert("error", "Failed to connect to email broadcast server");
     } finally {
       setActionLoading(false);
     }
@@ -200,6 +225,12 @@ const AdminDashboardPage = () => {
           className={activeTab === "appeals" ? "home-tab-active" : "home-tab"}
         >
           Appeals
+        </button>
+        <button
+          onClick={() => setActiveTab("emails")}
+          className={activeTab === "emails" ? "home-tab-active" : "home-tab"}
+        >
+          Emails
         </button>
       </div>
 
@@ -336,6 +367,22 @@ const AdminDashboardPage = () => {
               </div>
             ))
           )}
+        </div>
+      )}
+
+      {/* Emails Tab */}
+      {activeTab === "emails" && (
+        <div className="border border-muted rounded-lg p-6 bg-mutedLight flex flex-col items-center justify-center text-center min-h-50">
+          <p className="font-inter text-sm text-accent mb-4 max-w-sm">
+            Trigger global system tasks or transactional logs across Clivo networks.
+          </p>
+          <button
+            disabled={actionLoading}
+            onClick={handleSendEmail}
+            className="btn-primary text-xs py-2 px-5 font-inter font-semibold flex items-center gap-2"
+          >
+            {actionLoading ? <Spinner size={14} color="light" /> : "Send Email"}
+          </button>
         </div>
       )}
     </div>
