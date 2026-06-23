@@ -35,6 +35,7 @@ const FYPSection = () => {
           img="b"
           text="Couldn't Load Articles"
           subText="No articles were found here."
+          darkThemeStyle={true}
         />
       </div>
     );
@@ -42,7 +43,7 @@ const FYPSection = () => {
   return (
     <section className="mb-10">
       {articles.map((article, i) => (
-        <ArticleDisplay key={i} article={article} />
+        <ArticleDisplay key={i} article={article} darkThemeStyle={true} />
       ))}
     </section>
   );

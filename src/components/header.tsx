@@ -55,10 +55,6 @@ const Header = ({ type }: Props) => {
         type === "home" ? "dark:bg-stone-950 dark:border-b-stone-800" : "[&_*]:!dark:bg-transparent [&_*]:!dark:text-inherit [&_*]:!dark:border-inherit"
       }`}
     >
-      {/* 
-        By wrapping the inner elements in a conditional class block, we force standard 
-        light behavior for landing/article types even if the HTML element has the 'dark' class.
-      */}
       <div className={type === "home" ? "" : "theme-light scheme-light"}>
         <div className="max-w-5xl mx-auto px-6 py-4 flex-between">
           {/* Logo */}
@@ -89,7 +85,7 @@ const Header = ({ type }: Props) => {
                   className="flex-center gap-1 focus:outline-none cursor-pointer"
                 >
                   {user.picture ? (
-                    <div className={`h-8 w-8 rounded-full overflow-hidden border border-muted ${type === "home" ? "dark:border-stone-800" : ""}`}>
+                    <div className={`h-9 w-9 rounded-full overflow-hidden border border-muted ${type === "home" ? "dark:border-stone-800" : ""}`}>
                       <img
                         src={user.picture}
                         alt={user.name}
@@ -135,7 +131,7 @@ const Header = ({ type }: Props) => {
             ) : (
               <Link
                 href="/signin"
-                className="btn-primary text-sm py-2 px-4"
+                className="bg-black text-white font-outfit rounded-md text-sm py-2.5 px-5"
               >
                 Get Started
               </Link>

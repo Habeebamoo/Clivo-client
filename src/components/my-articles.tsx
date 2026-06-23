@@ -28,6 +28,7 @@ const MyArticles = () => {
           img="b"
           text="An Error Occurred"
           subText="An unexpected error has occurred"
+          darkThemeStyle={true}
         />
       </div>
     );
