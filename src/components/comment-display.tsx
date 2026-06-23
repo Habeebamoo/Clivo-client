@@ -95,7 +95,7 @@ const CommentDisplay = ({ comment, setRegisterModal }: Props) => {
         </div>
       </div>
 
-      <div className="pl-10 text-sm font-open break-words mt-1">
+      <div className="pl-10 text-sm font-open wrap-break-word mt-1">
         {comment.content}
       </div>
 

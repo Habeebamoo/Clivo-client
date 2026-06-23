@@ -5,9 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "@/src/redux/store";
 import type { User } from "@/src/types/user";
 import type { Appeal } from "@/src/types/admin";
-import { setUser, setAppeal } from "@/src/redux/reducers/admin";
 import { useState } from "react";
-import { toast } from "react-toastify";
 import { MdVerified } from "react-icons/md";
 import { H2, H3 } from "./typo";
 import Spinner from "./spinner";
@@ -15,31 +13,58 @@ import Alert from "./alert";
 
 type Tab = "users" | "appeals";
 
+const ITEMS_PER_PAGE = 8; // Adjust to set view length per page
+
 const AdminDashboardPage = () => {
   const dispatch = useDispatch();
   const { isLoading } = useFetchAdminStats();
-  const users: User[] = useSelector((state: RootState) => state.admin.users);
+  
+  // Local state initialized from Redux to handle instant optimistic updates
+  const reduxUsers = useSelector((state: RootState) => state.admin.users);
+  const [users, setLocalUsers] = useState<User[]>(reduxUsers);
+  
   const appeals: Appeal[] = useSelector(
     (state: RootState) => state.admin.appeals
   );
 
   const [activeTab, setActiveTab] = useState<Tab>("users");
   const [actionLoading, setActionLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const [alert, setAlert] = useState<{
     status: "success" | "error";
     text: string;
   } | null>(null);
+
+  // Sync with redux if async fetch finishes later
+  if (users.length === 0 && reduxUsers.length > 0) {
+    setLocalUsers(reduxUsers);
+  }
 
   const showAlert = (status: "success" | "error", text: string) => {
     setAlert({ status, text });
     setTimeout(() => setAlert(null), 3000);
   };
 
-  const banUser = async (userId: string) => {
+  // Pagination Math
+  const totalPages = Math.ceil(users.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedUsers = users.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const banUser = async (user: User) => {
     setActionLoading(true);
+    const updatedStatus = !user.isBanned;
+    
+    // Optimistic state update
+    setLocalUsers(prev => prev.map(u => u.userId === user.userId ? { ...u, isBanned: updatedStatus } : u));
+
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/admin/restrict/${userId}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/admin/restrict/${user.userId}`,
         {
           method: "POST",
           headers: {
@@ -51,22 +76,35 @@ const AdminDashboardPage = () => {
       );
       const response = await res.json();
       if (!res.ok) {
+        // Rollback state on failure
+        setLocalUsers(prev => prev.map(u => u.userId === user.userId ? { ...u, isBanned: !updatedStatus } : u));
         showAlert("error", response.message);
         return;
       }
-      showAlert("success", response.message);
+      showAlert("success", `${user.name} has been ${updatedStatus ? "banned" : "unbanned"}`);
     } catch {
+      setLocalUsers(prev => prev.map(u => u.userId === user.userId ? { ...u, isBanned: !updatedStatus } : u));
       showAlert("error", "Something went wrong");
     } finally {
       setActionLoading(false);
     }
   };
 
-  const verifyUser = async (userId: string) => {
+  const verifyUser = async (user: User) => {
     setActionLoading(true);
+    const updatedStatus = !user.verified;
+
+    // Determine the correct endpoint dynamically based on the action
+    const endpoint = updatedStatus ? "verify" : "unverify";
+
+    // Optimistic state update
+    setLocalUsers(prev => 
+      prev.map(u => u.userId === user.userId ? { ...u, verified: updatedStatus } : u)
+    );
+
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/admin/verify/${userId}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/admin/${endpoint}/${user.userId}`, // <-- Updated here
         {
           method: "POST",
           headers: {
@@ -78,11 +116,19 @@ const AdminDashboardPage = () => {
       );
       const response = await res.json();
       if (!res.ok) {
+        // Rollback state on failure
+        setLocalUsers(prev => 
+          prev.map(u => u.userId === user.userId ? { ...u, verified: !updatedStatus } : u)
+        );
         showAlert("error", response.message);
         return;
       }
-      showAlert("success", response.message);
+      showAlert("success", `${user.name} has been ${updatedStatus ? "verified" : "unverified"}`);
     } catch {
+      // Rollback state on network error
+      setLocalUsers(prev => 
+        prev.map(u => u.userId === user.userId ? { ...u, verified: !updatedStatus } : u)
+      );
       showAlert("error", "Something went wrong");
     } finally {
       setActionLoading(false);
@@ -160,7 +206,7 @@ const AdminDashboardPage = () => {
       {/* Users Tab */}
       {activeTab === "users" && (
         <div className="space-y-4">
-          {users.map((u: User) => (
+          {paginatedUsers.map((u: User) => (
             <div
               key={u.userId}
               className="border border-muted rounded-lg p-4 flex-between flex-wrap gap-3"
@@ -183,10 +229,10 @@ const AdminDashboardPage = () => {
                     )}
                   </div>
                   <p className="text-xs text-accent font-outfit">
-                    @{u.username}
+                    {u.username}
                   </p>
                   {u.isBanned && (
-                    <span className="text-xs font-inter text-red-500">
+                    <span className="text-xs font-inter text-red-500 block mt-0.5">
                       Banned
                     </span>
                   )}
@@ -196,14 +242,18 @@ const AdminDashboardPage = () => {
               <div className="flex-center gap-2">
                 <button
                   disabled={actionLoading}
-                  onClick={() => verifyUser(u.userId)}
-                  className="btn-gray text-xs py-1 px-3 rounded-sm"
+                  onClick={() => verifyUser(u)}
+                  className={`text-xs py-1 px-3 rounded-sm font-inter cursor-pointer border ${
+                    u.verified 
+                      ? "bg-stone-100 hover:bg-stone-200 text-stone-700 border-stone-200" 
+                      : "btn-gray"
+                  }`}
                 >
                   {u.verified ? "Unverify" : "Verify"}
                 </button>
                 <button
                   disabled={actionLoading}
-                  onClick={() => banUser(u.userId)}
+                  onClick={() => banUser(u)}
                   className={`text-xs py-1 px-3 rounded-sm font-inter cursor-pointer ${
                     u.isBanned
                       ? "bg-green-100 hover:bg-green-200 text-green-700"
@@ -215,6 +265,29 @@ const AdminDashboardPage = () => {
               </div>
             </div>
           ))}
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex-center gap-2 pt-4">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => handlePageChange(currentPage - 1)}
+                className="px-3 py-1 text-xs border border-muted rounded-sm disabled:opacity-40 disabled:cursor-not-allowed font-inter"
+              >
+                Prev
+              </button>
+              <span className="text-xs font-outfit text-accent px-2">
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() => handlePageChange(currentPage + 1)}
+                className="px-3 py-1 text-xs border border-muted rounded-sm disabled:opacity-40 disabled:cursor-not-allowed font-inter"
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       )}
 

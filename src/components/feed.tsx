@@ -7,6 +7,7 @@ import type { RootState } from "@/src/redux/store";
 import Spinner from "./spinner";
 import { useFetchFeed } from "@/src/hooks/useFetchFeed";
 import NotFound from "./not-found";
+import FeaturedArticleDisplay from "./featured-article-display";
 
 const FeedSection = () => {
   const { isLoading, isError } = useFetchFeed();
@@ -40,9 +41,14 @@ const FeedSection = () => {
       </div>
     );
 
+  const featuredArticle = articles[0];
+  const otherArticles = articles.slice(1)
+
   return (
     <section className="mb-10">
-      {articles.map((article, i) => (
+      <FeaturedArticleDisplay article={featuredArticle} />
+      
+      {otherArticles.map((article, i) => (
         <ArticleDisplay key={i} article={article} darkThemeStyle={true} />
       ))}
     </section>

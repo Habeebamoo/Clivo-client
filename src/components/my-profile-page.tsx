@@ -52,7 +52,7 @@ const MyProfilePage = () => {
             ) : (
               <a
                 href="https://myclivo.com/@clivoinc/how-to-become-a-verified-user-124"
-                className="text-[12px] underline cursor-pointer"
+                className="text-[12px] underline cursor-pointer dark:text-stone-300"
               >
                 Get Verified
               </a>
@@ -114,7 +114,7 @@ const MyProfilePage = () => {
         </div>
       </section>
 
-      <hr className="lg:hidden text-mutedLight" />
+      <hr className="lg:hidden text-mutedLight dark:text-stone-700" />
 
       <section className="px-8 mb-20">
         <MyArticles />

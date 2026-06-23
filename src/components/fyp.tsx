@@ -7,6 +7,7 @@ import type { Post } from "@/src/types/article";
 import type { RootState } from "@/src/redux/store";
 import Spinner from "./spinner";
 import NotFound from "./not-found";
+import FeaturedArticleDisplay from "./featured-article-display";
 
 const FYPSection = () => {
   const { isLoading, isError } = useFetchFyp();
@@ -40,9 +41,14 @@ const FYPSection = () => {
       </div>
     );
 
+  const featuredArticle = articles[0];
+  const otherArticles = articles.slice(1)
+
   return (
     <section className="mb-10">
-      {articles.map((article, i) => (
+      <FeaturedArticleDisplay article={featuredArticle} />
+
+      {otherArticles.map((article, i) => (
         <ArticleDisplay key={i} article={article} darkThemeStyle={true} />
       ))}
     </section>
