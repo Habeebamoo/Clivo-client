@@ -29,9 +29,9 @@ const BlockRenderer = ({ blocks }: { blocks: Block[] }) => {
 
           case "code":
             return (
-              <div key={i} className="flex-center">
-                <div className="code">
-                  <pre>
+              <div key={i} className="flex-center w-full">
+                <div className="code w-full overflow-hidden">
+                  <pre className="overflow-x-auto max-w-full">
                     <code>{block.data.code}</code>
                   </pre>
                 </div>
