@@ -164,7 +164,7 @@ const UserPage = ({ username }: UserPageProps) => {
           <div className="mt-16 px-8">
             {/* Display Fullname Identity */}
             <div className="flex-start gap-2">
-              <H2 font="inter" text={user.name} others="text-xl font-bold text-stone-900" />
+              <H2 font="inter" text={user.name} others="text-xl text-stone-900" />
               {user.verified && (
                 <MdVerified size={18} color="rgba(93, 110, 189, 1)" />
               )}
@@ -225,16 +225,12 @@ const UserPage = ({ username }: UserPageProps) => {
         {/* Right Hand Side Stream Stream Grid Feed */}
         <section className="lg:px-4 space-y-6">
           {articles.length === 0 ? (
-            <div className="flex-center flex-col py-16 bg-stone-50/50 rounded-2xl border border-dashed border-stone-200">
-              <div className="h-16 w-16 bg-stone-100 rounded-full flex-center text-stone-400 mb-4 font-mono text-xl">
-                ✍️
-              </div>
-              <H2
-                font="inter"
-                text="This user hasn't posted anything!"
-                others="text-stone-500 text-base font-medium text-center px-4"
-              />
-            </div>
+            <NotFound 
+              img="a" 
+              text="Oops" 
+              subText="This user hasn't posted anything." 
+              removedMargin={true}
+            />
           ) : (
             <div className="space-y-4 px-4">
               {[...articles].reverse().map((article: Post) => (

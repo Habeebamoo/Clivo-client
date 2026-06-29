@@ -7,15 +7,17 @@ const NotFound = ({
   img = "a",
   text,
   subText,
-  darkThemeStyle, // <-- Destructured the new prop
+  darkThemeStyle,
+  removedMargin
 }: {
   img?: "a" | "b";
   text: string;
   subText: string;
-  darkThemeStyle?: boolean; // <-- Added the optional boolean prop
+  darkThemeStyle?: boolean;
+  removedMargin?: boolean;
 }) => {
   return (
-    <div className="flex-center flex-col mt-20">
+    <div className={`flex-center flex-col ${!removedMargin && "mt-20" }`}>
       <Image
         src={img === "a" ? avatarImg : errorImg}
         alt={text}
